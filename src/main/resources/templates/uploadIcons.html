@@ -1,0 +1,135 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="img/favicon.ico" rel="shortcut icon">
+    <link href="css/jqueryTagInput/jquery.tag-editor.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ._main{
+            margin-top: 200px;
+            border:1px solid gray;
+            min-height: 300px;
+        }
+        .main {
+            margin-top: 200px;
+            border:1px solid gray;
+            min-height: 345px;
+            padding: 20px 0 0 20px;
+        }
+        .form{
+            display: flex;
+        }
+        .tag-editor {
+            list-style-type: none;
+            padding: 0 5px 0 0;
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            height: 38px;
+            width:90%;
+            cursor: text;
+            font: normal 14px sans-serif;
+            color: #555;
+            background: #fff;
+        }
+        .tag-editor li{
+            display: block;
+            float: left;
+            overflow: hidden;
+            margin:6px 0;
+            line-height: 1.8;
+        }
+        .tag-editor .tag-editor-delete i {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            vertical-align: middle;
+            background: url(images/delete.png) 0 0 no-repeat;
+            position: relative;
+            top: -1px;
+        }
+        .class{
+            height:50px;
+            background-color: lightgray;
+            line-height:50px;
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div>
+</div>
+<div class="row">
+    <div class="col-md-2 offset-md-1">
+        <div class="_main">
+            <div class="class">
+                分类
+            </div>
+            <div class="classList">
+                <ul class="list-group">
+                    <li class="list-group-item">水系统</li>
+                    <li class="list-group-item">土壤系统</li>
+                    <li class="list-group-item">大气系统</li>
+                    <li class="list-group-item">生态系统</li>
+                    <li class="list-group-item">人文/社会/经济</li>
+                    <li class="list-group-item">陆地地表</li>
+                    <li class="list-group-item">海洋系统</li>
+                    <li class="list-group-item">固体地球系统</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="main">
+
+                <div style="width:80%">
+                    <div class="input-group mb-3 ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">分类</span>
+                        </div>
+                        <input class="form-control" id="classInput" type="text" placeholder="图标分类" readonly>
+                    </div>
+                    <div class="input-group mb-3 ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">名称</span>
+                        </div>
+                        <input class="form-control" id="nameInput" type="text" placeholder="图标名称">
+                    </div>
+                    <div class="input-group mb-3 ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">标签</span>
+                        </div>
+                        <input class="form-control" id="tagInput" type="text" placeholder="输入描述图标的标签">
+                    </div>
+                    <div class="input-group mb-3 ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">定义/描述</span>
+                        </div>
+                        <input class="form-control" id="descInput" type="text" placeholder="输入描述图标的描述">
+                    </div>
+                </div>
+                <div style="width:18%;display:flex;align-items:center;justify-content:center">
+                    <div id="upImg" style="width: 120px;height: 120px;border: 1px solid #cccccc;text-align:center;vertical-align: middle;line-height: 120px;cursor: pointer">
+                        <img id="upImgShow" src="images/upImg.png" width="90" height="90">
+                    </div>
+                    <form class="form" id="form1" enctype="multipart/form-data">
+                    <input id="upGeoIcon" name="upGeoIcon" type="file" style="display: none;width: 0px;height: 0px;overflow: hidden">
+                    </form>
+                </div>
+            <div class="row" style="display:flex;justify-content:center">
+                <button class="btn btn-outline-success" id="uploadBtn" type="button">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="js/jqueryTagInput/jquery.tag-editor.js"></script>
+<script src="js/geoIcon/uploadIcon.js"></script>
+</html>
