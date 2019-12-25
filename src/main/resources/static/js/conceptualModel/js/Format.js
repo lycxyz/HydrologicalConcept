@@ -1498,11 +1498,13 @@ ArrangePanel.prototype.addGeneralInfo = function(div){
 
 ArrangePanel.prototype.addRelatedIcons = function(div){
     var ui = this.editorUi;
-
+    var graph = ui.editor.graph;
+    var ss = graph.getSelectionCell();
+    var geoId = ss.geoId;
     $.ajax({
         url: "conceptualModel/getGeoIconByGeoId",
         data:{
-            geoId:"c9cda363-8cbb-4c6a-8956-82d9bce988cc"
+            geoId:geoId
         },
         async:true,
         success:  (result) => {

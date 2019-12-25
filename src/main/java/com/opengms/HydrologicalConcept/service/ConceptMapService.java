@@ -25,18 +25,15 @@ public class ConceptMapService {
     }
 
     // 应该还有缺陷，到时再改
-    public void updateConceptMap(MultipartFile mfile, ConceptMap conceptMap){
-        conceptDao.saveConcept2File(mfile);
+    public void updateConceptMap(ConceptMap conceptMap){
+//        conceptDao.saveConcept2File(mfile);
         conceptMap.setPathUrl(pathUrl + conceptMap.getPathUrl());
         conceptMapDao.save(conceptMap);
     }
 
-    public ConceptMap getGeoIconByGeoId(String geoId){
+    public ConceptMap getConceptMapByGeoId(String geoId){
         ConceptMap concept =conceptMapDao.findConceptMapByGeoId(geoId);
         return concept;
     }
 
-    public List<ConceptMap> getAllGeoIcons(){
-        return conceptMapDao.findAll();
-    }
 }

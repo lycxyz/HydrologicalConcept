@@ -2990,7 +2990,7 @@ Sidebar.prototype.createVertexTemplateEntry = function (style, width, height, va
 Sidebar.prototype.createVertexTemplate = function (style, width, height, value, title, showLabel, showTitle, allowCellsInserted, iconId) {
     var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
     cells[0].vertex = true;
-    cells[0].iconId = iconId;
+    cells[0].geoId = iconId;
 
     return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);
 };
