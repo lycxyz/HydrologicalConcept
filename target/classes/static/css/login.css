@@ -1,0 +1,10 @@
+body {
+    background: url("../images/banner1.jpg");
+    background-size: 100% 100%;
+
+}
+
+.x_login {
+    position: absolute;
+    top: 20%;
+}

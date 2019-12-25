@@ -1,0 +1,894 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <title>HydrologicalConcept</title>
+    <style>
+        .main {
+            height: 600px;
+            margin-top: 60px;
+        }
+
+        .introduce {
+            /* padding:20px; */
+            background-color: lightgray;
+            height: 600px;
+        }
+
+        .myGroup {
+            /* background-color: aquamarine; */
+            height: 400px;
+            border: 1px solid gray
+        }
+
+        .list-panel {
+            max-height: 65%;
+            height: 65%;
+            overflow-y: auto;
+            /* background-color: cornsilk; */
+        }
+
+        .grouplist-title {
+            height: 40px;
+            font-size: 20px;
+            line-height: 40px;
+            text-align: center;
+            background-color: #5bc0de;
+            color: white;
+            border: 1px solid #5bc0de;
+        }
+
+        .grouplist-detail {
+            height: 400px;
+            border: 1px solid lightblue
+        }
+
+        .groupNameText {
+            height: 40px;
+            font-size: 20px;
+            line-height: 40px;
+            text-align: center;
+            background-color: #5bc0de;
+            color: white
+            /* background-color:lightgray */
+        }
+
+        .group-desc {
+            /* background-color: chartreuse; */
+            margin: 10px;
+            padding: 0;
+            /* height: 300px; */
+            height: 170px;
+            border: 1px solid black;
+        }
+
+        .group-desc p {
+            font-size: 15px;
+            height: 150px;
+
+            display: flex;
+        }
+
+        .group-member {
+            border: 1px solid gray;
+            margin-top: 20px;
+        }
+
+        .group-member-title {
+            height: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            text-align: center
+        }
+
+        .group-member-list {
+            padding-left: 20px;
+            padding-right: 20px;
+            height: 80px;
+        }
+
+        .group-invite {
+            /* background-color: lightblue; */
+            height: 300px;
+        }
+
+        .room-btn {
+            height: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .groupBtn {
+            margin-top: 13px;
+            width: 30%;
+            /* margin-right:1.5%; */
+            margin-left: 1.5%
+        }
+
+        .Function-description {
+            height: 300px;
+            background-color: aliceblue;
+        }
+
+        .Image-show {
+            height: 300px;
+            background-color: bisque
+        }
+
+        .list-group-item {
+            cursor: pointer;
+        }
+    </style>
+
+
+</head>
+<body>
+<div>
+    <div style="margin-top:10px;height:40px;" class="col-md-12 col-xs-12">
+        <div class="col-md-2 col-xs-4" style="float:right">
+            <button type="button" class="btn btn-primary" id="conceptualModel" style="float:left;"
+                    onClick="conceptualModel()">Conceptual Model</button>
+            <button type="button" class="btn btn-primary" id="uploadIcons" style="float:left;"
+                    onClick="uploadIcons()">Upload Icons</button>
+            <button type="button" class="btn btn-primary" id="chatTest" style="float:left;"
+                    onClick="chatTest()">Chat Test</button>
+
+            <button type="button" class="btn btn-primary" id="login" style="float:left;"
+                    onClick="login()">Login</button>
+            <button type="button" class="btn btn-success" id="register" onClick="register()">Register</button>
+            <span class="label label-warning" id="name"
+                  style="float:left;margin-right:10%;height:34px;line-height:34px;font-size:17px"></span>
+            <button type="button" class="btn btn-success" id="logout" onClick="logout()">Log out</button>
+        </div>
+    </div>
+    <div class="col-md-12 col-xs-12 main">
+        <div class="introduce" id="introduce">
+            <div class="Function-description">
+                <h1>Description2222</h1>
+            </div>
+            <div class="Image-show">
+                <h1>Features</h1>
+            </div>
+        </div>
+        <div class="group-panel" id="group-panel">
+            <div class="col-md-2  col-xs-4 myGroup" style="padding:0px">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active" id="showCreatedGroupList" style="width:50%"><a
+                            href="#createdGroupListContent"
+                            aria-controls="home" role="tab" data-toggle="tab">Created</a></li>
+                    <li role="presentation" id="showJoinedGroupList" style="width:50%"><a href="#joinedGroupListContent"
+                                                                                          aria-controls="profile"
+                                                                                          role="tab" data-toggle="tab">Joined
+                    </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="createdGroupListContent">
+                        <div class="grouplist-title">
+                            Created Group
+                        </div>
+                        <div class="list-panel">
+                            <ul class="list-group" id="createdGroupList">
+                            </ul>
+                        </div>
+                        <div class="create-panel">
+                            <button type="button" class="btn btn-default" id="createGroup"
+                                    style="width:50%;margin-left:25%"
+                                    data-toggle="modal" data-target="#createModal">Create
+                            </button>
+                            <div class="modal fade" id="createModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Create a new group</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" id="getGroupName" class="form-control"
+                                                   placeholder="Group name">
+                                            <br>
+                                            <textarea class="form-control" id="getGroupDesc" rows="3"
+                                                      placeholder="Group description"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onclick="createNewGroup()">
+                                                Create
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="joinedGroupListContent">
+                        <div class="grouplist-title">
+                            Joined Group
+                        </div>
+                        <div class="list-panel">
+                            <ul class="list-group" id="joinedGroupList">
+                            </ul>
+                        </div>
+                        <div class="join-panel">
+                            <button type="button" class="btn btn-default" style="width:50%;margin-left:25%"
+                                    data-toggle="modal" data-target="#joinModal">Join
+                            </button>
+                            <div class="modal fade" id="joinModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Join in a group</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" class="form-control" placeholder="Group Id"
+                                                   id="inputGroupID">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onClick="joinGroup()">Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 col-xs-8">
+                <div class="grouplist-detail">
+                    <div class="groupNameText" id="groupNameText"></div>
+                    <div style="display: flex">
+                        <div class="col-md-10 col-xs-9 group-desc">
+                            <div>
+                                <p id="groupDescText" style=" max-height:150px;overflow-y: auto;margin:0;padding: 5px">
+
+                                </p>
+                            </div>
+                            <div style="height:20px">
+                                <span class="label label-default" id="createdTime" style="float:right">time</span>
+                            </div>
+                            <div class="group-member">
+                                <div class="group-member-title">Members</div>
+                                <div class="group-member-list" id="memberList">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-3 group-invite">
+                            <div style="height:50%" class="changebtn">
+                                <button type="button" class="btn btn-default" id="quitBtn"
+                                        style="margin-top:20px;height:40px;margin-right:20px;width:80px"
+                                        onclick="quitGroup(this)"><span class="glyphicon glyphicon-log-out"
+                                                                        aria-hidden="true"></span>
+                                    Quit
+                                </button>
+                                <br>
+                                <button type="button" class="btn btn-success" id="editBtn"
+                                        style="margin-top:20px;height:40px;margin-right:20px;width:80px"
+                                        data-toggle="modal" data-target="#editModal" data-groupid=""
+                                        onclick="editGroupBtn(this)"><span
+                                        class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                    Edit
+                                </button>
+                                <br>
+                                <button type="button" class="btn btn-danger" id="deleteBtn"
+                                        style="margin-top:20px;height:40px;width:80px"
+                                        data-groupid="" onclick="deleteGroup(this)"><span
+                                        class="glyphicon glyphicon-floppy-remove"
+                                        aria-hidden="true"></span>
+                                    Delete
+                                </button>
+                            </div>
+                            <div style="height:50%;" class="otherbtn">
+                                <button type="button" class="btn btn-primary" id="inviteBtn"
+                                        style="margin-top:40px;height:40px;width:80px"
+                                        data-toggle="modal" data-target="#inviteModal" onclick="addMail(this)">
+                                        <span class="glyphicon glyphicon-share-plus" aria-hidden="true">
+                                        </span>
+                                    Invite
+                                </button>
+                                <br>
+                                <button type="button" class="btn btn-info" id="shareBtn"
+                                        style="margin-top:20px;height:40px;width:80px"
+                                        data-toggle="modal" data-target="#shareModal" onclick="ShareURL(this)">
+                                    <span class="glyphicon glyphicon-alt" aria-hidden="true"></span>Share
+                                </button>
+                            </div>
+                            <!--模态框-->
+                            <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Edit Group Detail</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> -->
+                                            <div class="tagsinput-primary form-group">
+                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
+                                                <span style="height:40px;line-height:40px;font-size:20px">Name:</span>
+                                                <br><input value="" id="editName" style="width:100%"
+                                                           placeholder="please input your edit name">
+                                            </div>
+                                            <!-- <input type="text" class="form-control" placeholder="User Email"> -->
+                                            <br>
+                                            <span style="height:40px;line-height:40px;font-size:20px;width:20%">Desc:</span>
+                                            <textarea id="editDesc" style="width:100%" rows="5" cols="5"
+                                                      placeholder="you can edit description here"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-groupid="" id="editGroup"
+                                                    onClick="editGroup(this)">Sumbit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Invite Others</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> -->
+                                            <div class="tagsinput-primary form-group">
+                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
+                                                <input name="tagsinput" id="tagsinputval" class="tagsinput"
+                                                       data-role="tagsinput" value=""
+                                                       placeholder="Input Email and print enter">
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Title" id="mailTitle">
+                                            <br>
+                                            <textarea style="width:100%" rows="5" cols="5" id="mailContent">
+                                                </textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onClick="Invite()">Send
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="shareModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Share Url</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="tagsinput-primary form-group">
+                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
+
+                                                <label for="basic-url">Concept Model URL</label>
+                                                <div class="input-group" style="width:100%">
+                                                    <input type="text" id="conceptURL" class="form-control">
+                                                </div>
+
+                                                <label for="basic-url">Logical Model URL</label>
+                                                <div class="input-group" style="width:100%">
+                                                    <input type="text" id="logicalURL" class="form-control">
+                                                </div>
+
+                                                <label for="basic-url">Computational Model URL</label>
+                                                <div class="input-group" style="width:100%">
+                                                    <input type="text" id="computationalURL" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-btn">
+                    <button type="button" class=" col-md-3 col-xs-3 btn btn-primary groupBtn" id="conceptBtn"
+                            data-type="ConceptualModel" onclick="startCooperation(this)">Conceptual
+                        Models
+                    </button>
+
+                    <!-- Indicates a successful or positive action -->
+                    <button type="button" class=" col-md-3 col-xs-3 btn btn-success groupBtn" id="logicalBtn"
+                            data-type="LogicalModel" onclick="startCooperation(this)">Logical
+                        Models
+                    </button>
+
+                    <!-- Contextual button for informational alert messages -->
+                    <button type="button" class="col-md-3 col-xs-3 btn btn-info groupBtn" id="computationalBtn"
+                            data-type="ComputationalModel" onclick="startCooperation(this)">Computational
+                        Models
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script src="js/tagsinput.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        localStorage.removeItem("historyURL");
+        if (!sessionStorage.getItem("username")) {
+            $("#name").css('display', 'none');
+            $("#logout").css('display', 'none');
+            $("#login").css('display', 'block');
+            $("#register").css('display', 'block');
+            $("#group-panel").css('display', 'none');
+            $("#introduce").css('display', 'block');
+            clearGroupData();
+        }
+        else {
+            $("#name").css('display', 'block');
+            $("#name").html(sessionStorage.getItem("username"));
+            $("#logout").css('display', 'block');
+            $("#login").css('display', 'none');
+            $("#register").css('display', 'none');
+            $("#group-panel").css('display', 'block');
+            $("#introduce").css('display', 'none');
+            clearGroupData();
+            loadCreatedGroupList();
+            loadJoinedGroupList();
+            $("#showCreatedGroupList").click();
+        }
+    });
+
+    $("#showCreatedGroupList").click(function () {
+        if ($("#createdGroupList").children().length > 0) {
+            $("#createdGroupList").find("li").first().click();
+            $("#editBtn").css('display', 'block');
+            $("#deleteBtn").css('display', 'block');
+            $("#quitBtn").css('display', 'none');
+            $("#inviteBtn").css('display', 'block');
+            $("#shareBtn").css('display', 'block');
+            $("#conceptBtn").css('display', 'block');
+            $("#logicalBtn").css('display', 'block');
+            $("#computationalBtn").css('display', 'block');
+        }
+        else {
+            clearGroupData();
+        }
+    });
+    $("#showJoinedGroupList").click(function () {
+        if ($("#joinedGroupList").children().length > 0) {
+            $("#joinedGroupList").find("li").first().click();
+            $("#editBtn").css('display', 'none');
+            $("#deleteBtn").css('display', 'none');
+            $("#quitBtn").css('display', 'block');
+            $("#inviteBtn").css('display', 'none');
+            $("#shareBtn").css('display', 'block');
+            $("#conceptBtn").css('display', 'block');
+            $("#logicalBtn").css('display', 'block');
+            $("#computationalBtn").css('display', 'block');
+        }
+        else {
+            clearGroupData();
+        }
+    });
+
+    $(".list-group").on("click", "li", function () {
+        var groupID = $(this).attr("data-groupid");
+        let groupObject = new Object();
+        groupObject["groupID"] = groupID;
+        $.ajax({
+            type: "post",
+            url: "/TeamWorking/ReadGroupServlet",
+            data: groupObject,
+            async: false,
+            success: function (data) {
+                if (data != "Fail") {
+                    var groupJSON = JSON.parse(data);
+                    $("#groupNameText").html(groupJSON["groupName"])
+                    $("#groupDescText").html(groupJSON["groupDescription"]);
+                    $("#createdTime").html("created time: " + groupJSON["createTime"]);
+                    $("#editBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#deleteBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#quitBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#inviteBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#shareBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#conceptBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#logicalBtn").attr('data-groupid', groupJSON["groupID"]);
+                    $("#computationalBtn").attr('data-groupid', groupJSON["groupID"]);
+                    var memberList = groupJSON["memberList"].split(",");
+                    var memberListHtml = '<span class="label label-primary">' + groupJSON["creator"] + '</span>';
+                    for (var i = 0; i < memberList.length; i++) {
+                        memberListHtml += '<span class="label label-info">' + memberList[i] + '</span>';
+                    }
+                    $("#memberList").html(memberListHtml);
+                }
+            },
+            error: function () {
+                console.log("load joined group fail!");
+            }
+        });
+    });
+
+    function clearGroupData() {
+        $("#groupNameText").html('')
+        $("#groupDescText").html('');
+        $("#createdTime").html('');
+        $("#memberList").html('');
+        $("#editBtn").removeAttr('data-groupid');
+        $("#deleteBtn").removeAttr('data-groupid');
+        $("#quitBtn").removeAttr('data-groupid');
+        $("#inviteBtn").removeAttr('data-groupid');
+        $("#shareBtn").removeAttr('data-groupid');
+        $("#conceptBtn").removeAttr('data-groupid');
+        $("#logicalBtn").removeAttr('data-groupid');
+        $("#computationalBtn").removeAttr('data-groupid');
+        $("#editBtn").css('display', 'none');
+        $("#deleteBtn").css('display', 'none');
+        $("#quitBtn").css('display', 'none');
+        $("#inviteBtn").css('display', 'none');
+        $("#shareBtn").css('display', 'none');
+        $("#conceptBtn").css('display', 'none');
+        $("#logicalBtn").css('display', 'none');
+        $("#computationalBtn").css('display', 'none');
+    }
+
+    function conceptualModel(){
+        window.location.href = "/conceptualModel";
+    }
+
+    function uploadIcons(){
+        window.location.href = "/uploadIcons";
+    }
+
+    function chatTest(){
+        window.location.href = "/chatTest";
+    }
+
+    function login() {
+        window.location.href = "/login";
+    }
+
+    function register() {
+        window.location.href = "/register";
+    }
+
+    function logout() {
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/LogoutServlet",
+                data: "",
+                async: false,
+                success: function (data) {
+                    if (data == "Success") {
+                        localStorage.removeItem("historyURL");
+                        sessionStorage.removeItem("username");
+                        window.location.reload();
+                    }
+                },
+                error: function () {
+                    toastr.warning("Log out fail!");
+                }
+            }
+        );
+    }
+
+    function loadCreatedGroupList() {
+        $("#createdGroupList").html('');
+        var userObject = new Object();
+        userObject["creator"] = sessionStorage.getItem("username");
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/SearchOwnGroupServlet",
+                data: userObject,
+                async: false,
+                success: function (data) {
+                    if (data != "Fail") {
+                        var groupHtml = ''
+                        var groupJSONArray = eval(data);
+                        for (var i = 0; i < groupJSONArray.length; i++) {
+                            groupHtml += '<li class="list-group-item" data-groupid="' + groupJSONArray[i]["groupID"] + '" >' + groupJSONArray[i]["groupName"] + '</li>';
+                        }
+                        $("#createdGroupList").html(groupHtml);
+                        $("#myModal").modal("hide");
+                    }
+                },
+                error: function () {
+                    console.log("load joined group fail!");
+                }
+            }
+        );
+    }
+
+    function loadJoinedGroupList() {
+        $("#joinedGroupList").html('');
+        var userObject = new Object();
+        userObject["userName"] = sessionStorage.getItem("username");
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/ReadUserServlet",
+                data: userObject,
+                async: false,
+                success: function (data) {
+                    if (data != "Fail") {
+                        var userJSON = JSON.parse(data);
+                        if (userJSON["joinedGroup"] != "") {
+                            var joinedGroupList = userJSON["joinedGroup"].split(",");
+                            var groupHtml = ''
+                            for (let i = 0; i < joinedGroupList.length; i++) {
+                                let groupObject = new Object();
+                                groupObject["groupID"] = joinedGroupList[i];
+                                $.ajax({
+                                    type: "post",
+                                    url: "/TeamWorking/ReadGroupServlet",
+                                    data: groupObject,
+                                    async: false,
+                                    success: function (data) {
+                                        if (data != "Fail") {
+                                            var groupJSON = JSON.parse(data);
+                                            groupHtml += '<li class="list-group-item" data-groupid="' + groupJSON["groupID"] + '">' + groupJSON["groupName"] + '</li>';
+                                        }
+                                    },
+                                    error: function () {
+                                        console.log("load joined group fail!");
+                                    }
+                                });
+                            }
+                            $("#joinedGroupList").html(groupHtml);
+                        }
+
+                    }
+                }
+            }
+        );
+    }
+
+    function createNewGroup() {
+        var groupName = $("#getGroupName").val();
+        var groupDesc = $("#getGroupDesc").val();
+        var groupObject = new Object();
+        groupObject["creator"] = sessionStorage.getItem("username");
+        groupObject["groupName"] = groupName;
+        groupObject["groupID"] = getUID();
+        groupObject["groupDescription"] = groupDesc;
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/CreateGroupServlet",
+                data: groupObject,
+                async: false,
+                success: function (data) {
+                    if (data != "Fail") {
+                        var groupJSON = JSON.parse(data);
+                        var groupHtml = '<li class="list-group-item" data-groupid="' + groupJSON["groupID"] + '">' + groupJSON["groupName"] + '</li>'
+                        $("#createdGroupList").append(groupHtml);
+                        $("#createModal").modal("hide");
+                        toastr.success("Create Group Success!");
+                    }
+                },
+                error: function () {
+                    toastr.warning("Create Fail!");
+                }
+            }
+        );
+    }
+
+    function editGroupBtn(e) {
+        var groupID = e.dataset.groupid;
+        $("#editGroup").attr("data-groupid", groupID);
+        var groupName = $("#groupNameText").html();
+        var groupDesc = $("#groupDescText").html();
+        $("#editName").val(groupName);
+        $("#editDesc").val(groupDesc);
+    }
+
+    function editGroup(e) {
+        var groupObject = new Object();
+        var newGroupName = $("#editName").val();
+        var newGroupDesc = $("#editDesc").val();
+        groupObject["groupID"] = e.dataset.groupid;
+        groupObject["groupName"] = newGroupName;
+        groupObject["groupDescription"] = newGroupDesc;
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/UpdateGroupServlet",
+                data: groupObject,
+                async: false,
+                success: function (data) {
+                    if (data == "Success") {
+                        toastr.success("Update Sucess!");
+                        $("#editModal").modal("hide");
+                        $("#groupNameText").html(newGroupName);
+                        $("#groupDescText").html(newGroupDesc);
+                        loadCreatedGroupList();
+                    }
+                    else {
+                        toastr.warning("Update Fail!");
+                    }
+                },
+                error: function () {
+                    toastr.warning("Update Fail!");
+                }
+            }
+        );
+    }
+
+    function deleteGroup(e) {
+        var flag = confirm("Are you sure to delete this group?");
+        if (flag) {
+            var groupObject = new Object();
+            groupObject["groupID"] = e.dataset.groupid;
+            $.ajax({
+                    type: "post",
+                    url: "/TeamWorking/DeleteGroupServlet",
+                    data: groupObject,
+                    async: false,
+                    success: function (data) {
+                        if (data == "Success") {
+                            toastr.success("Delete group success!");
+                            loadCreatedGroupList();
+                            $("#showCreatedGroupList").click();
+                        }
+                        else {
+                            toastr.warning("Delete Fail!");
+                        }
+                    },
+                    error: function () {
+                        toastr.warning("Delete Fail!");
+                    }
+                }
+            );
+        }
+    }
+
+    function quitGroup(e) {
+        var flag = confirm("Are you sure to quit this group?");
+        if (flag) {
+            var groupObject = new Object();
+            groupObject["groupID"] = e.dataset.groupid;
+            groupObject["userName"] = sessionStorage.getItem("username");
+            $.ajax({
+                    type: "post",
+                    url: "/TeamWorking/QuitGroupServlet",
+                    data: groupObject,
+                    async: false,
+                    success: function (data) {
+                        if (data == "Success") {
+                            toastr.success("Quit group success!");
+                            loadJoinedGroupList();
+                            $("#showJoinedGroupList").click();
+                        }
+                        else {
+                            toastr.warning("Quit Fail!");
+                        }
+                    },
+                    error: function () {
+                        toastr.warning("Quit Fail!");
+                    }
+                }
+            );
+        }
+    }
+
+    function joinGroup() {
+        var groupObject = new Object();
+        groupObject["userName"] = sessionStorage.getItem("username");
+        groupObject["groupID"] = $("#inputGroupID").val();
+        $.ajax({
+                type: "post",
+                url: "/TeamWorking/JoinGroupServlet",
+                data: groupObject,
+                async: false,
+                success: function (data) {
+                    if (data != "Fail" && data != "None" && data != "Exist") {
+                        toastr.success("Join Group success!");
+                        var groupJSON = JSON.parse(data);
+                        groupHtml = '<li class="list-group-item" data-groupid="' + groupJSON["groupID"] + '" >' + groupJSON["groupName"] + '</li>';
+                        $("#joinedGroupList").append(groupHtml);
+                        $("#joinModal").modal("hide");
+                        $("#showJoinedGroupList").click();
+                    }
+                    else if (data == "None") {
+                        toastr.warning("Group does not exist!");
+                    }
+                    else if (data == "Exist") {
+                        toastr.warning("You are already in the group!");
+                    }
+                    else {
+                        toastr.warning("Join Group Fail!");
+                    }
+                },
+                error: function () {
+                    confirm("Join Group Fail!");
+                }
+            }
+        );
+    }
+
+    function startCooperation(e) {
+        var groupID = e.dataset.groupid;
+        var modelType = e.dataset.type;
+        if (modelType == "Conceptual Models") {
+            window.location.href = "/HydrologicalConcept/templates/conceptualModel.html" + "?groupID=" + groupID + "-" + modelType;
+        }
+    }
+
+    function ShareURL(e) {
+        var groupID = e.dataset.groupid;
+        $("#conceptURL").val("http://" + address + "/TeamWorking/Collaborative/ConceptualModel/index.html" + "?groupID=" + groupID + "-ConceptualModel");
+        $("#logicalURL").val("http://" + address + "/TeamWorking/Collaborative/LogicalModel/index.html" + "?groupID=" + groupID + "-LogicalModel");
+        $("#computationalURL").val("http://" + address + "/TeamWorking/Collaborative/ComputationalModel/index.html" + "?groupID=" + groupID + "-ComputationalModel");
+    }
+
+    function addMail(e) {
+        var mailTitle = 'Invitation';
+        var mailContent = 'Dear sir/madam: \n' +
+            '\tI sincerely invite you to join our group on the platform of collaborative models building. \n' +
+            '\tThe website is: ' + window.location.href + '\n' +
+            '\tOur group ID is: ' + e.dataset.groupid + '\n' +
+            '\tPlease open the website and copy the group ID to join us.\n' +
+            '\tWaiting for You!\n' +
+            '\t\t\tyours\n' +
+            '\t\t\t' + sessionStorage.getItem("username");
+        $("#mailTitle").val(mailTitle);
+        $("#mailContent").val(mailContent)
+    }
+
+    function Invite() {
+        var email = $('#tagsinputval').val();
+        var mailTitle = $("#mailTitle").val();
+        var mailContent = $("#mailContent").val().replace(/\n/g, '<br>');
+        var mailObject = new Object();
+        mailObject["email"] = email;
+        mailObject["mailTitle"] = mailTitle;
+        mailObject["mailContent"] = mailContent;
+        $.ajax({
+            type: "post",
+            url: "/TeamWorking/sendEmailServlet",
+            data: mailObject,
+            async: false,
+            success: function (data) {
+                if (data == "success") {
+                    toastr.success('Send Mails Success!');
+                }
+                else {
+                    toastr.warning("Send Mails Fail!");
+                }
+            },
+            error: function () {
+                toastr.warning("Send Mails Fail!");
+            }
+        });
+        $("#inviteModal").modal("hide");
+    }
+
+    function getUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+</script>
+</html>
