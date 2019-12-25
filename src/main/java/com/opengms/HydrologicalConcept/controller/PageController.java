@@ -40,7 +40,7 @@ public class PageController {
     public String aaa()
     {
         return "_login";
-    };
+    }
     @RequestMapping("/home")
     public String home()
     {
@@ -68,4 +68,12 @@ public class PageController {
     {
         return "chatTest";
     };
+    @RequestMapping("/indexPage")
+    public String indexPage(){
+        return "indexPage";
+    }
+    @RequestMapping("/conceptItem")
+    public String conceptItem(){
+        return "conceptItem";
+    }
 }
