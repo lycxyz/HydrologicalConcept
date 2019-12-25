@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link href="css/createConcept.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="shortcut icon" href="#" />
+    <link href="css/createConcepts/bootstrap-tagsinput.css"/>
+    <style>
+        .bootstrap-tagsinput .tag [data-role="remove"] {
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .bootstrap-tagsinput .tag [data-role="remove"]:after {
+            content: "x";
+            padding: 0px 2px;
+        }
+
+        .labels {
+            line-height: 25px;
+            height: 25px;
+            margin-right: 10px;
+
+        }
+        .spanTitle {
+            width: 56px;
+            font-size: 75%;
+            height:30px;
+            line-height:30px;
+        }
+
+        .processInfoDiv {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        #accurate ::after {
+            content: "  "
+        }
+
+        input::-webkit-input-placeholder {
+            /* placeholder颜色  */
+            color: gray;
+            /* placeholder字体大小  */
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body style="overflow-x:hidden">
+<div class="row" >
+    <div class="col-md-8 col-md-offset-2" style="top:60px;">
+            <div id="conceptDescribeDiv">
+                <label>语义描述</label>
+                <div style="display:flex">
+                    <label class="label label-default labels">概念名称:</label>
+                    <input type="text" id="conceptName" style="height:26px;width:100px;margin-right:10px">
+                    <label class="label label-default labels">关联概念:</label>
+                    <input type="text" value="" data-role="tagsinput" id="relateConcept">
+                </div>
+                <div style="display:flex">
+                    <label class="label label-default labels">概念定义:</label>
+                    <textarea class="form-control" id="conceptDescription" placeholder="请输入概念的定义" rows="2"></textarea>
+                </div>
+                <div style="display:flex;margin-top:10px">
+                    <label class="label label-default labels">分类标准:</label>
+                    <button type="button" class="btn btn-success btn small" id="addClassify"  style="margin-left:5px;height:26px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="top:-1px"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="shape">几何形态</label>
+                <input type="text" class="form-control" id="shape" placeholder="请输入概念的几何形态">
+                <span class="label label-primary">多面体</span>
+                <span class="label label-success">点状</span>
+                <span class="label label-info">线状</span>
+                <span class="label label-warning">面状</span>
+                <span class="label label-danger">像素点</span>
+            </div>
+            <div class="form-group" id="propertyDiv">
+                <label for="shape">属性特征</label>
+                <div class="dropdown" style="display:flex;">
+                    <select id="property">
+                        <option value="physical" selected="selected">物理属性</option>
+                        <option value="chemical">化学属性</option>
+                        <option value="biology">生物属性</option>
+                        <option value="human">人文属性</option>
+                        <option value="economic">经济属性</option>
+                        <option value="social">社会属性</option>
+                    </select>
+                    <button type="button" class="btn btn-success btn small" id="addProperty" style="margin-left:20px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>演变过程</label>
+                <button type="button" class="btn btn-success btn small" id="addProcess" style="margin-left:20px">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="form-group" id="developProcess" style="display:flex">
+                <div style="width:80%;margin-right:2.5%">
+                    <div id="processDiv">
+                        <div class="subProcess">
+                            <div style="display:flex" >
+                                <label class="label label-default labels">过程名</label>
+                                <input type="text" class="processName" style="height:25px;width:80px;">
+                                <label class="label label-default labels" style="margin-left:20px;">过程描述</label>
+                                <input type="text" class="processDesc" style="height:25px;min-width:400px;">
+                            </div>
+                            <div style="display:flex;margin-top:10px">
+                                <label class="label label-default labels">发生条件</label>
+                                <textarea class="condition" placeholder="条件1：....,条件2：....,," rows="4" cols="50"></textarea>
+                                <label class="label label-default labels" style="margin-left:20px;">影响因素</label>
+                                <textarea class="factor" placeholder="因素1：,因素2:," rows="4" cols="50"></textarea>
+                            </div>
+                            <div style="display:flex;margin-top:10px">
+                                <label class="label label-default labels">过程特征</label>
+                                <textarea class="feature" placeholder="特征1：,特征2:," rows="4" cols="50"></textarea>
+                                <label class="label label-default labels" style="margin-left:20px;">参与要素</label>
+                                <textarea class="elements" placeholder="要素1：,要素2:," rows="4" cols="50"></textarea>
+                            </div>
+                            <div style="display:flex;margin-top:10px">
+                                <label class="label label-default labels">发生时间</label>
+                                <span class="spanTitle">精确信息</span>
+                                <input type="text" class="accurateTime" placeholder="2017年5月8日" style="width:35%;margin-right:10px">
+                                <span class="spanTitle" style="margin-left: 20px">模糊信息</span>
+                                <input type="text" class="inAccurateTime" placeholder="春季居多" style="width:35%">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>要素关系</label>
+                <button type="button" class="btn btn-success btn small" id="addRelation" style="margin-left:20px">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-success btn small" id="addRelationDescribe"  style="margin-left:20px">
+                    <span>添加描述</span>
+                </button>
+                <div id="elementDiv">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>空间位置</label>
+                <div class="dropdown" style="display:flex">
+                    <select id="spaceInfoType">
+                        <option value="assure" selected="selected">精确信息</option>
+                        <option value="inassure">模糊信息</option>
+                    </select>
+                    <button type="button" class="btn btn-success btn small" id="addSpaceInfo" style="margin-left:20px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div id="positionDiv">
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="col-md-1 col-md-offset-6 btn btn-default" id="test" onclick="saveFill()">Submit</button>
+            </div>
+    </div>
+</div>
+</body>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="js/jquery.min.js"></script>
+<script src="js/createConcepts/bootstrap-tagsinput.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+</script>
+<script src="js/createConcepts/createConcept.js"></script>
+</html>

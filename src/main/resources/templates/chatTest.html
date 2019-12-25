@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>My WebSocket</title>
+ <link href="img/favicon.ico" rel="shortcut icon">
+  <style>
+   #message{
+     margin-top:40px;
+     border:1px solid gray;
+     padding:20px;
+   }
+  </style>
+</head>
+<body>
+<button id="connect">连接WebSocket</button>
+<button id="closeWebSocket">断开连接</button>
+<hr />
+<br />
+昵称：<input type="text" id="nickname">
+消息：<input id="text" type="text" />
+<button id="send">发送消息</button>
+<div id="message"></div>
+<h3>关联的概念</h3>
+<div id="relateConcepts" style="overflow-y:auto;max-height:400px">
+
+</div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/chat/chatTest.js"></script>
+</html>
