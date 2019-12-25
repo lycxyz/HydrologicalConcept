@@ -1,0 +1,43 @@
+.panel.panelMove .panel-heading {
+    cursor: move;
+}
+
+.panel.panel-default > .panel-heading {
+    color: #768399;
+}
+
+.panel-default > .panel-heading {
+    color: #768399;
+    background-color: #e4e9eb;
+    border-color: #e4e9eb;
+}
+
+.panel-default > .panel-heading {
+    color: #768399;
+    background-color: #e4e9eb;
+    border-color: #e4e9eb;
+}
+
+.panel-heading {
+    padding: 0 15px;
+    min-height: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+#register-form-group input {
+    border-radius: 3px;
+}
