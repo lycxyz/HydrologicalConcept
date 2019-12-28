@@ -2,7 +2,11 @@ package com.opengms.HydrologicalConcept.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.opengms.HydrologicalConcept.dto.ConceptMapDTO;
+import com.opengms.HydrologicalConcept.dto.GeoIconDTO;
+import com.opengms.HydrologicalConcept.entity.ConceptMap;
 import com.opengms.HydrologicalConcept.entity.Concepts;
+import com.opengms.HydrologicalConcept.entity.GeoIcon;
 import org.ansj.domain.Result;
 import org.ansj.splitWord.analysis.ToAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,11 @@ public class AnsjSegService{
     String ConceptSemantic;
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @Autowired
+    GeoIconService geoIconService;
+    @Autowired
+    ConceptMapService conceptMapService;
 
     public String processInfo(String info) {
         String result="";
@@ -55,6 +64,8 @@ public class AnsjSegService{
         JSONArray arr = new JSONArray();
         int size = wordArray.size();
         if(wordArray.size()!=0){
+            //搜索概念
+            JSONArray arr1 = new JSONArray();
             for(int i = 0; i<size; i++){
                 Query query = new Query();
                 String name = wordArray.getString(i);
@@ -62,11 +73,29 @@ public class AnsjSegService{
                 query.addCriteria(Criteria.where("name").regex(pattern));
                 List<Concepts> result = mongoTemplate.find(query, Concepts.class, ConceptSemantic);
                 if(result.size()!=0){
-                    arr.add(result);
-//                    arr.add(,result);
+                    arr1.add(result);
                 }
-
             }
+            //搜索图标
+            JSONArray arr2 = new JSONArray();
+            for (int i = 0; i < size; i++) {
+                List<GeoIconDTO> result = geoIconService.getGeoIconByNameContains(wordArray.getString(i));
+                if(result.size()!=0){
+                    arr2.add(result);
+                }
+            }
+
+            //搜索概念图
+            JSONArray arr3 = new JSONArray();
+            for (int i = 0; i < size; i++) {
+                List<ConceptMapDTO> result = conceptMapService.getConceptMapByDescriptionContains(wordArray.getString(i));
+                if(result.size()!=0){
+                    arr3.add(result);
+                }
+            }
+            arr.add(arr1);
+            arr.add(arr2);
+            arr.add(arr3);
             searchResult= arr.toJSONString();
         }
 

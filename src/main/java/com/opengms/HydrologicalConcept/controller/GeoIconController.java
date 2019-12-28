@@ -24,7 +24,7 @@ public class GeoIconController {
     @ApiOperation(value = "上传地理图标")
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     public String upload(@RequestParam("upGeoIcon") @ApiParam(value = "地理图标文件") MultipartFile mfile,
-                         @RequestParam("geoIcon") @ApiParam(value = "地理图标JSON对象") String jsonObject){
+                         @RequestParam("geoIcon") @ApiParam(value = "地理图标JSON对象") String jsonObject) throws IOException {
 
         GeoIcon geoIcon = JSON.parseObject(jsonObject, GeoIcon.class);
         geoIconService.uploadGeoIcons(mfile,geoIcon);

@@ -153,7 +153,94 @@ Actions.prototype.init = function()
     //SaveTask
     this.addAction('SaveTask', function()
     {
-        var dlg = new ConceptTasksSaveDialog(ui);
+        function generateGUID () {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
+    	// 组装ConceptMap对象
+		{
+            graph.clearSelection();
+			var conceptMap = new Object();
+			if (GeoElements == null){
+				conceptMap["geoId"] = generateGUID();
+			}else{
+				conceptMap["geoId"] = GeoElements.geoId;
+			}
+			conceptMap["name"] = $("#concept_name").val();
+			conceptMap["mapClass"] = $("#concept_class").val();
+			conceptMap["description"] = $("#concept_desc").val();
+
+			conceptMap["shapeInfo"] = $("#concept_shape").val();
+			conceptMap["spacePositions"] = $("#concept_space").val();
+
+			var concept = {};
+			concept["definition"] = $("#concept_definition").val();
+			concept["relatedConcepts"] = $("#concept_relateConcepts").val().split("、");
+   			var classifications = [];
+			var c = $("#concept_dependAndSub").val().split("；\n");
+            for (let i = 0; i < c.length; i++) {
+                if(c[i] != ""){
+                    var a = {
+                        depend: c[i].split("：")[0],
+                        subConcepts: c[i].split("：")[1].split("、")
+                    };
+                    classifications.push(a);
+                }
+            }
+            concept["classifications"] = classifications;
+            conceptMap["concept"] = concept;
+
+            var properties = [];
+            var p = $("#concept_properties").val().split("；\n");
+            for (let i = 0; i < p.length; i++) {
+                if(p[i] != ""){
+                    var a = {
+                        type: p[i].split("：")[0],
+                        description: p[i].split("：")[1]
+                    };
+                    properties.push(a);
+                }
+            }
+            conceptMap["properties"] = properties;
+
+            var processes = [];
+            var proName = $(".concept_processName");
+            var proEle = $(".concept_processElements");
+            var proDesc = $(".concept_processDesc");
+            for (let i = 0; i < proName.length; i++) {
+                var a = {
+                    name: proName[i].value,
+                    elements: proEle[i].value.split("、"),
+                    description: proDesc[i].value
+                };
+                processes.push(a);
+            }
+            conceptMap["processes"] = processes;
+
+            var elementRelations = [];
+            var relateEle = $(".concept_relateElements");
+            var relateType = $(".concept_relateType");
+            var relateValue = $(".concept_relateValue");
+            for (let i = 0; i < relateEle.length; i++) {
+                var a = {
+                    relateElements: relateEle[i].innerText.slice(1).split(","),
+                    relateType: relateType[i].value,
+                    relateValue: relateValue[i].value
+                };
+                elementRelations.push(a);
+            }
+            conceptMap["elementRelations"] = elementRelations;
+        }
+        var dlg = new ConceptTasksSaveDialog(ui,conceptMap);
         ui.showDialog(dlg.container, 300, 450, true, false);
 
     }, null, null, '').isEnabled = isGraphEnabled;

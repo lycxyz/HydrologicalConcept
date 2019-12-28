@@ -28,15 +28,13 @@ public class ConceptMapController {
 
     @ApiOperation(value = "上传概念图")
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    String upload (@RequestBody @ApiParam(value = "概念图JSON对象") String conceptMapObject){
-        ConceptMap conceptMap = JSON.parseObject(conceptMapObject, ConceptMap.class);
+    String upload (@RequestBody @ApiParam(value = "概念图JSON对象") ConceptMap conceptMap){
         conceptMapService.uploadConceptMap(conceptMap);
         return "ok";
     }
     @ApiOperation(value = "更新概念图")
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    String update(@RequestBody @ApiParam(value = "概念图JSON对象") String conceptMapObject){
-        ConceptMap conceptMap = JSON.parseObject(conceptMapObject, ConceptMap.class);
+    String update(@RequestBody @ApiParam(value = "概念图JSON对象") ConceptMap conceptMap) throws Exception {
         conceptMapService.updateConceptMap(conceptMap);
         return "ok";
     }

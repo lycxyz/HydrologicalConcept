@@ -5,16 +5,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!--<link rel="stylesheet" href="../../../share/bootstrap/bootstrap.min.css">-->
-    <link type="text/css" href="js/conceptualModel/styles/navbar.css" rel="stylesheet">
-    <link type="text/css" href="js/conceptualModel/styles/grapheditor.css" rel="stylesheet">
+    <link type="text/css" href="/static/js/conceptualModel/styles/navbar.css" rel="stylesheet">
+    <link type="text/css" href="/static/js/conceptualModel/styles/grapheditor.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- jsPanel CSS -->
     <link href="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/jspanel.css" rel="stylesheet">
     <link rel="shortcut icon" href="#" />
-    <link href="js/conceptualModel/styles/bootstrap.css"/>
+    <link href="/static/js/conceptualModel/styles/bootstrap.css"/>
     <!--<link href="styles/bootstrap-tagsinput.css"/>-->
 
-    <script src="js/conceptualModel/js/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/jquery-1.9.1.js" type="text/javascript"></script>
     <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 
     <script type="text/javascript">
@@ -59,11 +59,11 @@
             return result;
         })(window.location.href);
         mxLoadResources = false;
-        mxBasePath = "js/conceptualModel/js/mxgraph/";
-        STYLE_PATH = "js/conceptualModel/styles";
-        RESOURCES_PATH = "js/conceptualModel/resources";
-        IMAGE_PATH = "js/conceptualModel/images";
-        STENCIL_PATH = "js/conceptualModel/stencils";
+        mxBasePath = "/static/js/conceptualModel/js/mxgraph/";
+        STYLE_PATH = "/static/js/conceptualModel/styles";
+        RESOURCES_PATH = "/static/js/conceptualModel/resources";
+        IMAGE_PATH = "/static/js/conceptualModel/images";
+        STENCIL_PATH = "/static/js/conceptualModel/stencils";
         EXPORT_URL = "http://geomodeling.njnu.edu.cn/GeoModelingNew/MyTestServlet";
         SAVE_URL = "http://geomodeling.njnu.edu.cn/GeoModelingNew/MyTestServlet";
 
@@ -148,10 +148,14 @@
         //             ]
         //     };
         var GeoElements =  {
+            "geoId":"80272317-7d89-d4f4-208e-4956904002eb",
             "name":"雨",
-            "id":"80272317-7d89-d4f4-208e-4956904002eb",
             "description":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
             "xml":"",
+            "pathUrl":"",
+            "mapClass":"水系统",
+            "shapeInfo":"无任何形状",
+            "spacePositions":"不同形式的雨所分布的区域不同",
             "concept":
                 {
                     "definition":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
@@ -169,16 +173,6 @@
                         ]
                 },
             "properties":[{"type":"物理属性","description":"无色透明液体,无粘性"}],
-            "shapeInfo":"无任何形状",
-            "spacePositions":"不同形式的雨所分布的区域不同",
-            "elementRelations":
-                [
-                    {
-                        "relateElements":["水滴","冰晶","云"],
-                        "relateType":"聚合",
-                        "relateValue":"冰晶水滴在高空中相互碰撞形成云"
-                    }
-                ],
             "processes":
                 [
                     {
@@ -195,6 +189,14 @@
                         "name":"成云过程",
                         "elements":["水滴","冰晶","云"],
                         "description":"水滴和冰晶在大气中碰撞生成云，影响因素主要包括浓度、温度，空气湿润时水滴和水晶在大气中运动碰撞容易成云。"
+                    }
+                ],
+            "elementRelations":
+                [
+                    {
+                        "relateElements":["水滴","冰晶","云"],
+                        "relateType":"聚合",
+                        "relateValue":"冰晶水滴在高空中相互碰撞形成云"
                     }
                 ]
         };
@@ -218,22 +220,22 @@
     <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/layout/jspanel.layout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/contextmenu/jspanel.contextmenu.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/dock/jspanel.dock.js"></script>
-    <script src="js/conceptualModel/js/Init.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/deflate/pako.min.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/deflate/base64.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/jscolor/jscolor.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/sanitizer/sanitizer.min.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/mxgraph/js/mxClient.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/EditorUi.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Editor.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Sidebar.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Graph.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Shapes.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Actions.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Menus.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Format.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Toolbar.js" type="text/javascript"></script>
-    <script src="js/conceptualModel/js/Dialogs.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Init.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/deflate/pako.min.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/deflate/base64.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/jscolor/jscolor.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/sanitizer/sanitizer.min.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/mxgraph/js/mxClient.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/EditorUi.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Editor.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Sidebar.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Graph.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Shapes.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Actions.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Menus.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Format.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Toolbar.js" type="text/javascript"></script>
+    <script src="/static/js/conceptualModel/js/Dialogs.js" type="text/javascript"></script>
 </head>
 <body class="geEditor">
 <div class="head">
@@ -241,7 +243,7 @@
         <div class="navbarPanel">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    <img src="images/logo.png" height="45">
+                    <img src="/static/images/logo.png" height="45">
                 </a>
             </div>
             <span class="navTitle">Conceptual Model Builder</span>
@@ -259,8 +261,8 @@
             </ul>
         </div>
     </nav>
-    <button type="button" class="chatBtn" id="chat" style="right:200px;margin-top:5px;position:fixed;z-index:1000;color: #fff;background-color: #449d44;border-color: #398439;">聊天</button>
-    <button type="button" class="chatBtn" id="concepts" style="right:250px;margin-top:5px;position:fixed;z-index:1000;color: #fff;background-color: lightblue;border-color: #398439;">概念</button>
+    <button type="button" class="chatBtn" id="chat" style="right:200px;margin-top:5px;position:fixed;z-index:100;color: #fff;background-color: #449d44;border-color: #398439;">聊天</button>
+    <button type="button" class="chatBtn" id="concepts" style="right:250px;margin-top:5px;position:fixed;z-index:100;color: #fff;background-color: lightblue;border-color: #398439;">概念</button>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -270,12 +272,13 @@
                 theme:'primary',
                 headerTitle:'chatRoom',
                 position:'center-top 0 58',
-                contentSize:'450 250',
+                contentSize:'650 450',
                 resizeit: {
-                    minWidth: 320,
+                    minWidth: 650,
+                    minHeight:390
                 },
                 contentOverflow: 'hidden',
-                // content:'<iframe src="../ChatRoom/index.html" style="width: 100%; height: 100%;"></iframe>',
+                content:'<iframe src="/conceptualModel/chatRoom" style="width: 100%; height: 100%;"></iframe>',
                 // content:'<iframe src="https://derpanoramafotograf.com/EN/projects/fskrpano.php?pano=091128-116" style="width: 100%; height: 100%;"></iframe>',
             });
         });
@@ -295,7 +298,8 @@
         }
     });
 </script>
-<script src="js/conceptualModel/js/Collaboration.js" type="text/javascript"></script>
-<script src="js/chat/chat.js" type="text/javascript"></script>
+<script src="/static/js/conceptualModel/js/Collaboration.js" type="text/javascript"></script>
+
+<!--<script src="js/chat/chat.js" type="text/javascript"></script>-->
 </body>
 </html>

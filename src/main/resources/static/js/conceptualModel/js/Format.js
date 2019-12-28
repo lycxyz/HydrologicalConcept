@@ -6112,6 +6112,7 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         nameTitle.className = 'label-font';
         div.appendChild(nameTitle);
         var nameInput = document.createElement('input');
+        nameInput.id = "concept_name";
 
         if (GeoElements != null){
             nameInput.value = GeoElements.name;
@@ -6132,6 +6133,35 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         div.appendChild(nameInput);
     }
 
+    //分类
+    {
+        var classTitle = document.createElement("div");
+        classTitle.innerHTML = "Classification";
+        classTitle.className = 'label-font';
+        div.appendChild(classTitle);
+
+        var classInput = document.createElement('input');
+        classInput.id = "concept_class"
+
+        if (GeoElements != null){
+            classInput.value = GeoElements.mapClass;
+        }
+
+        classInput.setAttribute('type', 'text');
+        classInput.style.fontSize = '12px';
+        classInput.style.overflow = 'hidden';
+        classInput.style.boxSizing = 'border-box';
+        classInput.style.border = 'solid 1px #d5d5d5';
+        classInput.style.borderRadius = '4px';
+        classInput.style.width = '100%';
+        classInput.style.outline = 'none';
+        classInput.style.padding = '6px';
+        classInput.style.display = 'block';
+        classInput.style.marginBottom = "10px";
+        classInput.style.fontFamily = "sans-serif";
+        div.appendChild(classInput);
+    }
+
     //描述
     {
         var descTitle = document.createElement("div");
@@ -6141,6 +6171,8 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
 
         // 小问题，textarea无法选中
         var descInput = document.createElement('textarea');
+        descInput.id = "concept_desc";
+
         descInput.className = "desc";
 
         if (GeoElements != null){
@@ -6167,47 +6199,13 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         div.appendChild(descInput);
     }
 
-    //分类
-    {
-        // var classTitle = document.createElement("div");
-        // classTitle.innerHTML = "Classification";
-        // classTitle.className = 'label-font';
-        // div.appendChild(classTitle);
-        //
-        // var classSelect = document.createElement("select");
-        // var firstOption = document.createElement("option");
-        // firstOption.text = "---------- select -----------";
-        // classSelect.appendChild(firstOption);
-        //
-        // for (var i = 0; i < this.classificationArray.length; i++) {
-        //     var option = document.createElement('option');
-        //     option.text = this.classificationArray[i];
-        //     option.style.fontFamily = 'Sans-serif';
-        //     classSelect.appendChild(option);
-        // }
-        //
-        // classSelect.style.fontSize = '12px';
-        // classSelect.style.overflow = 'hidden';
-        // classSelect.style.boxSizing = 'border-box';
-        // classSelect.style.border = 'solid 1px #d5d5d5';
-        // classSelect.style.borderRadius = '4px';
-        // classSelect.style.width = '100%';
-        // classSelect.style.outline = 'none';
-        // classSelect.style.padding = '6px';
-        // classSelect.style.display = 'block';
-        // classSelect.style.marginBottom = "10px";
-        // div.appendChild(classSelect);
-
-    }
-
-
     return div;
 };
+
 GeoElementsPanel.prototype.addGeoElements = function (div) {
     var ui = this.editorUi;
     var graph = ui.editor.graph;
     var ss = graph.getSelectionCell();
-    // console.log(ss);
 
     //六要素
 
@@ -6220,6 +6218,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
 
 
         var shapeInput = document.createElement("input");
+        shapeInput.id = "concept_shape";
 
         if (GeoElements != null){
             shapeInput.value = GeoElements.shapeInfo;
@@ -6251,6 +6250,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
 
 
         var spaceInput = document.createElement("input");
+        spaceInput.id = "concept_space";
 
         if (GeoElements != null){
             spaceInput.value = GeoElements.spacePositions;
@@ -6269,52 +6269,6 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         spaceLabelDiv.appendChild(spaceInput);
         div.appendChild(spaceLabelDiv);
 
-        // var space = document.createElement('div');
-        // space.style.border = '1px solid #ebebeb';
-        // space.style.padding = '5px';
-        //
-        // var preciseTypeDiv = document.createElement("div");
-        // var preciseTypeTitle = document.createElement("p");
-        // preciseTypeTitle.innerHTML = "Type: ";
-        // preciseTypeTitle.style.margin = "3px 0 0 1px";
-        // var preciseTypeContent = document.createElement("input");
-        // preciseTypeContent.placeholder = "请输入空间位置的类型，精确或模糊";
-        // preciseTypeContent.style.border = 'solid 1px #d5d5d5';
-        // preciseTypeContent.style.borderRadius = '4px';
-        // preciseTypeContent.style.width = '90%';
-        // preciseTypeContent.style.outline = 'none';
-        // preciseTypeContent.style.padding = '6px';
-        // preciseTypeContent.style.display = 'block';
-        //
-        // if (GeoElements != null){
-        //     preciseTypeContent.value = GeoElements.spacePositions[0].preciseType;
-        // }
-        //
-        // preciseTypeDiv.appendChild(preciseTypeTitle);
-        // preciseTypeDiv.appendChild(preciseTypeContent);
-        // space.appendChild(preciseTypeDiv);
-        //
-        // var spaceDetialDiv = document.createElement("div");
-        // var spaceDetialTitle = document.createElement("p");
-        // spaceDetialTitle.innerHTML = "Description: ";
-        // spaceDetialTitle.style.margin = "3px 0 0 1px";
-        // var spaceDetialContent = document.createElement("input");
-        // spaceDetialContent.placeholder = "请输入空间位置的详细描述";
-        // spaceDetialContent.style.border = 'solid 1px #d5d5d5';
-        // spaceDetialContent.style.borderRadius = '4px';
-        // spaceDetialContent.style.width = '90%';
-        // spaceDetialContent.style.outline = 'none';
-        // spaceDetialContent.style.padding = '6px';
-        // spaceDetialContent.style.display = 'block';
-        //
-        // if (GeoElements != null){
-        //     spaceDetialContent.value = GeoElements.spacePositions[0].description;
-        // }
-        //
-        // spaceDetialDiv.appendChild(spaceDetialTitle);
-        // spaceDetialDiv.appendChild(spaceDetialContent);
-        // space.appendChild(spaceDetialDiv);
-        // div.appendChild(space);
     }
 
     // 语义描述
@@ -6336,6 +6290,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         definitionTitle.innerHTML = "Definition: ";
         definitionTitle.style.margin = "3px 0 0 1px";
         var definitionContent = document.createElement("input");
+        definitionContent.id = "concept_definition";
         definitionContent.placeholder = "请输入概念的定义";
         definitionContent.style.border = 'solid 1px #d5d5d5';
         definitionContent.style.borderRadius = '4px';
@@ -6357,6 +6312,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         relateConceptTitle.innerHTML = "Relate Concepts: ";
         relateConceptTitle.style.margin = "3px 0 0 1px";
         var relateConceptContent = document.createElement("input");
+        relateConceptContent.id = "concept_relateConcepts";
         relateConceptContent.placeholder = "请输入相关概念，例如：relateConcept";
         relateConceptContent.style.border = 'solid 1px #d5d5d5';
         relateConceptContent.style.borderRadius = '4px';
@@ -6366,12 +6322,6 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         relateConceptContent.style.display = 'block';
 
         if (GeoElements != null){
-            // var r = [];
-            // for (let i = 0; i < GeoElements.concepts.relatedConcepts.length; i++) {
-            //     var c = GeoElements.concepts.relatedConcepts[i].name;
-            //     r.push(c);
-            // }
-            // relateConceptContent.value = r.join("、");
             relateConceptContent.value = GeoElements.concept.relatedConcepts.join("、");
         }
 
@@ -6384,7 +6334,9 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         classTitle.innerHTML = "Classifications:";
         classTitle.style.margin = "3px 0 0 1px";
         var classContent = document.createElement('textarea');
+
         classContent.placeholder = "请输入概念依赖及子概念，例如：depend;subconcept1,subconcept2";
+        classContent.id = "concept_dependAndSub";
         classContent.setAttribute('type', 'text');
         classContent.style.fontSize = '12px';
         classContent.style.fontFamily = 'Arial';
@@ -6405,10 +6357,6 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             for (let i = 0; i < GeoElements.concept.classifications.length; i++) {
                 var d = GeoElements.concept.classifications[i].depend;
                 var s = [];
-                // for (let j = 0; j < GeoElements.concepts.classifications[i].subConcepts.length; j++) {
-                //     var n = GeoElements.concepts.classifications[i].subConcepts[j].name;
-                //     s.push(n);
-                // }
                 s = GeoElements.concept.classifications[i].subConcepts;
                 c.push(d+"："+s.join("、"));
             }
@@ -6433,6 +6381,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
         div.appendChild(propertyLabelDiv);
 
         var propertyContent = document.createElement('textarea');
+        propertyContent.id = "concept_properties";
         propertyContent.placeholder = "请输入属性特征，例如：物理属性：无色透明液体，无粘性；化学属性：腐蚀性；";
         propertyContent.setAttribute('type', 'text');
         propertyContent.style.fontSize = '12px';
@@ -6459,81 +6408,6 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             propertyContent.value = c.join("；\n");
         }
         div.appendChild(propertyContent);
-
-        // var property = document.createElement('div');
-        // property.style.border = '1px solid #ebebeb';
-        // property.style.padding = '5px';
-        // var propertyFolderDiv = document.createElement("div");
-        // var propertyContentDiv = document.createElement("div");
-        // propertyContentDiv.id = "property_";
-        // var addEmptyPropertyFolder = document.createElement("button");
-        // addEmptyPropertyFolder.innerHTML = "+";
-        // addEmptyPropertyFolder.style.width = "20px";
-        // addEmptyPropertyFolder.style.height = "24px";
-        // addEmptyPropertyFolder.style.padding = "0px";
-        // addEmptyPropertyFolder.style.fontSize = "20px";
-        // addEmptyPropertyFolder.disabled = true;
-        // addEmptyPropertyFolder.style.cssFloat = 'right';
-        // addEmptyPropertyFolder.style.marginTop = '-12%';
-        // addEmptyPropertyFolder.style.marginRight = '20%';
-        //
-        // addEmptyPropertyFolder.onclick = ()=> {
-        //     if (propertySelect.selectedIndex > 0) {
-        //         this.createElementPalette(propertySelect.options[propertySelect.selectedIndex].text, propertyContentDiv);
-        //     }
-        // };
-        //
-        // if (GeoElements != null){
-        //     for (let i = 0; i < GeoElements.properties.length; i++) {
-        //         var type = GeoElements.properties[i].propertyType;
-        //         var name = GeoElements.properties[i].name;
-        //         var description = GeoElements.properties[i].description;
-        //         var obj = {
-        //             name: name,
-        //             description: description
-        //         };
-        //         this.createElementPalette(type, propertyContentDiv,obj);
-        //
-        //     }
-        // }
-        //
-        //
-        // var propertySelect = document.createElement("select");
-        // var firstOption = document.createElement("option");
-        // firstOption.text = "------ select ------";
-        // propertySelect.appendChild(firstOption);
-        //
-        // for (var i = 0; i < this.propertyArray.length; i++) {
-        //     var option = document.createElement('option');
-        //     option.text = this.propertyArray[i];
-        //     option.style.fontFamily = 'Sans-serif';
-        //     propertySelect.appendChild(option);
-        // }
-        // propertySelect.onchange = function () {
-        //     if (propertySelect.selectedIndex > 0) {
-        //         addEmptyPropertyFolder.disabled = false;
-        //     } else {
-        //         addEmptyPropertyFolder.disabled = true;
-        //     }
-        // };
-        //
-        // propertySelect.style.fontSize = '12px';
-        // propertySelect.style.overflow = 'hidden';
-        // propertySelect.style.boxSizing = 'border-box';
-        // propertySelect.style.border = 'solid 1px #d5d5d5';
-        // propertySelect.style.borderRadius = '4px';
-        // propertySelect.style.width = '65%';
-        // propertySelect.style.outline = 'none';
-        // propertySelect.style.padding = '3px';
-        // propertySelect.style.display = 'block';
-        // propertySelect.style.marginBottom = "5px";
-        //
-        // propertyFolderDiv.appendChild(propertySelect);
-        // propertyFolderDiv.appendChild(addEmptyPropertyFolder);
-        // property.appendChild(propertyFolderDiv);
-        // property.appendChild(propertyContentDiv);
-        // div.appendChild(property);
-
     }
 
     // 演变过程
@@ -6582,6 +6456,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             processNameTitle.innerHTML = "Name: ";
             processNameTitle.style.margin = "3px 0 0 1px";
             var processNameContent = document.createElement("input");
+            processNameContent.className = "concept_processName";
             processNameContent.placeholder = "请输入过程名称";
             processNameContent.style.border = 'solid 1px #d5d5d5';
             processNameContent.style.borderRadius = '4px';
@@ -6603,6 +6478,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             elementsTitle.innerHTML = "Elems: ";
             elementsTitle.style.margin = "3px 0 0 1px";
             var elementsContent = document.createElement("input");
+            elementsContent.className = "concept_processElements";
             elementsContent.placeholder = "请输入参与要素";
             elementsContent.style.border = 'solid 1px #d5d5d5';
             elementsContent.style.borderRadius = '4px';
@@ -6625,6 +6501,7 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             processDescTitle.innerHTML = "Description: ";
             processDescTitle.style.margin = "3px 0 0 1px";
             var processDescContent = document.createElement("textarea");
+            processDescContent.className = "concept_processDesc";
             processDescContent.placeholder = "请输入过程描述";
             processDescContent.setAttribute('type', 'text');
             processDescContent.style.fontSize = '12px';
@@ -6650,101 +6527,6 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
             processDescDiv.appendChild(processDescTitle);
             processDescDiv.appendChild(processDescContent);
             pro.appendChild(processDescDiv);
-
-            // var processFolderDiv = document.createElement("div");
-            // var processContentDiv = document.createElement("div");
-            // processContentDiv.id = 'process_';
-            // var addEmptyProcessFolder = document.createElement("button");
-            // addEmptyProcessFolder.innerHTML = "+";
-            // addEmptyProcessFolder.style.width = "20px";
-            // addEmptyProcessFolder.style.height = "24px";
-            // addEmptyProcessFolder.style.padding = "0";
-            // addEmptyProcessFolder.style.fontSize = "20px";
-            // addEmptyProcessFolder.disabled = true;
-            // addEmptyProcessFolder.style.cssFloat = 'right';
-            // addEmptyProcessFolder.style.marginTop = '-12%';
-            // addEmptyProcessFolder.style.marginRight = '20%';
-            // var removeEmptyProcessFolder = document.createElement("button");
-            // removeEmptyProcessFolder.innerHTML = "×";
-            // removeEmptyProcessFolder.style.width = "20px";
-            // removeEmptyProcessFolder.style.height = "24px";
-            // removeEmptyProcessFolder.style.padding = "0";
-            // removeEmptyProcessFolder.style.fontSize = "20px";
-            // removeEmptyProcessFolder.style.cssFloat = 'right';
-            // removeEmptyProcessFolder.style.marginTop = '-12%';
-            // removeEmptyProcessFolder.style.marginRight = '5%';
-            //
-            // var that = this;
-            // addEmptyProcessFolder.onclick = () => {
-            //     if (processSelect.selectedIndex > 0) {
-            //         that.createElementPalette(processSelect.options[processSelect.selectedIndex].text, processContentDiv);
-            //     }
-            // };
-            //
-            // if (p != undefined) {
-            //     if (p.elements.length>0) {
-            //         that.createElementPalette("参与要素", processContentDiv,p.elements.join("、"));
-            //     }
-            //     if (p.effectFactors.length>0) {
-            //         that.createElementPalette("影响因素", processContentDiv,p.effectFactors.join("、"));
-            //     }
-            //     if (p.processFeatures.length>0) {
-            //         that.createElementPalette("过程特征", processContentDiv,p.processFeatures.join("；"));
-            //     }
-            //     if (p.happenConditions.length>0) {
-            //         that.createElementPalette("发生条件", processContentDiv,p.happenConditions.join("；"));
-            //     }
-            //     if (p.happenTime.length>0) {
-            //         var s = [];
-            //         for (let i = 0; i < p.happenTime.length; i++) {
-            //             var h = p.happenTime[i];
-            //             s.push(h.type+"："+h.description);
-            //         }
-            //         that.createElementPalette("发生时间", processContentDiv,s.join("；\n"));
-            //     }
-            // }
-            //
-            // removeEmptyProcessFolder.onclick = function (elt) {
-            //     var eltTitle = elt.target.parentNode;
-            //     eltTitle.parentNode.remove();
-            // }
-            //
-            // var processSelect = document.createElement("select");
-            // var firstOption = document.createElement("option");
-            // firstOption.text = "------ select ------";
-            // processSelect.appendChild(firstOption);
-            //
-            //
-            // for (var i = 0; i < that.processArray.length; i++) {
-            //     var option = document.createElement('option');
-            //     option.text = that.processArray[i];
-            //     option.style.fontFamily = 'Sans-serif';
-            //     processSelect.appendChild(option);
-            // }
-            // processSelect.onchange = function () {
-            //     if (processSelect.selectedIndex > 0) {
-            //         addEmptyProcessFolder.disabled = false;
-            //     } else {
-            //         addEmptyProcessFolder.disabled = true;
-            //     }
-            // };
-            //
-            // processSelect.style.fontSize = '12px';
-            // processSelect.style.overflow = 'hidden';
-            // processSelect.style.boxSizing = 'border-box';
-            // processSelect.style.border = 'solid 1px #d5d5d5';
-            // processSelect.style.borderRadius = '4px';
-            // processSelect.style.width = '65%';
-            // processSelect.style.outline = 'none';
-            // processSelect.style.padding = '3px';
-            // processSelect.style.display = 'block';
-            // processSelect.style.marginBottom = "5px";
-            //
-            // processFolderDiv.appendChild(processSelect);
-            // processFolderDiv.appendChild(addEmptyProcessFolder);
-            // processFolderDiv.appendChild(removeEmptyProcessFolder);
-            // pro.appendChild(processFolderDiv);
-            // pro.appendChild(processContentDiv);
 
             process.appendChild(pro);
         };
@@ -6893,6 +6675,7 @@ GeoElementsPanel.prototype.createElementTitle = function (label) {
 
     var that = this;
     var elt = document.createElement('div');
+    elt.className = "concept_relateElements";
     elt.style.padding = "2px 0px 0px 10px";
     elt.style.background = "#eeeeee";
     elt.style.cursor = "pointer";
@@ -7011,6 +6794,7 @@ GeoElementsPanel.prototype.addPalette = function (Localization,id,obj) {
         var nameTitle = document.createElement("span");
         nameTitle.innerHTML = "Type: ";
         var nameContent = document.createElement("input");
+        nameContent.className = "concept_relateType";
         nameContent.type = "text";
         nameContent.style.width = "140px";
         nameContent.style.height = "15px";
@@ -7028,6 +6812,7 @@ GeoElementsPanel.prototype.addPalette = function (Localization,id,obj) {
         descTitle.innerHTML = "Description:";
         descTitle.style.margin = "5px 0 0 0";
         var descContent = document.createElement('textarea');
+        descContent.className = "concept_relateValue";
         descContent.setAttribute('type', 'text');
         descContent.style.fontSize = '12px';
         descContent.style.fontFamily = 'Arial';

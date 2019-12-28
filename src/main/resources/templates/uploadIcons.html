@@ -2,8 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="img/favicon.ico" rel="shortcut icon">
-    <link href="css/jqueryTagInput/jquery.tag-editor.css" rel="stylesheet">
+    <link href="/static/img/favicon.ico" rel="shortcut icon">
+    <link href="/static/css/jqueryTagInput/jquery.tag-editor.css" rel="stylesheet">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
         ._main{
@@ -48,7 +48,7 @@
             width: 7px;
             height: 7px;
             vertical-align: middle;
-            background: url(images/delete.png) 0 0 no-repeat;
+            background: url(/static/images/delete.png) 0 0 no-repeat;
             position: relative;
             top: -1px;
         }
@@ -115,7 +115,7 @@
                 </div>
                 <div style="width:18%;display:flex;align-items:center;justify-content:center">
                     <div id="upImg" style="width: 120px;height: 120px;border: 1px solid #cccccc;text-align:center;vertical-align: middle;line-height: 120px;cursor: pointer">
-                        <img id="upImgShow" src="images/upImg.png" width="90" height="90">
+                        <img id="upImgShow" src="/static/images/upImg.png" width="90" height="90">
                     </div>
                     <form class="form" id="form1" enctype="multipart/form-data">
                     <input id="upGeoIcon" name="upGeoIcon" type="file" style="display: none;width: 0px;height: 0px;overflow: hidden">
@@ -130,6 +130,6 @@
 </body>
 <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="js/jqueryTagInput/jquery.tag-editor.js"></script>
-<script src="js/geoIcon/uploadIcon.js"></script>
+<script src="/static/js/jqueryTagInput/jquery.tag-editor.js"></script>
+<script src="/static/js/geoIcon/uploadIcon.js"></script>
 </html>
