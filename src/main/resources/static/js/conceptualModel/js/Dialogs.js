@@ -1335,7 +1335,10 @@ var ConceptTasksReadDialog=function(editorUi){
 /**
  * Constructs a new save dialog
  */
-var ConceptTasksSaveDialog=function(editorUi){
+var ConceptTasksSaveDialog=function(editorUi,conceptMap){
+    var ui = editorUi;
+    var graph = ui.editor.graph;
+
     var div = document.createElement("div");
     div.style.textAlign = "center";
     var head=document.createElement('h1');
@@ -1345,8 +1348,9 @@ var ConceptTasksSaveDialog=function(editorUi){
     var nameText=document.createElement("input");
     nameText.setAttribute('type','text');
     nameText.setAttribute('id', 'graphNameSave');
-    nameText.setAttribute("value",$('#graphName').val());
-    // console.log($('#graphName').val());
+	if (GeoElements != null){
+		nameText.value = GeoElements.name;
+	}
     nameText.style.fontSize = '12px';
     nameText.style.overflow = 'hidden';
     nameText.style.boxSizing = 'border-box';
@@ -1362,7 +1366,9 @@ var ConceptTasksSaveDialog=function(editorUi){
     var textarea = document.createElement('textarea');
     textarea.setAttribute('type', 'text');
     textarea.setAttribute('id', 'graphDescriptionSave');
-    textarea.innerHTML=$('#graphDescription').val();
+    if (GeoElements != null){
+        textarea.innerText = GeoElements.description;
+    }
     textarea.style.fontSize = '12px';
     textarea.style.fontFamily = 'Arial';
     textarea.style.overflow = 'hidden';
@@ -1397,32 +1403,59 @@ var ConceptTasksSaveDialog=function(editorUi){
 
     var okBtn = mxUtils.button(mxResources.get('ok'), function()
     {
-		var reg=/groupID=(\S*)/;
-		var url=window.location.href;
-        var groupID=url.match(reg)[1];
-        var encoder = new mxCodec();
-        var node = encoder.encode(graph.getModel());
-        var graphContentXML = mxUtils.getXml(node);
-        var dataJSON=new Object();
-        dataJSON["Model"]="Conceptual";
-        dataJSON["Type"]="Save";
-        dataJSON["ProjectID"]="";
-        dataJSON["TaskName"]=$('#graphNameSave').val();
-        sessionStorage.setItem("graphName",$('#graphNameSave').val());
-        dataJSON["Description"]=$('#graphDescriptionSave').val();
-        sessionStorage.setItem("graphDescription",$('#graphDescriptionSave').val());
-        dataJSON["GraphXML"]=graphContentXML;
-        // 测试
-        console.log("graphContentXML是:" + graphContentXML);
-        dataJSON["ConceptualXML"] = graph.getConceptualSceneStr();
-        // 测试
-        console.log("graphContentXML是:" + graphContentXML);
-		    dataJSON["CID"]=groupID;
+		// var reg=/groupID=(\S*)/;
+		// var url=window.location.href;
+        // var groupID=url.match(reg)[1];
+        // var encoder = new mxCodec();
+        // var node = encoder.encode(graph.getModel());
+        // var graphContentXML = mxUtils.getXml(node);
+        //
+        // var dataJSON=new Object();
+        // dataJSON["Model"]="Conceptual";
+        // dataJSON["Type"]="Save";
+        // dataJSON["ProjectID"]="";
+        // dataJSON["TaskName"]=$('#graphNameSave').val();
+        // sessionStorage.setItem("graphName",$('#graphNameSave').val());
+        // dataJSON["Description"]=$('#graphDescriptionSave').val();
+        // sessionStorage.setItem("graphDescription",$('#graphDescriptionSave').val());
+        // dataJSON["GraphXML"]=graphContentXML;
+        // // 测试
+        // console.log("graphContentXML是:" + graphContentXML);
+        // dataJSON["ConceptualXML"] = graph.getConceptualSceneStr();
+        // // 测试
+        // console.log("graphContentXML是:" + graphContentXML);
+        // dataJSON["CID"]=groupID;
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x) / scale),
+            Math.floor((border / scale - bounds.y) / scale),
+        );
+        xmlCanvas.scale(1);
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graph.model.root), xmlCanvas);
+        var w = Math.ceil(bounds.width * scale / scale + 2 * border);
+        var h = Math.ceil(bounds.height * scale / scale + 2 * border);
+        var xml = mxUtils.getXml(root);
+
+        conceptMap["cXml"] = ui.editor.getGraphXml().outerHTML;
+        conceptMap["xml"] = xml;
+        conceptMap["width"] = w;
+        conceptMap["height"] = h;
+        conceptMap["pathUrl"] = "";
+        console.log(conceptMap);
         $.ajax({
             type: "POST",
-            url: "http://localhost:8081/TeamWorking/MxGraphServlet",
-            data: dataJSON,
-            dataType: "",
+            url: "/conceptMap/update",
+            data: JSON.stringify(conceptMap),
+            contentType: "application/json",
             success: function (data) {
                 if(data!==""||data!=="undefined"||data!=null){
                     alert("success!");

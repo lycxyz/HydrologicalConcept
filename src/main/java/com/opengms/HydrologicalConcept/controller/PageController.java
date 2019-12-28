@@ -55,11 +55,11 @@ public class PageController {
         return "createConceptStructure";
     };
 
-    @RequestMapping("/chat")
+    @RequestMapping("/chatRoom")
     public String chatroom()
 
     {
-        return "chat";
+        return "chatRoom";
     };
 
     @RequestMapping("/chatTest")

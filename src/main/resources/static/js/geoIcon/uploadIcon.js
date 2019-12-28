@@ -27,12 +27,13 @@ $(document).ready(function(){
         geoIcon["geoId"] = generateGUID();
         geoIcon["name"]=$("#nameInput").val().split('.')[0];
         geoIcon["description"] = $("#descInput").val();
-        geoIcon["pathUrl"] = $("#nameInput").val();
+        geoIcon["pathUrl"] = "";
         geoIcon["iconClass"] = $("#classInput").val();
         geoIcon["tags"] = $("#tagInput").val().split(',');
         geoIcon["relatedConceptMaps"] = [];
         geoIcon["relatedGeoIcons"] = [];
         console.log(geoIcon);
+
         var formData = new FormData(document.getElementById("form1"));
         formData.append("geoIcon",JSON.stringify(geoIcon));
             $.ajax({

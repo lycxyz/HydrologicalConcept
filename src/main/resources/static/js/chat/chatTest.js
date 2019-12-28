@@ -5,7 +5,8 @@ $(document).ready(function (){
 });
 $("#closeWebSocket").click(function(){
     ws.close();
-})
+});
+
 $("#send").click(function () {
     var message = document.getElementById('text').value;
     ws.send(message);
@@ -13,7 +14,6 @@ $("#send").click(function () {
 });
 $("#connect").click(function () {
     var nickname = $("#nickname").val();
-
     if (nickname===""){
         alert("请输入昵称");
         return;
@@ -67,6 +67,7 @@ $("#connect").click(function () {
         ws.close();
     };
 });
+
 //将消息显示在网页上
 function setMessageInnerHTML(innerHTML) {
     document.getElementById('message').innerHTML += innerHTML + '<br/>';

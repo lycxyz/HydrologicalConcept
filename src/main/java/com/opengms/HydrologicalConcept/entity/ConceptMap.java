@@ -11,6 +11,7 @@ public class ConceptMap {
     String geoId;
     String name;
     String description;
+    String cXml;
     String xml;
     String pathUrl;
     String mapClass;
@@ -21,4 +22,7 @@ public class ConceptMap {
     List<PropertyStructure> properties;
     List<ProcessStructure> processes;
     List<ElementRelationStructure> elementRelations;
+
+    Integer width;
+    Integer height;
 }

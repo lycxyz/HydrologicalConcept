@@ -2,11 +2,16 @@ package com.opengms.HydrologicalConcept.service;
 
 import com.opengms.HydrologicalConcept.dao.GeoIconDao;
 import com.opengms.HydrologicalConcept.dao.Impl.IconDao;
+import com.opengms.HydrologicalConcept.dto.GeoIconDTO;
 import com.opengms.HydrologicalConcept.entity.GeoIcon;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,16 +22,24 @@ import java.util.List;
 @Service
 public class GeoIconService {
 
-    private static final String pathUrl = "upload\\geoIcon\\";
-
-    @Autowired
-    IconDao iconDao;
     @Autowired
     GeoIconDao geoIconDao;
 
-    public String uploadGeoIcons(MultipartFile mfile, GeoIcon geoIcon) {
-        iconDao.saveIcon2File(mfile);
-        geoIcon.setPathUrl(pathUrl + geoIcon.getPathUrl());
+    @Value("${resourcePath}")
+    String resourcePath;
+
+    public String uploadGeoIcons(MultipartFile mfile, GeoIcon geoIcon) throws IOException {
+
+        String folderPath = resourcePath + "/geoIcon";
+        File folder = new File(folderPath);
+        if (!folder.exists())
+        {
+            folder.mkdirs();
+        }
+        File file = new File(folderPath,new Date().getTime() + "_geoIcon.png");
+        mfile.transferTo(file);
+
+        geoIcon.setPathUrl("/static/geoIcon/" + file.getName());
         geoIconDao.insert(geoIcon);
         return "ok";
     }
@@ -38,5 +51,9 @@ public class GeoIconService {
 
     public List<GeoIcon> getAllGeoIcons(){
         return geoIconDao.findAll();
+    }
+
+    public List<GeoIconDTO> getGeoIconByNameContains(String key){
+        return geoIconDao.findGeoIconByNameContains(key);
     }
 }
