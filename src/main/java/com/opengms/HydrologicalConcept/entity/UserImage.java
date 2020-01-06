@@ -2,12 +2,10 @@ package com.opengms.HydrologicalConcept.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ProcessStructure {
+public class UserImage {
+    String geoId;
     String name;
-    List<String> elements;
     String description;
-    List<UserImage> relateImages;
+    String pathUrl;
 }

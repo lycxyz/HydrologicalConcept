@@ -7,6 +7,7 @@ import com.opengms.HydrologicalConcept.entity.ConceptMap;
 import com.opengms.HydrologicalConcept.utils.MxGraphUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,6 +22,8 @@ public class ConceptMapService {
     @Value("${resourcePath}")
     String resourcePath;
 
+    MongoTemplate mongoTemplate;
+
     public void uploadConceptMap(ConceptMap conceptMap) {
         conceptMapDao.insert(conceptMap);
     }
@@ -28,13 +31,20 @@ public class ConceptMapService {
 
     public void updateConceptMap(ConceptMap conceptMap) throws Exception {
 
+
         String name = new Date().getTime() + "_conceptMap.png";
         MxGraphUtils mxGraphUtils = new MxGraphUtils();
         mxGraphUtils.exportImage(conceptMap.getWidth(), conceptMap.getHeight(), conceptMap.getXml(), resourcePath+"/conceptMap/", name);
 
         conceptMap.setPathUrl("/static/conceptMap/" + name);
-
-        conceptMapDao.save(conceptMap);
+        Boolean f = conceptMapDao.existsByGeoId(conceptMap.getGeoId());
+        if (f){
+            ConceptMap map = conceptMapDao.findConceptMapByGeoId(conceptMap.getGeoId());
+            conceptMap.set_id(map.get_id());
+            conceptMapDao.save(conceptMap);
+        }else {
+            conceptMapDao.insert(conceptMap);
+        }
     }
 
     public ConceptMap getConceptMapByGeoId(String geoId){

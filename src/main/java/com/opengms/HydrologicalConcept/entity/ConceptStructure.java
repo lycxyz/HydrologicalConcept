@@ -9,4 +9,5 @@ public class ConceptStructure {
     String definition;
     List<String> relatedConcepts;
     List<ConceptClassification> classifications;
+    List<UserImage> relateImages;
 }

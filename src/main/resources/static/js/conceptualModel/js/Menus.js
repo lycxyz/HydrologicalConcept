@@ -4,6 +4,8 @@
 /**
  * Constructs a new graph editor
  */
+// import _ from  'lodash';
+
 Menus = function(editorUi)
 {
 	this.editorUi = editorUi;
@@ -979,6 +981,7 @@ Menus.prototype.addMenuItems = function(menu, keys, parent, trigger, sprites)
  */
 Menus.prototype.createPopupMenu = function(menu, cell, evt)
 {
+    var ui = this.editorUi;
 	var graph = this.editorUi.editor.graph;
 	menu.smartSeparators = true;
 	
@@ -988,8 +991,497 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 	}
 	else
 	{
+        if (graph.getSelectionCount() == 1)
+        {
+            var submenu1 = menu.addItem('关联到...', null, null);
+
+            menu.addItem('几何形状', null, function()
+            {
+                relate2Shape();
+            }, submenu1);
+            menu.addItem('空间位置', null, function()
+            {
+                relate2Space();
+            }, submenu1);
+            menu.addItem('语义描述', null, function()
+            {
+                relate2Concept();
+            }, submenu1);
+
+            var subProperty = menu.addItem('属性特征', null, null, submenu1);
+            for (let i = 0; i < GeoElements.properties.length; i++) {
+                // var type = GeoElements.properties[i].type;
+                menu.addItem(GeoElements.properties[i].type, null, function()
+                {
+                    relate2Property(GeoElements.properties[i].type);
+                }, subProperty);
+            }
+
+            var subProcess = menu.addItem('演变过程', null, null, submenu1);
+            for (let i = 0; i < GeoElements.processes.length; i++) {
+                menu.addItem(GeoElements.processes[i].name, null, function()
+                {
+                    relate2Process(GeoElements.processes[i].name);
+                }, subProcess);
+            }
+
+            var subRelation = menu.addItem('要素关系', null, null, submenu1);
+            for (let i = 0; i < GeoElements.elementRelations.length; i++) {
+                menu.addItem(GeoElements.elementRelations[i].relateElements.join("，"), null, function()
+                {
+                    relate2Relation(GeoElements.elementRelations[i].relateElements.join("，"));
+                }, subRelation);
+            }
+
+            this.addMenuItems(menu, '-', null, evt);
+        }
+
+
 		this.addMenuItems(menu, ['delete', '-', 'cut', 'copy', '-', 'duplicate'], null, evt);
+
 	}
+
+	var relate2Shape =  ()=> {
+        console.log('几何形状');
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "几何形状"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("几何形状");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                var parent = $("#shapeImageContainer")[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                GeoElements.shapeInfo.relateImages.push(userImage);
+            }
+        })
+
+    };
+    var relate2Space =  ()=> {
+        console.log('空间位置');
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "空间位置"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("空间位置");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                var parent = $("#spaceImageContainer")[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                GeoElements.spacePosition.relateImages.push(userImage);
+            }
+        })
+
+    };
+    var relate2Concept =  ()=> {
+        console.log('语义描述');
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "语义描述"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("语义描述");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                var parent = $("#conceptImageContainer")[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                GeoElements.concept.relateImages.push(userImage);
+            }
+        })
+    };
+    var relate2Property = (type)=>{
+        console.log(type);
+
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "属性特征"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("属性特征");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+
+                var parent = $("#propertyImageContainer_"+type)[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                for (let i = 0; i < GeoElements.properties.length; i++) {
+                    if (GeoElements.properties[i].type == type) {
+                        GeoElements.properties[i].relateImages.push(userImage);
+                    }
+                }
+            }
+        })
+    };
+    var relate2Process = (type)=>{
+        console.log(type);
+
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "演变过程"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("演变过程");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+
+                var parent = $("#processImageContainer_"+type)[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                for (let i = 0; i < GeoElements.processes.length; i++) {
+                    if (GeoElements.processes[i].name == type) {
+                        GeoElements.processes[i].relateImages.push(userImage);
+                    }
+                }
+            }
+        })
+    };
+    var relate2Relation = (type)=>{
+        console.log(type);
+
+        var ss = graph.getSelectionCell();
+
+        var xmlDoc = mxUtils.createXmlDocument();
+        var root = xmlDoc.createElement('output');
+        xmlDoc.appendChild(root);
+        var xmlCanvas = new mxXmlCanvas2D(root);
+        var scale=graph.getView().scale;
+        var stackLayout = new mxStackLayout(graph, true);
+        var border=stackLayout.border;
+        var bounds = graph.getGraphBounds();
+        // cells 类数组对象 没有长度的属性和数组的方法
+        var cells = graph.model.cells;
+        var x = ss.geometry.x;
+        var y = ss.geometry.y;
+        for(let i in cells){
+            if (i > 1 && cells[i].parent.id == 1 && cells[i].edge != true) {
+                if (cells[i].geometry.x < x  ) {
+                    x = cells[i].geometry.x;
+                }
+                if (cells[i].geometry.y < y ) {
+                    y = cells[i].geometry.y;
+                }
+            }
+
+        }
+        var dX = x - ss.geometry.x;
+        var dY = y - ss.geometry.y;
+        xmlCanvas.translate(
+            Math.floor((border / scale - bounds.x + dX) / scale),
+            Math.floor((border / scale - bounds.y + dY) / scale),
+        );
+        xmlCanvas.scale(1);
+        var graphRoot = _.cloneDeep(graph.model.root);
+        for (var i = 0;i<graphRoot.children[0].children.length;i++){
+            var cell = graphRoot.children[0].children[i];
+            if (cell != ss){
+                graphRoot.children[0].children.splice(i,1);
+            }
+        }
+        var imgExport = new mxImageExport();
+        imgExport.drawState(graph.getView().getState(graphRoot), xmlCanvas);
+        var w = ss.geometry.width;
+        var h = ss.geometry.height;
+        var xml = mxUtils.getXml(root);
+
+        $.ajax({
+            url: "/userImage/userDIY",
+            data: {
+                width: w,
+                height: h,
+                xml: xml,
+                type: "要素关系"
+            },
+            type: "post",
+            async: true,
+            success: (userImage)=>{
+                graph.clearSelection();
+                $("#geoElementSelect").val("要素关系");
+                $("#geoElementSelect").trigger("change");
+
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+
+                var parent = $("#relateImageContainer_"+type)[0];
+                parent.appendChild(image);
+                parent.style.padding = "5px";
+                for (let i = 0; i < GeoElements.elementRelations.length; i++) {
+                    if (GeoElements.elementRelations[i].relateElements.join("，") == type) {
+                        GeoElements.elementRelations[i].relateImages.push(userImage);
+                    }
+                }
+            }
+        })
+    };
 
 	if (!graph.isSelectionEmpty())
 	{

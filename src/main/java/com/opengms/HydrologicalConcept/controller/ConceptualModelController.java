@@ -1,6 +1,7 @@
 package com.opengms.HydrologicalConcept.controller;
 
 import com.opengms.HydrologicalConcept.dao.GeoIconDao;
+import com.opengms.HydrologicalConcept.dto.GeoIconDTO;
 import com.opengms.HydrologicalConcept.entity.GeoIcon;
 import com.opengms.HydrologicalConcept.service.GeoIconService;
 import io.swagger.annotations.Api;
@@ -42,10 +43,18 @@ public class ConceptualModelController {
         return geoIcons;
     }
 
-    @ApiOperation(value = "返回聊天室页面")
+    @ApiOperation(value = "进入聊天室页面")
     @RequestMapping(value = "/chatRoom",method = RequestMethod.GET)
     ModelAndView chatRoom (){
         ModelAndView mv = new ModelAndView("chatRoom");
         return mv;
     }
+
+    @ApiOperation(value="根据词条返回地理图标")
+    @RequestMapping(value = "/getGeoIconsByKey",method = RequestMethod.GET)
+    List<GeoIconDTO> getGeoIconsByKey(@RequestParam("searchTerms") String key){
+        List<GeoIconDTO> geoIcons = geoIconService.getGeoIconByNameContains(key);
+        return geoIcons;
+    }
+
 }

@@ -92,7 +92,7 @@ Sidebar.prototype.createConceptualSidebar = function (dir) {
     // this.addChatTool(true);
     this.addTabsPalette(true);
     this.addTabContent(true);
-    this.addSearchPalette(false);
+    this.addSearchPalette(true);
     //这里加载左侧的目录树
     this.addGeoIconPalette(true);
     //init General Content
@@ -189,12 +189,12 @@ Sidebar.prototype.gearImage = STENCIL_PATH + '/clipart/Gear_128x128.png';
 /**
  * Specifies the width of the thumbnails.
  */
-Sidebar.prototype.thumbWidth = 36;
+Sidebar.prototype.thumbWidth = 50;
 
 /**
  * Specifies the height of the thumbnails.
  */
-Sidebar.prototype.thumbHeight = 36;
+Sidebar.prototype.thumbHeight = 50;
 
 /**
  * Specifies the padding for the thumbnails. Default is 3.
@@ -204,7 +204,7 @@ Sidebar.prototype.thumbPadding = (document.documentMode >= 5) ? 0 : 1;
 /**
  * Specifies the delay for the tooltip. Default is 2 px.
  */
-Sidebar.prototype.thumbBorder = 2;
+Sidebar.prototype.thumbBorder = 1;
 
 /**
  * Specifies the size of the sidebar titles.
@@ -247,6 +247,13 @@ Sidebar.prototype.defaultImageWidth = 80;
  * Specifies the height for clipart images. Default is 80.
  */
 Sidebar.prototype.defaultImageHeight = 80;
+
+/**
+ * 张硕
+ * 2019.12.30
+ * 存放目前的搜索词条
+ */
+Sidebar.prototype.activeTerms = "";
 
 /**
  * Adds all palettes to the sidebar.
@@ -443,7 +450,7 @@ Sidebar.prototype.addEntry = function (tags, fn) {
         var tmp = tags.toLowerCase().replace(/[\/\,\(\)]/g, ' ').split(' ');
 
         var doAddEntry = mxUtils.bind(this, function (tag) {
-            if (tag.length > 1) {
+            if (tag.length > 0) {
                 var entry = this.taglist[tag];
 
                 if (typeof entry !== 'object') {
@@ -481,50 +488,144 @@ Sidebar.prototype.addEntry = function (tags, fn) {
  * Adds shape search UI.
  */
 Sidebar.prototype.searchEntries = function (searchTerms, count, page, success, error) {
-    if (this.taglist != null && searchTerms != null) {
-        var tmp = searchTerms.toLowerCase().split(' ');
-        var dict = new mxDictionary();
-        var max = (page + 1) * count;
-        var results = [];
-        var index = 0;
+    /**
+     * 张硕
+     * 2019.12.30
+     * 拿着 searchTerms 去数据库里搜索
+     */
+    if (this.activeTerms == '' || this.activeTerms != searchTerms){
+        this.activeTerms = searchTerms;
+        $.ajax({
+            url:'/conceptualModel/getGeoIconsByKey',
+            data:{
+                searchTerms:searchTerms
+            },
+            success:(result)=> {
+                // 填充字典
+                for (var i=0; i< result.length; i++){
+                    var name = result[i].name;
+                    var iconId = result[i].geoId;
+                    var tags = [this.activeTerms, name];
+                    this.createVertexTemplateEntry('image;html=1;labelBackgroundColor=#ffffff;image=' + result[i].pathUrl,
+                        this.defaultImageWidth, this.defaultImageHeight, "", name, name != null, null, tags.join(" "), iconId);
+                }
+                //
+                if (this.taglist != null && searchTerms != null)
+                {
+                    var tmp = searchTerms.toLowerCase().split(' ');
+                    var dict = new mxDictionary();
+                    var max = (page + 1) * count;
+                    var results = [];
+                    var index = 0;
 
-        for (var i = 0; i < tmp.length; i++) {
-            if (tmp[i].length > 0) {
-                var entry = this.taglist[tmp[i]];
-                var tmpDict = new mxDictionary();
+                    for (var i = 0; i < tmp.length; i++)
+                    {
+                        if (tmp[i].length > 0)
+                        {
+                            var entry = this.taglist[tmp[i]];
+                            var tmpDict = new mxDictionary();
 
-                if (entry != null) {
-                    var arr = entry.entries;
-                    results = [];
+                            if (entry != null)
+                            {
+                                var arr = entry.entries;
+                                results = [];
 
-                    for (var j = 0; j < arr.length; j++) {
-                        var entry = arr[j];
+                                for (var j = 0; j < arr.length; j++)
+                                {
+                                    var entry = arr[j];
 
-                        // NOTE Array does not contain duplicates
-                        if ((index == 0) == (dict.get(entry) == null)) {
-                            tmpDict.put(entry, entry);
-                            results.push(entry);
+                                    // NOTE Array does not contain duplicates
+                                    if ((index == 0) == (dict.get(entry) == null))
+                                    {
+                                        tmpDict.put(entry, entry);
+                                        results.push(entry);
 
-                            if (i == tmp.length - 1 && results.length == max) {
-                                success(results.slice(page * count, max), max, true, tmp);
+                                        if (i == tmp.length - 1 && results.length == max)
+                                        {
+                                            success(results.slice(page * count, max), max, true, tmp);
 
-                                return;
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                results = [];
+                            }
+
+                            dict = tmpDict;
+                            index++;
+                        }
+                    }
+
+                    var len = results.length;
+                    success(results.slice(page * count, (page + 1) * count), len, false, tmp);
+                }
+                else
+                {
+                    success([], null, null, tmp);
+                }
+            }
+        });
+
+    } else if (this.activeTerms == searchTerms){
+        if (this.taglist != null && searchTerms != null)
+        {
+            var tmp = searchTerms.toLowerCase().split(' ');
+            var dict = new mxDictionary();
+            var max = (page + 1) * count;
+            var results = [];
+            var index = 0;
+
+            for (var i = 0; i < tmp.length; i++)
+            {
+                if (tmp[i].length > 0)
+                {
+                    var entry = this.taglist[tmp[i]];
+                    var tmpDict = new mxDictionary();
+
+                    if (entry != null)
+                    {
+                        var arr = entry.entries;
+                        results = [];
+
+                        for (var j = 0; j < arr.length; j++)
+                        {
+                            var entry = arr[j];
+
+                            // NOTE Array does not contain duplicates
+                            if ((index == 0) == (dict.get(entry) == null))
+                            {
+                                tmpDict.put(entry, entry);
+                                results.push(entry);
+
+                                if (i == tmp.length - 1 && results.length == max)
+                                {
+                                    success(results.slice(page * count, max), max, true, tmp);
+
+                                    return;
+                                }
                             }
                         }
                     }
-                } else {
-                    results = [];
+                    else
+                    {
+                        results = [];
+                    }
+
+                    dict = tmpDict;
+                    index++;
                 }
-
-                dict = tmpDict;
-                index++;
             }
-        }
 
-        var len = results.length;
-        success(results.slice(page * count, (page + 1) * count), len, false, tmp);
-    } else {
-        success([], null, null, tmp);
+            var len = results.length;
+            success(results.slice(page * count, (page + 1) * count), len, false, tmp);
+        }
+        else
+        {
+            success([], null, null, tmp);
+        }
     }
 };
 
@@ -655,7 +756,7 @@ Sidebar.prototype.addSearchPalette = function (expand) {
     elt.style.visibility = 'hidden';
     //this.container.appendChild(elt);
     tabContents[0].appendChild(elt);
-    tabContents[1].appendChild(elt.cloneNode(true));
+    // tabContents[1].appendChild(elt.cloneNode(true));
 
     var div = document.createElement('div');
     div.className = 'geSidebar';
@@ -901,7 +1002,7 @@ Sidebar.prototype.addSearchPalette = function (expand) {
     var outer2 = document.createElement('div');
     outer2.appendChild(div.cloneNode(true));
     tabContents[0].appendChild(outer);
-    tabContents[1].appendChild(outer2);
+    // tabContents[1].appendChild(outer2);
 
     // Keeps references to the DOM nodes
     this.palettes['search'] = [elt, outer];
@@ -975,27 +1076,49 @@ Sidebar.prototype.addGeoIconPalette = function (expand) {
         success: function (result) {
 
             var iconList = result;
-            var classes = [];
-            for (let i = 0; i < iconList.length; i++) {
-                classes.push(iconList[i].iconClass);
-            }
-            classes = Array.from(new Set(classes));
 
-            for (var j = 0;j < classes.length;j++) {
-                var fns = [];
-                for (var i = 0; i < iconList.length; i++) {
-                    var name = iconList[i].name;
-                    var iconId = iconList[i].geoId;
-                    var xml = iconList[i].xml;
-                    var belong = iconList[i].iconClass;
-                    if (classes[j] === belong) {
-                        fns.push(that.createVertexTemplateEntry('image;html=1;labelBackgroundColor=#ffffff;image=' + iconList[i].pathUrl,
-                            that.defaultImageWidth, that.defaultImageHeight, xml, name, name != null, null, null, iconId));
-                    }
-                }
-                that.addPaletteFunctions2(iconId, classes[j], false, fns);
-            }
+            // var classes = [];
+            // for (let i = 0; i < iconList.length; i++) {
+            //     classes.push(iconList[i].iconClass);
+            // }
+            // classes = Array.from(new Set(classes));
+            //
+            // for (var j = 0;j < classes.length;j++) {
+            //     var fns = [];
+            //     for (var i = 0; i < iconList.length; i++) {
+            //         var name = iconList[i].name;
+            //         var iconId = iconList[i].geoId;
+            //         var xml = iconList[i].xml;
+            //         var belong = iconList[i].iconClass;
+            //         if (classes[j] === belong) {
+            //             fns.push(that.createVertexTemplateEntry('image;html=1;labelBackgroundColor=#ffffff;image=' + iconList[i].pathUrl,
+            //                 that.defaultImageWidth, that.defaultImageHeight, xml, name, name != null, null, null, iconId));
+            //         }
+            //     }
+            //     that.addPaletteFunctions2(iconId, classes[j], false, fns);
+            // }
 
+            var tabContents = that.palettes['tabContent'].childNodes;
+            var elt = document.createElement('div');
+            tabContents[0].appendChild(elt);
+
+            var div = document.createElement('div');
+            div.className = 'geSidebar';
+            div.id = 'geoIconContainer';
+            div.style.boxSizing = 'border-box';
+            div.style.overflow = 'hidden';
+            div.style.width = '100%';
+            div.style.padding = '8px';
+            div.style.paddingTop = '14px';
+            div.style.paddingBottom = '0px';
+            elt.appendChild(div);
+            for (var i = 0; i < iconList.length; i++) {
+                var name = iconList[i].name;
+                var iconId = iconList[i].geoId;
+                var a = that.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + iconList[i].pathUrl,
+                    that.defaultImageWidth, that.defaultImageHeight, "", name, name != null, null, null, iconId);
+                div.appendChild(a);
+            }
         }
     });
 };
@@ -2988,6 +3111,19 @@ Sidebar.prototype.createVertexTemplateEntry = function (style, width, height, va
  * Creates a drop handler for inserting the given cells.
  */
 Sidebar.prototype.createVertexTemplate = function (style, width, height, value, title, showLabel, showTitle, allowCellsInserted, iconId) {
+    var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
+    cells[0].vertex = true;
+    cells[0].geoId = iconId;
+
+    return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);
+};
+
+/**
+ * 张硕
+ * 2019.12.30
+ * 创建geoIocn的cell
+ */
+Sidebar.prototype.createGeoIconTemplate = function (style, width, height, value, title, showLabel, showTitle, allowCellsInserted, iconId) {
     var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
     cells[0].vertex = true;
     cells[0].geoId = iconId;

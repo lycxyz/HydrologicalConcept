@@ -12,7 +12,7 @@ public class GeoIcon {
     String name;
     String description;
     String pathUrl;
-    String iconClass;
+//    String iconClass;
     List<String> tags;
 
     List<ConceptMap> relatedConceptMaps;

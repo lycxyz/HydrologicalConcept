@@ -1335,7 +1335,7 @@ var ConceptTasksReadDialog=function(editorUi){
 /**
  * Constructs a new save dialog
  */
-var ConceptTasksSaveDialog=function(editorUi,conceptMap){
+var ConceptTasksSaveDialog=function(editorUi){
     var ui = editorUi;
     var graph = ui.editor.graph;
 
@@ -1445,18 +1445,18 @@ var ConceptTasksSaveDialog=function(editorUi,conceptMap){
         var h = Math.ceil(bounds.height * scale / scale + 2 * border);
         var xml = mxUtils.getXml(root);
 
-        conceptMap["cXml"] = ui.editor.getGraphXml().outerHTML;
-        conceptMap["xml"] = xml;
-        conceptMap["width"] = w;
-        conceptMap["height"] = h;
-        conceptMap["pathUrl"] = "";
-        console.log(conceptMap);
+        // conceptMap["cXml"] = ui.editor.getGraphXml().outerHTML;
+        GeoElements.graphXml = ui.editor.getGraphXml().outerHTML;
+        GeoElements.xml = xml;
+        GeoElements.width = w;
+        GeoElements.height = h;
+        console.log(GeoElements);
         $.ajax({
             type: "POST",
             url: "/conceptMap/update",
-            data: JSON.stringify(conceptMap),
+            data: JSON.stringify(GeoElements),
             contentType: "application/json",
-            success: function (data) {
+            success:  (data)=> {
                 if(data!==""||data!=="undefined"||data!=null){
                     alert("success!");
                     // console.log("save task: "+data);

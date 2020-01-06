@@ -24,6 +24,13 @@ Actions.prototype.init = function()
 		return Action.prototype.isEnabled.apply(this, arguments) && graph.isEnabled();
 	};
 
+    /**
+	 * 张硕
+	 * 2020.1.1
+	 * 添加关联事件
+     * 可以使用更原生的方法添加菜单，见Menus.prototype.createPopupMenu
+     */
+
 	// File actions
 	this.addAction('new...', function() { window.open(ui.getUrl()); });
 	this.addAction('open...', function()
@@ -169,78 +176,93 @@ Actions.prototype.init = function()
     	// 组装ConceptMap对象
 		{
             graph.clearSelection();
-			var conceptMap = new Object();
-			if (GeoElements == null){
-				conceptMap["geoId"] = generateGUID();
-			}else{
-				conceptMap["geoId"] = GeoElements.geoId;
-			}
-			conceptMap["name"] = $("#concept_name").val();
-			conceptMap["mapClass"] = $("#concept_class").val();
-			conceptMap["description"] = $("#concept_desc").val();
-
-			conceptMap["shapeInfo"] = $("#concept_shape").val();
-			conceptMap["spacePositions"] = $("#concept_space").val();
-
-			var concept = {};
-			concept["definition"] = $("#concept_definition").val();
-			concept["relatedConcepts"] = $("#concept_relateConcepts").val().split("、");
-   			var classifications = [];
-			var c = $("#concept_dependAndSub").val().split("；\n");
-            for (let i = 0; i < c.length; i++) {
-                if(c[i] != ""){
-                    var a = {
-                        depend: c[i].split("：")[0],
-                        subConcepts: c[i].split("：")[1].split("、")
-                    };
-                    classifications.push(a);
+            if (GeoElements.geoId == ""){
+                GeoElements.geoId = generateGUID();
+            }
+            GeoElements.name = $("#concept_name").val();
+            GeoElements.mapClass = $("#concept_class").val();
+            GeoElements.description = $("#concept_desc").val();
+            for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+                GeoElements.shapeInfo.relateImages[i].description = GeoElements.shapeInfo.desc;
+                $.ajax({
+                    url: "/userImage/update",
+                    data: JSON.stringify(GeoElements.shapeInfo.relateImages[i]),
+                    type: "post",
+                    async: true,
+                    success: (result)=>{
+                        console.log(result);
+                    }
+                })
+            }
+            for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+                GeoElements.spacePosition.relateImages[i].description = GeoElements.spacePosition.desc;
+                $.ajax({
+                    url: "/userImage/update",
+                    data: JSON.stringify(GeoElements.spacePosition.relateImages[i]),
+                    type: "post",
+                    async: true,
+                    success: (result)=>{
+                        console.log(result);
+                    }
+                })
+            }
+            for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+                GeoElements.concept.relateImages[i].description = GeoElements.concept.definition;
+                $.ajax({
+                    url: "/userImage/update",
+                    data: JSON.stringify(GeoElements.concept.relateImages[i]),
+                    type: "post",
+                    async: true,
+                    success: (result)=>{
+                        console.log(result);
+                    }
+                })
+            }
+            for (let j = 0; j < GeoElements.properties.length; j++) {
+                for (let i = 0; i < GeoElements.properties[j].relateImages.length; i++) {
+                    GeoElements.properties[j].relateImages[i].description = GeoElements.properties[j].description;
+                    $.ajax({
+                        url: "/userImage/update",
+                        data: JSON.stringify(GeoElements.properties[j].relateImages[i]),
+                        type: "post",
+                        async: true,
+                        success: (result)=>{
+                            console.log(result);
+                        }
+                    })
                 }
             }
-            concept["classifications"] = classifications;
-            conceptMap["concept"] = concept;
-
-            var properties = [];
-            var p = $("#concept_properties").val().split("；\n");
-            for (let i = 0; i < p.length; i++) {
-                if(p[i] != ""){
-                    var a = {
-                        type: p[i].split("：")[0],
-                        description: p[i].split("：")[1]
-                    };
-                    properties.push(a);
+            for (let j = 0; j < GeoElements.processes.length; j++) {
+                for (let i = 0; i < GeoElements.processes[j].relateImages.length; i++) {
+                    GeoElements.processes[j].relateImages[i].description = GeoElements.processes[j].description;
+                    $.ajax({
+                        url: "/userImage/update",
+                        data: JSON.stringify(GeoElements.processes[j].relateImages[i]),
+                        type: "post",
+                        async: true,
+                        success: (result)=>{
+                            console.log(result);
+                        }
+                    })
                 }
             }
-            conceptMap["properties"] = properties;
-
-            var processes = [];
-            var proName = $(".concept_processName");
-            var proEle = $(".concept_processElements");
-            var proDesc = $(".concept_processDesc");
-            for (let i = 0; i < proName.length; i++) {
-                var a = {
-                    name: proName[i].value,
-                    elements: proEle[i].value.split("、"),
-                    description: proDesc[i].value
-                };
-                processes.push(a);
+            for (let j = 0; j < GeoElements.elementRelations.length; j++) {
+                for (let i = 0; i < GeoElements.elementRelations[j].relateImages.length; i++) {
+                    GeoElements.elementRelations[j].relateImages[i].description = GeoElements.elementRelations[j].relateValue;
+                    $.ajax({
+                        url: "/userImage/update",
+                        data: JSON.stringify(GeoElements.elementRelations[j].relateImages[i]),
+                        type: "post",
+                        async: true,
+                        success: (result)=>{
+                            console.log(result);
+                        }
+                    })
+                }
             }
-            conceptMap["processes"] = processes;
 
-            var elementRelations = [];
-            var relateEle = $(".concept_relateElements");
-            var relateType = $(".concept_relateType");
-            var relateValue = $(".concept_relateValue");
-            for (let i = 0; i < relateEle.length; i++) {
-                var a = {
-                    relateElements: relateEle[i].innerText.slice(1).split(","),
-                    relateType: relateType[i].value,
-                    relateValue: relateValue[i].value
-                };
-                elementRelations.push(a);
-            }
-            conceptMap["elementRelations"] = elementRelations;
         }
-        var dlg = new ConceptTasksSaveDialog(ui,conceptMap);
+        var dlg = new ConceptTasksSaveDialog(ui);
         ui.showDialog(dlg.container, 300, 450, true, false);
 
     }, null, null, '').isEnabled = isGraphEnabled;
@@ -1362,7 +1384,7 @@ Actions.prototype.init = function()
 		if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
 		{
 			graph.clearSelection();
-			ui.actions.get('image').funct();
+            ui.actions.get('image').funct();
 		}
 	}).isEnabled = isGraphEnabled;
 	action = this.addAction('layers', mxUtils.bind(this, function()

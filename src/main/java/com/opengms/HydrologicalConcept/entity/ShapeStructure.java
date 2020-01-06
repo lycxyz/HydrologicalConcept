@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PropertyStructure {
-    String type;
-    String description;
+public class ShapeStructure {
+    String desc;
     List<UserImage> relateImages;
 }

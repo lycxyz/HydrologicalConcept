@@ -1,0 +1,161 @@
+{
+  "geoId": "string",
+  concept_name"name": "string",
+  concept_class"mapClass": "string",
+  concept_desc"description": "string",
+  "pathUrl": "string",
+  "height": 0,
+  "width": 0,
+  "xml": "string",
+  "graphXml": "string",
+  
+  geoElementSelect
+  "shapeInfo": {
+    concept_shape"desc": "string",
+    shapeImageContainer"relateImages": [
+      {
+        "description": "string",
+        "geoId": "string",
+        "name": "string",
+        "pathUrl": "string"
+      }
+    ]
+  },
+  "spacePosition": {
+    concept_space"desc": "string",
+    spaceImageContainer"relateImages": [
+      {
+        "description": "string",
+        "geoId": "string",
+        "name": "string",
+        "pathUrl": "string"
+      }
+    ]
+  },
+  "concept": {
+    concept_definition"definition": "string",
+    concept_relateConcepts"relatedConcepts": [
+      "string"
+    ],
+    concept_dependAndSub"classifications": [
+      {
+        "depend": "string",
+        "subConcepts": [
+          "string"
+        ]
+      }
+    ],
+    "relateImages": [
+      {
+        "description": "string",
+        "geoId": "string",
+        "name": "string",
+        "pathUrl": "string"
+      }
+    ]
+  },
+  "elementRelations": [
+    {
+      "relateElements": [
+        "string"
+      ],
+      "relateImages": [
+        {
+          "description": "string",
+          "geoId": "string",
+          "name": "string",
+          "pathUrl": "string"
+        }
+      ],
+      "relateType": "string",
+      "relateValue": "string"
+    }
+  ],
+  "processes": [
+    {
+      calssname concept_processName"name": "string","elements": [
+        "string"
+      ],
+      "description": "string",
+      "relateImages": [
+        {
+          "description": "string",
+          "geoId": "string",
+          "name": "string",
+          "pathUrl": "string"
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      classname concept_properties"description": "string",
+      "relateImages": [
+        {
+          "description": "string",
+          "geoId": "string",
+          "name": "string",
+          "pathUrl": "string"
+        }
+      ],
+      "type": "string"
+    }
+  ],
+
+}
+
+{
+  "geoId": "",
+  "name": "",
+  "mapClass": "",
+  "description": "",
+  "pathUrl": "",
+  "height": 0,
+  "width": 0,
+  "xml": "",
+  "graphXml": "",
+  
+  "shapeInfo": {
+    "desc": "",
+    "relateImages": []
+  },
+  "spacePosition": {
+    "desc": "",
+    "relateImages": []
+  },
+  "concept": {
+    "classifications": [
+      {
+        "depend": "",
+        "subConcepts": []
+      }
+    ],
+    "definition": "",
+    "relateImages": [],
+    "relatedConcepts": []
+  },
+  "elementRelations": [
+    {
+      "relateElements": [],
+      "relateImages": [],
+      "relateType": "",
+      "relateValue": ""
+    }
+  ],
+  "processes": [
+    {
+      "description": "",
+      "elements": [],
+      "name": "",
+      "relateImages": []
+    }
+  ],
+  "properties": [
+    {
+      "description": "",
+      "relateImages": [],
+      "type": ""
+    }
+  ]
+
+}

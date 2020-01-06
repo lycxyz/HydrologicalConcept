@@ -6088,7 +6088,8 @@ GeoElementsPanel = function (format, editorUi, container) {
 mxUtils.extend(GeoElementsPanel, BaseFormatPanel);
 
 GeoElementsPanel.prototype.processArray = ['参与要素', '影响因素', '过程特征', '发生条件', '发生时间'];
-GeoElementsPanel.prototype.elementArray = ['风', '雨', '雷', '电', '金','木', '水','火'];
+GeoElementsPanel.prototype.geoElementArray = ['几何形状', '空间位置', '语义描述', '属性特征', '演变过程','要素关系'];
+GeoElementsPanel.prototype.propertyArray = ['物理', '化学', '生物', '人文', '社会','经济'];
 GeoElementsPanel.prototype.classificationArray = ["水系统", "土壤系统","大气系统","生态系统", "人文/社会/经济","陆地地表","海洋系统", "固体地球系统"];
 
 GeoElementsPanel.prototype.init = function () {
@@ -6097,7 +6098,8 @@ GeoElementsPanel.prototype.init = function () {
     var graph = editor.graph;
 
     this.container.appendChild(this.addGeneralElements(this.createPanel()));
-    this.container.appendChild(this.addGeoElements(this.createPanel()));
+    this.container.appendChild(this.addGeoElementSelect(this.createPanel()));
+    // this.container.appendChild(this.addGeoElements(this.createPanel()));
 };
 
 GeoElementsPanel.prototype.addGeneralElements = function(div){
@@ -6113,11 +6115,6 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         div.appendChild(nameTitle);
         var nameInput = document.createElement('input');
         nameInput.id = "concept_name";
-
-        if (GeoElements != null){
-            nameInput.value = GeoElements.name;
-        }
-
         nameInput.setAttribute('type', 'text');
         nameInput.style.fontSize = '12px';
         nameInput.style.overflow = 'hidden';
@@ -6131,6 +6128,10 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         nameInput.style.marginBottom = "10px";
         nameInput.style.fontFamily = "sans-serif";
         div.appendChild(nameInput);
+        nameInput.value = GeoElements.name;
+        nameInput.onchange = ()=>{
+            GeoElements.name = nameInput.value;
+        };
     }
 
     //分类
@@ -6141,12 +6142,7 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         div.appendChild(classTitle);
 
         var classInput = document.createElement('input');
-        classInput.id = "concept_class"
-
-        if (GeoElements != null){
-            classInput.value = GeoElements.mapClass;
-        }
-
+        classInput.id = "concept_class";
         classInput.setAttribute('type', 'text');
         classInput.style.fontSize = '12px';
         classInput.style.overflow = 'hidden';
@@ -6160,6 +6156,10 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         classInput.style.marginBottom = "10px";
         classInput.style.fontFamily = "sans-serif";
         div.appendChild(classInput);
+        classInput.value = GeoElements.mapClass;
+        classInput.onchange = ()=>{
+            GeoElements.mapClass = classInput.value;
+        };
     }
 
     //描述
@@ -6172,13 +6172,7 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         // 小问题，textarea无法选中
         var descInput = document.createElement('textarea');
         descInput.id = "concept_desc";
-
         descInput.className = "desc";
-
-        if (GeoElements != null){
-            descInput.value = GeoElements.description;
-        }
-
         descInput.setAttribute('type', 'text');
         descInput.style.fontSize = '12px';
         descInput.style.overflow = 'hidden';
@@ -6195,8 +6189,11 @@ GeoElementsPanel.prototype.addGeneralElements = function(div){
         descInput.onclick = function () {
             this.focus();
         };
-
         div.appendChild(descInput);
+        descInput.value = GeoElements.description;
+        descInput.onchange = ()=>{
+            GeoElements.description = descInput.value;
+        };
     }
 
     return div;
@@ -6652,6 +6649,1363 @@ GeoElementsPanel.prototype.addGeoElements = function (div) {
 
 
     return div;
+};
+
+GeoElementsPanel.prototype.addGeoElementSelect = function(div){
+    var ui = this.editorUi;
+    var graph = ui.editor.graph;
+
+    var geoElementSelectDiv = document.createElement("div");
+    var selectTitle = document.createElement("span");
+    selectTitle.className = "label-font";
+
+    selectTitle.innerHTML = "不同维度：";
+    var geoElementSelect = document.createElement("select");
+    geoElementSelect.id = "geoElementSelect";
+    var firstOption = document.createElement("option");
+    firstOption.text = "------ 选择维度 ------";
+    firstOption.style.textAlign = "center";
+    geoElementSelect.appendChild(firstOption);
+
+    for (var i = 0; i < this.geoElementArray.length; i++) {
+        var option = document.createElement('option');
+        option.text = this.geoElementArray[i];
+        option.style.fontFamily = 'Sans-serif';
+        option.style.textAlign = "center";
+        geoElementSelect.appendChild(option);
+    }
+
+    geoElementSelect.style.fontSize = '12px';
+    geoElementSelect.style.boxSizing = 'border-box';
+    geoElementSelect.style.border = 'solid 1px #d5d5d5';
+    geoElementSelect.style.borderRadius = '4px';
+    geoElementSelect.style.outline = 'none';
+    geoElementSelect.style.padding = '6px';
+    geoElementSelect.style.marginBottom = "10px";
+
+    var eleContainer = document.createElement("div");
+    geoElementSelect.onchange =  () => {
+        var value = geoElementSelect.value;
+        switch (value) {
+            case "几何形状":
+                eleContainer.innerHTML = "";
+                this.addShapePalette(eleContainer,ui);
+                break;
+            case "空间位置":
+                eleContainer.innerHTML = "";
+                this.addSpacePalette(eleContainer,ui);
+                break;
+            case "语义描述":
+                eleContainer.innerHTML = "";
+                this.addConceptPalette(eleContainer,ui);
+                break;
+            case "属性特征":
+                eleContainer.innerHTML = "";
+                this.addPropertyPalette(eleContainer,ui);
+                break;
+            case "演变过程":
+                eleContainer.innerHTML = "";
+                this.addProcessPalette(eleContainer,ui);
+                break;
+            case "要素关系":
+                eleContainer.innerHTML = "";
+                this.addRelationPalette(eleContainer,ui);
+                break;
+            default:
+                eleContainer.innerHTML = "";
+                break;
+        }
+    };
+
+    geoElementSelectDiv.appendChild(selectTitle);
+    geoElementSelectDiv.appendChild(geoElementSelect);
+    geoElementSelectDiv.appendChild(eleContainer);
+    div.appendChild(geoElementSelectDiv);
+    return div;
+};
+
+
+GeoElementsPanel.prototype.addShapePalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    //几何形状
+    {
+        var shapeInfo = document.createElement('div');
+        var shapeLabel = document.createElement('label');
+        shapeLabel.innerHTML = "几何形状";
+        shapeLabel.className = 'label-font2';
+
+
+        var shapeInput = document.createElement("input");
+        shapeInput.id = "concept_shape";
+        shapeInput.value = GeoElements.shapeInfo.desc;
+        shapeInput.style.fontSize = '12px';
+        shapeInput.style.overflow = 'hidden';
+        shapeInput.style.boxSizing = 'border-box';
+        shapeInput.style.border = 'solid 1px #d5d5d5';
+        shapeInput.style.borderRadius = '4px';
+        shapeInput.style.width = '100%';
+        shapeInput.style.outline = 'none';
+        shapeInput.style.padding = '6px';
+        shapeInput.style.display = 'block';
+        shapeInput.style.margin = "5px 0 10px";
+        shapeInfo.appendChild(shapeLabel);
+        shapeInfo.appendChild(shapeInput);
+        shapeInput.onchange = ()=>{
+            GeoElements.shapeInfo.desc = shapeInput.value;
+            // GeoElements.shapeInfo.relateImages.forEach((item)=>{
+            //     item.description = shapeInput.value;
+            // });
+        };
+
+        var uploadButton1 = document.createElement('button');
+        uploadButton1.innerText = "本地图片";
+        uploadButton1.style.padding = "0";
+        uploadButton1.style.margin = '0 5px';
+        uploadButton1.style.fontSize = "13px";
+        uploadButton1.style.lineHeight = '1.5';
+        var uploadButton2 = document.createElement('button');
+        uploadButton2.innerText = "在线图片";
+        uploadButton2.style.padding = "0";
+        uploadButton2.style.margin = '0 5px';
+        uploadButton2.style.fontSize = "13px";
+        uploadButton2.style.lineHeight = '1.5';
+        shapeInfo.appendChild(uploadButton1);
+        shapeInfo.appendChild(uploadButton2);
+        var br = document.createElement("br");
+        var imageContainer = document.createElement("div");
+        imageContainer.id = "shapeImageContainer";
+        imageContainer.style.whiteSpace = "initial";
+        imageContainer.style.margin = "5px";
+        imageContainer.style.backgroundColor = "#d4e4b4";
+        shapeInfo.appendChild(br);
+
+        for (let i = 0; i < GeoElements.shapeInfo.relateImages.length ; i++) {
+            var a = GeoElements.shapeInfo.relateImages[i];
+            var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+            imageContainer.appendChild(image);
+            imageContainer.style.padding = "5px";
+        }
+
+        var fileInput2 = document.createElement("input");
+        fileInput2.id = "shapeUpload2";
+        fileInput2.placeholder = "请输入图片URL，Enter以确定";
+        fileInput2.style.display = "none";
+        fileInput2.style.fontSize = '12px';
+        fileInput2.style.overflow = 'hidden';
+        fileInput2.style.boxSizing = 'border-box';
+        fileInput2.style.border = 'solid 1px #d5d5d5';
+        fileInput2.style.borderRadius = '4px';
+        fileInput2.style.width = '100%';
+        fileInput2.style.outline = 'none';
+        fileInput2.style.padding = '6px';
+        fileInput2.style.margin = "5px 0 10px";
+        uploadButton2.onclick = ()=>{
+            fileInput2.style.display = "block";
+        };
+        fileInput2.onkeyup = (event)=>{
+            if (event.keyCode == "13") {
+                fileInput2.style.display = "none";
+                var url = fileInput2.value;
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                var parent = $("#shapeImageContainer")[0];
+                parent.appendChild(image);
+                imageContainer.style.padding = "5px";
+                $.ajax({
+                    url: "/userImage/online",
+                    data: {
+                        url: url
+                    },
+                    type: "post",
+                    async: true,
+                    success: (userImage)=>{
+                        GeoElements.shapeInfo.relateImages.push(userImage);
+                        console.log(userImage);
+                    }
+                })
+            }
+        };
+        shapeInfo.appendChild(fileInput2);
+        shapeInfo.appendChild(imageContainer);
+
+        var fileInput1 = document.createElement("input");
+        fileInput1.id = "shapeUpload1";
+        fileInput1.style.display = "none";
+        fileInput1.type = "file";
+        shapeInfo.appendChild(fileInput1);
+        uploadButton1.onclick = ()=>{
+            $("#shapeUpload1").trigger("click");
+        };
+        fileInput1.onchange = ()=>{
+            var file = document.getElementById("shapeUpload1");
+            console.log(file.files[0]);
+            var formData = new FormData();
+            formData.append("mfile",file.files[0]);
+            $.ajax({
+                url: "/userImage/upload",
+                data: formData,
+                type: "post",
+                async: true,
+                processData: false,
+                contentType: false,
+                success: (userImage)=>{
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                    var parent = $("#shapeImageContainer")[0];
+                    parent.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    GeoElements.shapeInfo.relateImages.push(userImage);
+                }
+            })
+        };
+
+        div.appendChild(shapeInfo);
+    }
+    container.appendChild(div);
+};
+GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    // 空间位置
+    {
+        var spaceLabelDiv = document.createElement('div');
+        var spaceLabel = document.createElement('label');
+        spaceLabel.innerHTML = '空间位置';
+        spaceLabel.className = 'label-font2';
+        spaceLabelDiv.appendChild(spaceLabel);
+
+
+        var spaceInput = document.createElement("input");
+        spaceInput.value = GeoElements.spacePosition.desc;
+        spaceInput.id = "concept_space";
+        spaceInput.style.fontSize = '12px';
+        spaceInput.style.overflow = 'hidden';
+        spaceInput.style.boxSizing = 'border-box';
+        spaceInput.style.border = 'solid 1px #d5d5d5';
+        spaceInput.style.borderRadius = '4px';
+        spaceInput.style.width = '100%';
+        spaceInput.style.outline = 'none';
+        spaceInput.style.padding = '6px';
+        spaceInput.style.display = 'block';
+        spaceInput.style.margin = "5px 0 10px";
+        spaceLabelDiv.appendChild(spaceInput);
+        spaceInput.onchange = ()=>{
+            GeoElements.spacePosition.desc = spaceInput.value;
+        };
+
+        var uploadButton1 = document.createElement('button');
+        uploadButton1.innerText = "本地图片";
+        uploadButton1.style.padding = "0";
+        uploadButton1.style.margin = '0 5px';
+        uploadButton1.style.fontSize = "13px";
+        uploadButton1.style.lineHeight = '1.5';
+        var uploadButton2 = document.createElement('button');
+        uploadButton2.innerText = "在线图片";
+        uploadButton2.style.padding = "0";
+        uploadButton2.style.margin = '0 5px';
+        uploadButton2.style.fontSize = "13px";
+        uploadButton2.style.lineHeight = '1.5';
+        spaceLabelDiv.appendChild(uploadButton1);
+        spaceLabelDiv.appendChild(uploadButton2);
+
+        var br = document.createElement("br");
+        var imageContainer = document.createElement("div");
+        imageContainer.id = "spaceImageContainer";
+        imageContainer.style.whiteSpace = "initial";
+        imageContainer.style.margin = "5px";
+        imageContainer.style.backgroundColor = "#d4e4b4";
+        spaceLabelDiv.appendChild(br);
+        for (let i = 0; i < GeoElements.spacePosition.relateImages.length ; i++) {
+            var a = GeoElements.spacePosition.relateImages[i];
+            var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+            imageContainer.appendChild(image);
+            imageContainer.style.padding = "5px";
+        }
+        var fileInput2 = document.createElement("input");
+        fileInput2.id = "shapeUpload2";
+        fileInput2.placeholder = "请输入图片URL，Enter以确定";
+        fileInput2.style.display = "none";
+        fileInput2.style.fontSize = '12px';
+        fileInput2.style.overflow = 'hidden';
+        fileInput2.style.boxSizing = 'border-box';
+        fileInput2.style.border = 'solid 1px #d5d5d5';
+        fileInput2.style.borderRadius = '4px';
+        fileInput2.style.width = '100%';
+        fileInput2.style.outline = 'none';
+        fileInput2.style.padding = '6px';
+        fileInput2.style.margin = "5px 0 10px";
+        uploadButton2.onclick = ()=>{
+            fileInput2.style.display = "block";
+        };
+        fileInput2.onkeyup = (event)=>{
+            if (event.keyCode == "13") {
+                fileInput2.style.display = "none";
+                var url = fileInput2.value;
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                var parent = $("#spaceImageContainer")[0];
+                parent.appendChild(image);
+                imageContainer.style.padding = "5px";
+                $.ajax({
+                    url: "/userImage/online",
+                    data: {
+                        url: url
+                    },
+                    type: "post",
+                    async: true,
+                    success: (userImage)=>{
+                        GeoElements.spacePosition.relateImages.push(userImage);
+                        console.log(userImage);
+                    }
+                })
+            }
+        };
+        spaceLabelDiv.appendChild(fileInput2);
+        spaceLabelDiv.appendChild(imageContainer);
+
+        var fileInput1 = document.createElement("input");
+        fileInput1.id = "shapeUpload1";
+        fileInput1.style.display = "none";
+        fileInput1.type = "file";
+        spaceLabelDiv.appendChild(fileInput1);
+        uploadButton1.onclick = ()=>{
+            $("#shapeUpload1").trigger("click");
+        };
+        fileInput1.onchange = ()=>{
+            var file = document.getElementById("shapeUpload1");
+            console.log(file.files[0]);
+            var formData = new FormData();
+            formData.append("mfile",file.files[0]);
+            $.ajax({
+                url: "/userImage/upload",
+                data: formData,
+                type: "post",
+                async: true,
+                processData: false,
+                contentType: false,
+                success: (userImage)=>{
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                    var parent = $("#spaceImageContainer")[0];
+                    parent.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    GeoElements.spacePosition.relateImages.push(userImage);
+                }
+            })
+        };
+
+        div.appendChild(spaceLabelDiv);
+
+    }
+
+    container.appendChild(div);
+};
+GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    // 语义描述
+    {
+        var conceptLabelDiv = document.createElement('div');
+        var conceptLabel = document.createElement('label');
+        conceptLabel.innerHTML = '语义描述';
+        conceptLabel.className = 'label-font2';
+        conceptLabelDiv.appendChild(conceptLabel);
+        div.appendChild(conceptLabelDiv);
+
+        var concept = document.createElement('div');
+        concept.style.border = '1px solid #ebebeb';
+        concept.style.padding = '5px';
+
+        var definitionDiv = document.createElement("div");
+        var definitionTitle = document.createElement("p");
+        definitionTitle.innerHTML = "Definition: ";
+        definitionTitle.style.margin = "3px 0 0 1px";
+        var definitionContent = document.createElement("input");
+        definitionContent.id = "concept_definition";
+        definitionContent.placeholder = "请输入概念的定义";
+        definitionContent.style.border = 'solid 1px #d5d5d5';
+        definitionContent.style.borderRadius = '4px';
+        definitionContent.style.width = '94%';
+        definitionContent.style.outline = 'none';
+        definitionContent.style.padding = '6px';
+        definitionContent.style.display = 'block';
+        definitionDiv.appendChild(definitionTitle);
+        definitionDiv.appendChild(definitionContent);
+        concept.appendChild(definitionDiv);
+        definitionContent.value = GeoElements.concept.definition;
+        definitionContent.onchange = ()=>{
+            GeoElements.concept.definition = definitionContent.value;
+        };
+
+        var relateConceptDiv = document.createElement("div");
+        var relateConceptTitle = document.createElement("p");
+        relateConceptTitle.innerHTML = "Relate Concepts: ";
+        relateConceptTitle.style.margin = "3px 0 0 1px";
+        var relateConceptContent = document.createElement("input");
+        relateConceptContent.id = "concept_relateConcepts";
+        relateConceptContent.placeholder = "例如：概念1、概念2";
+        relateConceptContent.style.border = 'solid 1px #d5d5d5';
+        relateConceptContent.style.borderRadius = '4px';
+        relateConceptContent.style.width = '94%';
+        relateConceptContent.style.outline = 'none';
+        relateConceptContent.style.padding = '6px';
+        relateConceptContent.style.display = 'block';
+        definitionDiv.appendChild(relateConceptTitle);
+        definitionDiv.appendChild(relateConceptContent);
+        concept.appendChild(relateConceptDiv);
+        relateConceptContent.value = GeoElements.concept.relatedConcepts.join("、");
+        relateConceptContent.onchange = ()=>{
+            GeoElements.concept.relatedConcepts = relateConceptContent.value.split("、");
+        };
+
+        var classDiv = document.createElement("div");
+        var classTitle = document.createElement("p");
+        classTitle.innerHTML = "Classifications:";
+        classTitle.style.margin = "3px 0 0 1px";
+        var classContent = document.createElement('textarea');
+
+        classContent.placeholder = "例如：类型1：子概念1、子概念2；\n类型2：子概念1、子概念2";
+        classContent.id = "concept_dependAndSub";
+        classContent.setAttribute('type', 'text');
+        classContent.style.fontSize = '12px';
+        classContent.style.fontFamily = 'Arial';
+        classContent.style.overflow = 'hidden';
+        classContent.style.boxSizing = 'border-box';
+        classContent.style.border = 'solid 1px #d5d5d5';
+        classContent.style.borderRadius = '4px';
+        classContent.style.width = '100%';
+        classContent.style.outline = 'none';
+        classContent.style.padding = '6px';
+        classContent.rows = 4;
+        classDiv.appendChild(classTitle);
+        classDiv.appendChild(classContent);
+        concept.appendChild(classDiv);
+
+        if (GeoElements.concept.classifications[0].depend != ""){
+            var c = [];
+            for (let i = 0; i < GeoElements.concept.classifications.length; i++) {
+                var d = GeoElements.concept.classifications[i].depend;
+                var s = [];
+                s = GeoElements.concept.classifications[i].subConcepts;
+                c.push(d+"："+s.join("、"));
+            }
+            classContent.value = c.join("；\n");
+        }
+        classContent.onclick = function () {
+            this.focus();
+        };
+        classContent.onchange = ()=>{
+            var classifications = [];
+            var c = classContent.value.split("；\n");
+            for (let i = 0; i < c.length; i++) {
+                if(c[i] != ""){
+                    var a = {
+                        depend: c[i].split("：")[0],
+                        subConcepts: c[i].split("：")[1].split("、")
+                    };
+                    classifications.push(a);
+                }
+            }
+            GeoElements.concept.classifications = classifications;
+        };
+
+        var uploadButton1 = document.createElement('button');
+        uploadButton1.innerText = "本地图片";
+        uploadButton1.style.padding = "0";
+        uploadButton1.style.margin = '0 5px';
+        uploadButton1.style.fontSize = "13px";
+        uploadButton1.style.lineHeight = '1.5';
+        var uploadButton2 = document.createElement('button');
+        uploadButton2.innerText = "在线图片";
+        uploadButton2.style.padding = "0";
+        uploadButton2.style.margin = '0 5px';
+        uploadButton2.style.fontSize = "13px";
+        uploadButton2.style.lineHeight = '1.5';
+        concept.appendChild(uploadButton1);
+        concept.appendChild(uploadButton2);
+
+
+        var br = document.createElement("br");
+        var imageContainer = document.createElement("div");
+        imageContainer.id = "conceptImageContainer";
+        imageContainer.style.whiteSpace = "initial";
+        imageContainer.style.margin = "5px";
+        imageContainer.style.backgroundColor = "#d4e4b4";
+        concept.appendChild(br);
+        for (let i = 0; i < GeoElements.concept.relateImages.length ; i++) {
+            var a = GeoElements.concept.relateImages[i];
+            var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+            imageContainer.appendChild(image);
+            imageContainer.style.padding = "5px";
+        }
+        var fileInput2 = document.createElement("input");
+        fileInput2.id = "shapeUpload2";
+        fileInput2.placeholder = "请输入图片URL，Enter以确定";
+        fileInput2.style.display = "none";
+        fileInput2.style.fontSize = '12px';
+        fileInput2.style.overflow = 'hidden';
+        fileInput2.style.boxSizing = 'border-box';
+        fileInput2.style.border = 'solid 1px #d5d5d5';
+        fileInput2.style.borderRadius = '4px';
+        fileInput2.style.width = '100%';
+        fileInput2.style.outline = 'none';
+        fileInput2.style.padding = '6px';
+        fileInput2.style.margin = "5px 0 10px";
+        uploadButton2.onclick = ()=>{
+            fileInput2.style.display = "block";
+        };
+        fileInput2.onkeyup = (event)=>{
+            if (event.keyCode == "13") {
+                fileInput2.style.display = "none";
+                var url = fileInput2.value;
+                var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                    ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                var parent = $("#conceptImageContainer")[0];
+                parent.appendChild(image);
+                imageContainer.style.padding = "5px";
+                $.ajax({
+                    url: "/userImage/online",
+                    data: {
+                        url: url
+                    },
+                    type: "post",
+                    async: true,
+                    success: (userImage)=>{
+                        GeoElements.concept.relateImages.push(userImage);
+                        console.log(userImage);
+                    }
+                })
+            }
+        };
+        concept.appendChild(fileInput2);
+        concept.appendChild(imageContainer);
+
+        var fileInput1 = document.createElement("input");
+        fileInput1.id = "shapeUpload1";
+        fileInput1.style.display = "none";
+        fileInput1.type = "file";
+        concept.appendChild(fileInput1);
+        uploadButton1.onclick = ()=>{
+            $("#shapeUpload1").trigger("click");
+        };
+        fileInput1.onchange = ()=>{
+            var file = document.getElementById("shapeUpload1");
+            console.log(file.files[0]);
+            var formData = new FormData();
+            formData.append("mfile",file.files[0]);
+            $.ajax({
+                url: "/userImage/upload",
+                data: formData,
+                type: "post",
+                async: true,
+                processData: false,
+                contentType: false,
+                success: (userImage)=>{
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                    var parent = $("#conceptImageContainer")[0];
+                    parent.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    GeoElements.concept.relateImages.push(userImage);
+                }
+            })
+        };
+
+        div.appendChild(concept);
+    }
+
+    container.appendChild(div);
+};
+GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    // 属性特征
+    {
+        var propertyDiv = document.createElement('div');
+        var propertyLabel = document.createElement("label");
+        propertyLabel.innerHTML = "属性特征";
+        propertyLabel.className = 'label-font2';
+        propertyDiv.appendChild(propertyLabel);
+
+        var propertySelect = document.createElement("select");
+        propertySelect.id = "propertySelect";
+        for (var i = 0; i < this.propertyArray.length; i++) {
+            var option = document.createElement('option');
+            option.text = this.propertyArray[i];
+            option.style.fontFamily = 'Sans-serif';
+            option.style.textAlign = "center";
+            propertySelect.appendChild(option);
+        }
+        propertySelect.style.fontSize = '12px';
+        propertySelect.style.boxSizing = 'border-box';
+        propertySelect.style.border = 'solid 1px #d5d5d5';
+        propertySelect.style.borderRadius = '4px';
+        propertySelect.style.outline = 'none';
+        propertySelect.style.padding = '2px';
+        propertySelect.style.marginLeft = "10px";
+        propertyDiv.appendChild(propertySelect);
+
+        var addPropertyFolder = document.createElement("button");
+        addPropertyFolder.innerHTML = "+";
+        addPropertyFolder.style.width = "17px";
+        addPropertyFolder.style.height = "17px";
+        addPropertyFolder.style.padding = "0";
+        addPropertyFolder.style.fontSize = "13px";
+        addPropertyFolder.style.marginLeft = '10px';
+        propertyDiv.appendChild(addPropertyFolder);
+
+        addPropertyFolder.onclick = ()=>{
+            var text = $("#propertySelect").val();
+            var has = document.getElementById("property_"+text)
+            if (has == null){
+                var p = {
+                    "description": "",
+                    "relateImages": [],
+                    "type": text
+                };
+                GeoElements.properties.push(p);
+                addProperty(1,p);
+            }
+        };
+
+        var addProperty = (f,p,n)=>{
+            var pro = document.createElement('div');
+            pro.id = "property_"+p.type;
+
+            var title = document.createElement("span");
+            title.innerText = p.type+ "：";
+            title.style.cssFloat = "left";
+            title.style.fontSize = "14px";
+            title.style.margin = "3px";
+            pro.appendChild(title);
+            var close = document.createElement('div');
+            close.innerText = "×";
+            close.style.cssFloat = "right";
+            close.style.fontSize = "20px";
+            close.onclick = function (elt) {
+                var eltTitle = elt.target.parentNode;
+                eltTitle.remove();
+
+                for (let i = 0; i < GeoElements.properties.length; i++) {
+                    if (GeoElements.properties[i].type == p.type) {
+                        GeoElements.properties.splice(i,1);
+                    }
+                }
+            };
+            pro.appendChild(close);
+
+            var propertyContent = document.createElement('textarea');
+            propertyContent.className = "concept_properties";
+            propertyContent.setAttribute('type', 'text');
+            propertyContent.style.fontSize = '12px';
+            propertyContent.style.fontFamily = 'Arial';
+            propertyContent.style.overflow = 'hidden';
+            propertyContent.style.boxSizing = 'border-box';
+            propertyContent.style.border = 'solid 1px #d5d5d5';
+            propertyContent.style.borderRadius = '4px';
+            propertyContent.style.width = '100%';
+            propertyContent.style.outline = 'none';
+            propertyContent.style.padding = '6px';
+            propertyContent.style.display = "block";
+            propertyContent.rows = 2;
+            propertyContent.style.margin = "5px 0 10px";
+            pro.appendChild(propertyContent);
+
+            propertyContent.value = p.description;
+            propertyContent.onclick = function () {
+                this.focus();
+            };
+            propertyContent.onchange = ()=>{
+                p.description = propertyContent.value;
+            };
+
+            var uploadButton1 = document.createElement('button');
+            uploadButton1.innerText = "本地图片";
+            uploadButton1.style.padding = "0";
+            uploadButton1.style.margin = '0 5px';
+            uploadButton1.style.fontSize = "13px";
+            uploadButton1.style.lineHeight = '1.5';
+            var uploadButton2 = document.createElement('button');
+            uploadButton2.innerText = "在线图片";
+            uploadButton2.style.padding = "0";
+            uploadButton2.style.margin = '0 5px';
+            uploadButton2.style.fontSize = "13px";
+            uploadButton2.style.lineHeight = '1.5';
+            pro.appendChild(uploadButton1);
+            pro.appendChild(uploadButton2);
+
+            var br = document.createElement("br");
+            var imageContainer = document.createElement("div");
+            imageContainer.id = "propertyImageContainer_"+p.type;
+            imageContainer.style.whiteSpace = "initial";
+            imageContainer.style.margin = "5px";
+            imageContainer.style.backgroundColor = "#d4e4b4";
+            pro.appendChild(br);
+
+            if (f == 0) {
+                for (let j = 0; j < GeoElements.properties[n].relateImages.length; j++) {
+                    var a = GeoElements.properties[n].relateImages[j];
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                }
+            }
+
+            var fileInput2 = document.createElement("input");
+            fileInput2.id = "shapeUpload2_"+p.type;
+            fileInput2.placeholder = "请输入图片URL，Enter以确定";
+            fileInput2.style.display = "none";
+            fileInput2.style.fontSize = '12px';
+            fileInput2.style.overflow = 'hidden';
+            fileInput2.style.boxSizing = 'border-box';
+            fileInput2.style.border = 'solid 1px #d5d5d5';
+            fileInput2.style.borderRadius = '4px';
+            fileInput2.style.width = '100%';
+            fileInput2.style.outline = 'none';
+            fileInput2.style.padding = '6px';
+            fileInput2.style.margin = "5px 0 10px";
+            uploadButton2.onclick = ()=>{
+                fileInput2.style.display = "block";
+            };
+            fileInput2.onkeyup = (event)=>{
+                if (event.keyCode == "13") {
+                    fileInput2.style.display = "none";
+                    var url = fileInput2.value;
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    $.ajax({
+                        url: "/userImage/online",
+                        data: {
+                            url: url
+                        },
+                        type: "post",
+                        async: true,
+                        success: (userImage)=>{
+                           p.relateImages.push(userImage)
+                        }
+                    })
+                }
+            };
+            pro.appendChild(fileInput2);
+            pro.appendChild(imageContainer);
+
+            var fileInput1 = document.createElement("input");
+            fileInput1.id = "shapeUpload1_"+p.type;
+            fileInput1.style.display = "none";
+            fileInput1.type = "file";
+            pro.appendChild(fileInput1);
+            uploadButton1.onclick = ()=>{
+                $("#shapeUpload1_"+p.type).trigger("click");
+            };
+            fileInput1.onchange = ()=>{
+                var file = fileInput1;
+                console.log(file.files[0]);
+                var formData = new FormData();
+                formData.append("mfile",file.files[0]);
+                $.ajax({
+                    url: "/userImage/upload",
+                    data: formData,
+                    type: "post",
+                    async: true,
+                    processData: false,
+                    contentType: false,
+                    success: (userImage)=>{
+                        var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                            ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                        imageContainer.appendChild(image);
+                        imageContainer.style.padding = "5px";
+                       p.relateImages.push(userImage);
+                    }
+                })
+            };
+
+            propertyDiv.appendChild(pro);
+        };
+
+        var n = 0;
+        for (let i = 0; i < GeoElements.properties.length ; i++) {
+
+            addProperty(0,GeoElements.properties[i],n++);
+        }
+
+        div.appendChild(propertyDiv);
+    }
+
+    container.appendChild(div);
+};
+GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    // 演变过程
+    {
+        var processLabelDiv = document.createElement('div');
+        var processLabel = document.createElement("label");
+        processLabel.innerHTML = "演变过程";
+        processLabel.className = 'label-font2';
+        processLabelDiv.appendChild(processLabel)
+
+        var addProcessFolder = document.createElement("button");
+        addProcessFolder.innerHTML = "+";
+        addProcessFolder.style.width = "17px";
+        addProcessFolder.style.height = "17px";
+        addProcessFolder.style.padding = "0";
+        addProcessFolder.style.fontSize = "13px";
+        addProcessFolder.style.marginLeft = '10px';
+        processLabelDiv.appendChild(addProcessFolder)
+        div.appendChild(processLabelDiv);
+
+        var process = document.createElement('div');
+        process.style.border = '1px solid #ebebeb';
+        process.style.padding = '5px';
+        div.appendChild(process);
+
+        var m = 0;
+        addProcessFolder.onclick = function () {
+
+            var name = "new_"+ m++;
+            var p = {
+                "description": "",
+                "elements": [],
+                "name": name,
+                "relateImages": []
+            };
+            GeoElements.processes.push(p);
+            addProcess(1,p);
+        };
+        var addProcess = (f,p,n) => {
+            var pro = document.createElement('div');
+
+            var close = document.createElement('div');
+            close.innerText = "×";
+            close.style.cssFloat = "right";
+            close.style.fontSize = "20px";
+            close.onclick = function (elt) {
+                var eltTitle = elt.target.parentNode;
+                eltTitle.remove();
+
+                for (let i = 0; i < GeoElements.processes.length; i++) {
+                    if (GeoElements.processes[i].name == p.name) {
+                        GeoElements.processes.splice(i,1);
+                    }
+                }
+            };
+            pro.appendChild(close);
+
+            var processNameDiv = document.createElement("div");
+            var processNameTitle = document.createElement("span");
+            processNameTitle.innerHTML = "Name: ";
+            processNameTitle.style.margin = "3px 0 0 1px";
+            var processNameContent = document.createElement("input");
+            processNameContent.className = "concept_processName";
+            processNameContent.placeholder = "请输入过程名称";
+            processNameContent.style.border = 'solid 1px #d5d5d5';
+            processNameContent.style.borderRadius = '4px';
+            processNameContent.style.width = '50%';
+            processNameContent.style.outline = 'none';
+            processNameContent.style.padding = '3px';
+            processNameContent.style.marginBottom = "2px";
+            processNameDiv.appendChild(processNameTitle);
+            processNameDiv.appendChild(processNameContent);
+            pro.appendChild(processNameDiv);
+            processNameContent.value = p.name;
+            processNameContent.onchange = ()=>{
+                p.name = processNameContent.value;
+                imageContainer.id = "processImageContainer_"+p.name;
+                fileInput1.id = "shapeUpload1_"+p.name;
+
+            };
+
+            var elementsDiv = document.createElement("div");
+            var elementsTitle = document.createElement("span");
+            elementsTitle.innerHTML = "Elems: ";
+            elementsTitle.style.margin = "3px 0 0 1px";
+            var elementsContent = document.createElement("input");
+            elementsContent.className = "concept_processElements";
+            elementsContent.placeholder = "例如：要素1、要素2";
+            elementsContent.style.border = 'solid 1px #d5d5d5';
+            elementsContent.style.borderRadius = '4px';
+            elementsContent.style.width = '60%';
+            elementsContent.style.outline = 'none';
+            elementsContent.style.padding = '3px';
+            elementsContent.style.marginBottom = "2px";
+            elementsDiv.appendChild(elementsTitle);
+            elementsDiv.appendChild(elementsContent);
+            pro.appendChild(elementsDiv);
+            elementsContent.value = p.elements.join("、");
+            elementsContent.onchange = ()=>{
+                p.elements = elementsContent.value.split("、");
+            };
+
+
+            var processDescDiv = document.createElement("div");
+            var processDescTitle = document.createElement("span");
+            processDescTitle.innerHTML = "Description: ";
+            processDescTitle.style.margin = "3px 0 0 1px";
+            var processDescContent = document.createElement("textarea");
+            processDescContent.className = "concept_processDesc";
+            processDescContent.placeholder = "请输入过程描述";
+            processDescContent.setAttribute('type', 'text');
+            processDescContent.style.fontSize = '12px';
+            processDescContent.style.fontFamily = 'Arial';
+            processDescContent.style.overflow = 'hidden';
+            processDescContent.style.boxSizing = 'border-box';
+            processDescContent.style.border = 'solid 1px #d5d5d5';
+            processDescContent.style.borderRadius = '4px';
+            processDescContent.style.width = '100%';
+            processDescContent.style.outline = 'none';
+            processDescContent.style.padding = '6px';
+            processDescContent.style.display = 'block';
+            processDescContent.style.marginBottom = '5px';
+            processDescContent.rows = 2;
+            processDescContent.onclick = function () {
+                this.focus();
+            };
+            processDescDiv.appendChild(processDescTitle);
+            processDescDiv.appendChild(processDescContent);
+            pro.appendChild(processDescDiv);
+            processDescContent.value = p.description;
+            processDescContent.onchange = ()=>{
+                p.description = processDescContent.value;
+            };
+
+            var uploadButton1 = document.createElement('button');
+            uploadButton1.innerText = "本地图片";
+            uploadButton1.style.padding = "0";
+            uploadButton1.style.margin = '0 5px 5px';
+            uploadButton1.style.fontSize = "13px";
+            uploadButton1.style.lineHeight = '1.5';
+            var uploadButton2 = document.createElement('button');
+            uploadButton2.innerText = "在线图片";
+            uploadButton2.style.padding = "0";
+            uploadButton2.style.margin = '0 5px 5px';
+            uploadButton2.style.fontSize = "13px";
+            uploadButton2.style.lineHeight = '1.5';
+            pro.appendChild(uploadButton1);
+            pro.appendChild(uploadButton2);
+
+            var br = document.createElement("br");
+            var imageContainer = document.createElement("div");
+            imageContainer.id = "processImageContainer_"+p.name;
+            imageContainer.style.whiteSpace = "initial";
+            imageContainer.style.margin = "5px";
+            imageContainer.style.backgroundColor = "#d4e4b4";
+            pro.appendChild(br);
+
+            if (f == 0) {
+                for (let j = 0; j < GeoElements.processes[n].relateImages.length; j++) {
+                    var a = GeoElements.processes[n].relateImages[j];
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                }
+            }
+
+            var fileInput2 = document.createElement("input");
+            fileInput2.placeholder = "请输入图片URL，Enter以确定";
+            fileInput2.style.display = "none";
+            fileInput2.style.fontSize = '12px';
+            fileInput2.style.overflow = 'hidden';
+            fileInput2.style.boxSizing = 'border-box';
+            fileInput2.style.border = 'solid 1px #d5d5d5';
+            fileInput2.style.borderRadius = '4px';
+            fileInput2.style.width = '100%';
+            fileInput2.style.outline = 'none';
+            fileInput2.style.padding = '6px';
+            fileInput2.style.margin = "5px 0 10px";
+            uploadButton2.onclick = ()=>{
+                fileInput2.style.display = "block";
+            };
+            fileInput2.onkeyup = (event)=>{
+                if (event.keyCode == "13") {
+                    fileInput2.style.display = "none";
+                    var url = fileInput2.value;
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    $.ajax({
+                        url: "/userImage/online",
+                        data: {
+                            url: url
+                        },
+                        type: "post",
+                        async: true,
+                        success: (userImage)=>{
+                            p.relateImages.push(userImage);
+
+                        }
+                    })
+                }
+            };
+            pro.appendChild(fileInput2);
+            pro.appendChild(imageContainer);
+
+            var fileInput1 = document.createElement("input");
+            fileInput1.id = "shapeUpload1_"+p.name;
+            fileInput1.style.display = "none";
+            fileInput1.type = "file";
+            pro.appendChild(fileInput1);
+            uploadButton1.onclick = ()=>{
+                $("#shapeUpload1_"+p.name).trigger("click");
+            };
+            fileInput1.onchange = ()=>{
+                var file = fileInput1;
+                console.log(file.files[0]);
+                var formData = new FormData();
+                formData.append("mfile",file.files[0]);
+                $.ajax({
+                    url: "/userImage/upload",
+                    data: formData,
+                    type: "post",
+                    async: true,
+                    processData: false,
+                    contentType: false,
+                    success: (userImage)=>{
+                        var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                            ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                        imageContainer.appendChild(image);
+                        imageContainer.style.padding = "5px";
+                        p.relateImages.push(userImage);
+                    }
+                })
+            };
+
+
+            process.appendChild(pro);
+        };
+    }
+
+    var n = 0;
+    for (let i = 0; i < GeoElements.processes.length ; i++) {
+
+        addProcess(0,GeoElements.processes[i],n++);
+    }
+
+    container.appendChild(div);
+};
+GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
+    var div = document.createElement("div");
+    div.style.border = '1px solid #ebebeb';
+    div.style.padding = '5px';
+
+    // 要素关系
+    {
+        var elementLabelDiv = document.createElement('div');
+        var elementLabel = document.createElement("label");
+        elementLabel.innerHTML = "要素关系";
+        elementLabel.className = 'label-font2';
+        elementLabelDiv.appendChild(elementLabel)
+        div.appendChild(elementLabelDiv);
+
+        var element = document.createElement('div');
+        element.style.border = '1px solid #ebebeb';
+        element.style.padding = '5px';
+        var elementFolderDiv = document.createElement("div");
+        var elementContentDiv = document.createElement("div");
+        elementContentDiv.id = 'element_';
+
+        var elementArray = ["1","2","3"];
+        var elementSelect = document.createElement("select");
+        elementSelect.multiple = true;
+        elementSelect.size = 3;
+
+        for (var i = 0; i < elementArray.length; i++) {
+            var option = document.createElement('option');
+            option.text = elementArray[i];
+            option.style.fontFamily = 'Sans-serif';
+            elementSelect.appendChild(option);
+        }
+
+        var selected = [];
+        elementSelect.onclick = function (opt) {
+            var index = opt.target.index;
+            var i = 0, len = selected.length;
+            for (; i < len; i++) {
+                if (selected[i] == index) {
+                    selected.splice(i, 1);
+                    elementSelect.options[index].selected = false;
+                    break;
+                }
+            }
+            if (i >= len) {
+                selected.push(index);
+                elementSelect.options[index].selected = true;
+            }
+
+            if (selected.length <= 1) {
+                addEmptyElementButton.disabled = true;
+            } else {
+                addEmptyElementButton.disabled = false;
+            }
+        };
+
+        elementSelect.style.fontSize = '12px';
+        elementSelect.style.boxSizing = 'border-box';
+        elementSelect.style.border = 'solid 1px #d5d5d5';
+        elementSelect.style.borderRadius = '4px';
+        elementSelect.style.width = '65%';
+        elementSelect.style.outline = 'none';
+        elementSelect.style.padding = '6px';
+        elementSelect.style.display = 'block';
+        elementSelect.style.marginBottom = "10px";
+
+        elementFolderDiv.appendChild(elementSelect);
+        var addEmptyElementButton = document.createElement("button");
+        addEmptyElementButton.innerHTML = "+";
+        addEmptyElementButton.style.width = "26px";
+        addEmptyElementButton.style.height = "26px";
+        addEmptyElementButton.style.padding = "0";
+        addEmptyElementButton.style.fontSize = "20px";
+        addEmptyElementButton.disabled = true;
+        addEmptyElementButton.style.cssFloat = 'right';
+        addEmptyElementButton.style.marginTop = '-16%';
+        addEmptyElementButton.style.marginRight = '20%';
+
+        elementFolderDiv.appendChild(addEmptyElementButton);
+        element.appendChild(elementFolderDiv);
+        element.appendChild(elementContentDiv);
+
+        addEmptyElementButton.onclick = () => {
+            var title = [];
+            for (let i = 0; i < selected.length; i++) {
+                title.push(elementSelect.options[selected[i]].text);
+                elementSelect.options[selected[i]].selected = false;
+            }
+            selected = [];
+            addEmptyElementButton.disabled = true;
+
+            var r = {
+                "relateElements": title,
+                "relateImages": [],
+                "relateType": "",
+                "relateValue": ""
+            };
+            GeoElements.elementRelations.push(r);
+            addElementRelation(1,r);
+        };
+
+
+        var addElementRelation =  (f,r,n)=> {
+            var relateDiv = document.createElement("div");
+            var text = r.relateElements.join("、");
+            var close = document.createElement('div');
+            close.innerText = "×";
+            close.style.cssFloat = "right";
+            close.style.fontSize = "20px";
+            close.onclick = function (elt) {
+                var eltTitle = elt.target.parentNode;
+                eltTitle.remove();
+
+                for (let i = 0; i < GeoElements.elementRelations.length; i++) {
+                    if (GeoElements.elementRelations[i].relateElements.join("、") == text) {
+                        GeoElements.elementRelations.splice(i,1);
+                    }
+                }
+            };
+            relateDiv.appendChild(close);
+
+            var eleDiv = document.createElement("div");
+            var eleTitle = document.createElement("span");
+            eleTitle.innerHTML = "Elems: ";
+            eleTitle.style.margin = "3px 0 0 1px";
+            var eleContent = document.createElement("input");
+            eleContent.value = text;
+            eleContent.disabled = true;
+            eleContent.style.border = 'solid 1px #d5d5d5';
+            eleContent.style.borderRadius = '4px';
+            eleContent.style.width = '50%';
+            eleContent.style.outline = 'none';
+            eleContent.style.padding = '3px';
+            eleContent.style.marginBottom = "2px";
+            eleDiv.appendChild(eleTitle);
+            eleDiv.appendChild(eleContent);
+            relateDiv.appendChild(eleDiv);
+
+            var typeDiv = document.createElement("div");
+            var typeTitle = document.createElement("span");
+            typeTitle.innerHTML = "Type: ";
+            typeTitle.style.margin = "3px 0 0 1px";
+            var typeContent = document.createElement("input");
+            typeContent.className = "concept_relateType";
+            typeContent.style.border = 'solid 1px #d5d5d5';
+            typeContent.style.borderRadius = '4px';
+            typeContent.style.width = '50%';
+            typeContent.style.outline = 'none';
+            typeContent.style.padding = '3px';
+            typeContent.style.marginBottom = "2px";
+            typeDiv.appendChild(typeTitle);
+            typeDiv.appendChild(typeContent);
+            relateDiv.appendChild(typeDiv);
+            typeContent.value = r.relateType;
+            typeContent.onchange = ()=>{
+                r.relateType = typeContent.value;
+            };
+
+            var descDiv = document.createElement("div");
+            var descTitle = document.createElement("p");
+            descTitle.innerHTML = "Description:";
+            descTitle.style.margin = "5px 0 0 0";
+            var descContent = document.createElement('textarea');
+            descContent.className = "concept_relateValue";
+            descContent.setAttribute('type', 'text');
+            descContent.style.fontSize = '12px';
+            descContent.style.fontFamily = 'Arial';
+            descContent.style.overflow = 'hidden';
+            descContent.style.boxSizing = 'border-box';
+            descContent.style.border = 'solid 1px #d5d5d5';
+            descContent.style.borderRadius = '4px';
+            descContent.style.width = '100%';
+            descContent.style.outline = 'none';
+            descContent.style.padding = '6px';
+            descContent.rows = 2;
+            descContent.onclick = function () {
+                this.focus();
+            };
+            descDiv.appendChild(descTitle);
+            descDiv.appendChild(descContent);
+            relateDiv.appendChild(descDiv);
+            descContent.value = r.relateValue;
+            descContent.onchange = ()=>{
+                r.relateValue = descContent.value;
+            };
+
+            var uploadButton1 = document.createElement('button');
+            uploadButton1.innerText = "本地图片";
+            uploadButton1.style.padding = "0";
+            uploadButton1.style.margin = '5px';
+            uploadButton1.style.fontSize = "13px";
+            uploadButton1.style.lineHeight = '1.5';
+            var uploadButton2 = document.createElement('button');
+            uploadButton2.innerText = "在线图片";
+            uploadButton2.style.padding = "0";
+            uploadButton2.style.margin = '5px';
+            uploadButton2.style.fontSize = "13px";
+            uploadButton2.style.lineHeight = '1.5';
+            relateDiv.appendChild(uploadButton1);
+            relateDiv.appendChild(uploadButton2);
+
+
+            var br = document.createElement("br");
+            var imageContainer = document.createElement("div");
+            imageContainer.id = "relateImageContainer_"+text;
+            imageContainer.style.whiteSpace = "initial";
+            imageContainer.style.margin = "5px";
+            imageContainer.style.backgroundColor = "#d4e4b4";
+            relateDiv.appendChild(br);
+
+            if (f == 0) {
+                for (let j = 0; j < GeoElements.elementRelations[n].relateImages.length; j++) {
+                    var a = GeoElements.elementRelations[n].relateImages[j];
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                }
+            }
+
+            var fileInput2 = document.createElement("input");
+            fileInput2.placeholder = "请输入图片URL，Enter以确定";
+            fileInput2.style.display = "none";
+            fileInput2.style.fontSize = '12px';
+            fileInput2.style.overflow = 'hidden';
+            fileInput2.style.boxSizing = 'border-box';
+            fileInput2.style.border = 'solid 1px #d5d5d5';
+            fileInput2.style.borderRadius = '4px';
+            fileInput2.style.width = '100%';
+            fileInput2.style.outline = 'none';
+            fileInput2.style.padding = '6px';
+            fileInput2.style.margin = "5px 0 10px";
+            uploadButton2.onclick = ()=>{
+                fileInput2.style.display = "block";
+            };
+            fileInput2.onkeyup = (event)=>{
+                if (event.keyCode == "13") {
+                    fileInput2.style.display = "none";
+                    var url = fileInput2.value;
+                    var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
+                        ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+
+                    imageContainer.appendChild(image);
+                    imageContainer.style.padding = "5px";
+                    $.ajax({
+                        url: "/userImage/online",
+                        data: {
+                            url: url
+                        },
+                        type: "post",
+                        async: true,
+                        success: (userImage)=>{
+                            r.relateImages.push(userImage);
+                        }
+                    })
+                }
+            };
+            relateDiv.appendChild(fileInput2);
+            relateDiv.appendChild(imageContainer);
+
+            var fileInput1 = document.createElement("input");
+            fileInput1.id = "shapeUpload1_"+text;
+            fileInput1.style.display = "none";
+            fileInput1.type = "file";
+            relateDiv.appendChild(fileInput1);
+            uploadButton1.onclick = ()=>{
+                $("#shapeUpload1_"+text).trigger("click");
+            };
+            fileInput1.onchange = ()=>{
+                var file = fileInput1;
+                console.log(file.files[0]);
+                var formData = new FormData();
+                formData.append("mfile",file.files[0]);
+                $.ajax({
+                    url: "/userImage/upload",
+                    data: formData,
+                    type: "post",
+                    async: true,
+                    processData: false,
+                    contentType: false,
+                    success: (userImage)=>{
+                        var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
+                            ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
+                        imageContainer.appendChild(image);
+                        imageContainer.style.padding = "5px";
+                        r.relateImages.push(userImage);
+                    }
+                })
+            };
+
+            element.appendChild(relateDiv);
+        };
+
+        var n = 0;
+        for (let i = 0; i < GeoElements.elementRelations.length ; i++) {
+            addElementRelation(0,GeoElements.elementRelations[i],n++);
+        }
+
+        div.appendChild(element);
+    }
+
+
+    container.appendChild(div);
 };
 
 GeoElementsPanel.prototype.createElementPalette = function (title, div, obj) {

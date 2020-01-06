@@ -46,6 +46,12 @@ var graph;
     var editorUi = new EditorUi(new Editor(urlParams['chrome'] === '0', themes));
     var memberList = '<div id="members" style="float: right;margin-right: 50px;width: 120px;text-align: right;overflow-x: scroll;overflow-y: hidden;"></div>';
     $(".geToolbar").append(memberList);
+
+    if (GeoElements.graphXml != ""){
+        var x = mxUtils.parseXml(GeoElements.graphXml).documentElement;
+        editorUi.editor.setGraphXml(x);
+    }
+
     //定时信息发送器
     // var timer = window.setInterval(function () {
     //   if (Controller === sessionStorage.getItem("username")) { //判断是否有权发送演示信息

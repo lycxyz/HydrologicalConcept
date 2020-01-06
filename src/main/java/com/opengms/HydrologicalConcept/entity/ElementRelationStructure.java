@@ -9,4 +9,5 @@ public class ElementRelationStructure {
     List<String> relateElements;
     String relateType;
     String relateValue;
+    List<UserImage> relateImages;
 }
