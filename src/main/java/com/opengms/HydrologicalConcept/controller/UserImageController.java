@@ -2,6 +2,7 @@ package com.opengms.HydrologicalConcept.controller;
 
 import com.opengms.HydrologicalConcept.dao.UserImageDao;
 import com.opengms.HydrologicalConcept.entity.UserImage;
+import com.opengms.HydrologicalConcept.service.AnsjSegService;
 import com.opengms.HydrologicalConcept.service.UserImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ public class UserImageController {
 
     @Autowired
     UserImageDao userImageDao;
+
+    @Autowired
+    AnsjSegService ansjSegService;
 
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     UserImage upload(MultipartFile mfile) throws IOException {
@@ -47,8 +51,15 @@ public class UserImageController {
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     String update(@RequestBody UserImage userImage){
 
+
         UserImage image = userImageDao.findByGeoId(userImage.getGeoId());
         image.setDescription(userImage.getDescription());
+
+        String result = ansjSegService.processInfo(image.getDescription());
+        result = result.replaceAll("\"","");
+        String[] tags = result.substring(1,result.length()-1).split(",");
+        image.setTags(tags);
+
         userImageDao.save(image);
         return "ok";
     }

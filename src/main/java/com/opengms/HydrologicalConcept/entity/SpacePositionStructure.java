@@ -7,5 +7,6 @@ import java.util.List;
 @Data
 public class SpacePositionStructure {
     String desc;
+    String[] tags;
     List<UserImage> relateImages;
 }

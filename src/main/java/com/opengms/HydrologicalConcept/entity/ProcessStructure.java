@@ -9,5 +9,6 @@ public class ProcessStructure {
     String name;
     List<String> elements;
     String description;
+    String[] tags;
     List<UserImage> relateImages;
 }

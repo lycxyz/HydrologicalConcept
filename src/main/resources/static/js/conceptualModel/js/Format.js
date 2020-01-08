@@ -7724,7 +7724,15 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
         var elementContentDiv = document.createElement("div");
         elementContentDiv.id = 'element_';
 
-        var elementArray = ["1","2","3"];
+        var elementArray = [];
+        for (let i = 0; i < GeoElements.processes.length; i++) {
+            var process = GeoElements.processes[i];
+            for (let j = 0; j < process.elements.length; j++) {
+                elementArray.push(process.elements[j]);
+            }
+        }
+        elementArray = _.uniq(elementArray);
+
         var elementSelect = document.createElement("select");
         elementSelect.multiple = true;
         elementSelect.size = 3;
