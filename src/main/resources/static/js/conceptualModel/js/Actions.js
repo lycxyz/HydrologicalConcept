@@ -189,6 +189,7 @@ Actions.prototype.init = function()
                     data: JSON.stringify(GeoElements.shapeInfo.relateImages[i]),
                     type: "post",
                     async: true,
+                    contentType:'application/json',
                     success: (result)=>{
                         console.log(result);
                     }
@@ -201,6 +202,7 @@ Actions.prototype.init = function()
                     data: JSON.stringify(GeoElements.spacePosition.relateImages[i]),
                     type: "post",
                     async: true,
+                    contentType:'application/json',
                     success: (result)=>{
                         console.log(result);
                     }
@@ -213,6 +215,7 @@ Actions.prototype.init = function()
                     data: JSON.stringify(GeoElements.concept.relateImages[i]),
                     type: "post",
                     async: true,
+                    contentType:'application/json',
                     success: (result)=>{
                         console.log(result);
                     }
@@ -226,6 +229,7 @@ Actions.prototype.init = function()
                         data: JSON.stringify(GeoElements.properties[j].relateImages[i]),
                         type: "post",
                         async: true,
+                        contentType:'application/json',
                         success: (result)=>{
                             console.log(result);
                         }
@@ -240,6 +244,7 @@ Actions.prototype.init = function()
                         data: JSON.stringify(GeoElements.processes[j].relateImages[i]),
                         type: "post",
                         async: true,
+                        contentType:'application/json',
                         success: (result)=>{
                             console.log(result);
                         }
@@ -254,6 +259,7 @@ Actions.prototype.init = function()
                         data: JSON.stringify(GeoElements.elementRelations[j].relateImages[i]),
                         type: "post",
                         async: true,
+                        contentType:'application/json',
                         success: (result)=>{
                             console.log(result);
                         }

@@ -7,5 +7,6 @@ import java.util.List;
 @Data
 public class ShapeStructure {
     String desc;
+    String[] tags;
     List<UserImage> relateImages;
 }

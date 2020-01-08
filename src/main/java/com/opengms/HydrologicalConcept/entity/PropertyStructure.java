@@ -8,5 +8,6 @@ import java.util.List;
 public class PropertyStructure {
     String type;
     String description;
+    String[] tags;
     List<UserImage> relateImages;
 }

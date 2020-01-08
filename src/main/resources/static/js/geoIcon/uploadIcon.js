@@ -34,7 +34,9 @@ $(document).ready(function(){
         geoIcon["relatedGeoIcons"] = [];
         console.log(geoIcon);
 
-        var formData = new FormData(document.getElementById("form1"));
+        // var formData = new FormData(document.getElementById("form1"));
+        var formData = new FormData();
+        // formData.append("upGeoIcon",$('#upGeoIcon')[0].files[0]);
         formData.append("geoIcon",JSON.stringify(geoIcon));
             $.ajax({
                 url: "/geoIcon/upload",
@@ -50,7 +52,7 @@ $(document).ready(function(){
                 },
 
             })
-    })
+    });
 
     function generateGUID () {
         var s = [];

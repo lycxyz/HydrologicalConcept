@@ -8,4 +8,5 @@ public class UserImage {
     String name;
     String description;
     String pathUrl;
+    String[] tags;
 }

@@ -45,7 +45,7 @@ public class AnsjSegService{
             for(int i=0;i<output.size();i++){
                 String word = output.get(i).getName(); //拿到词
                 String natureStr = output.get(i).getNatureStr(); //拿到词性
-                if(natureStr.equals("n")||natureStr.equals("vn")||natureStr.equals("an")||natureStr.equals("nz")||natureStr.equals("nl")||natureStr.equals("nw")||natureStr.equals("nr")){
+                if(natureStr.equals("n")||natureStr.equals("nt")||natureStr.equals("vn")||natureStr.equals("an")||natureStr.equals("nz")||natureStr.equals("nl")||natureStr.equals("nw")||natureStr.equals("nr")||natureStr.equals("ng")||natureStr.equals("ns")||natureStr.equals("t")||natureStr.equals("tg")){
                     wordArray.add(word);
                 }
             }

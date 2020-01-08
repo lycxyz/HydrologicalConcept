@@ -11,7 +11,7 @@ import java.util.List;
 @ApiModel(value = "概念图对象：ConceptMap")
 @Data
 public class ConceptMap{
-    String _id;
+    String id;
     String geoId;
     String name;
     String description;
@@ -19,6 +19,7 @@ public class ConceptMap{
     String xml;
     String pathUrl;
     String mapClass;
+    String[] tags;
 
     ShapeStructure shapeInfo;
     SpacePositionStructure spacePosition;
