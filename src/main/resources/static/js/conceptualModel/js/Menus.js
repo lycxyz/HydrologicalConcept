@@ -1027,9 +1027,9 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 
             var subRelation = menu.addItem('要素关系', null, null, submenu1);
             for (let i = 0; i < GeoElements.elementRelations.length; i++) {
-                menu.addItem(GeoElements.elementRelations[i].relateElements.join("，"), null, function()
+                menu.addItem(GeoElements.elementRelations[i].relateElements.join("、"), null, function()
                 {
-                    relate2Relation(GeoElements.elementRelations[i].relateElements.join("，"));
+                    relate2Relation(GeoElements.elementRelations[i].relateElements.join("、"));
                 }, subRelation);
             }
 
@@ -1105,7 +1105,29 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                 var parent = $("#shapeImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.shapeInfo.relateImages[i].pathUrl || pathUrl2 == GeoElements.shapeInfo.relateImages[i].pathUrl) {
+                            GeoElements.shapeInfo.relateImages.splice(i,1);
+                            break;
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 GeoElements.shapeInfo.relateImages.push(userImage);
             }
@@ -1176,7 +1198,29 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                 var parent = $("#spaceImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.spacePosition.relateImages[i].pathUrl || pathUrl2 == GeoElements.spacePosition.relateImages[i].pathUrl) {
+                            GeoElements.spacePosition.relateImages.splice(i,1);
+                            break;
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 GeoElements.spacePosition.relateImages.push(userImage);
             }
@@ -1247,7 +1291,28 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                 var parent = $("#conceptImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.concept.relateImages[i].pathUrl || pathUrl2 == GeoElements.concept.relateImages[i].pathUrl) {
+                            GeoElements.concept.relateImages.splice(i,1);
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 GeoElements.concept.relateImages.push(userImage);
             }
@@ -1319,7 +1384,30 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
 
                 var parent = $("#propertyImageContainer_"+type)[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let n = 0; n < GeoElements.properties.length; n++) {
+                        for (let i = 0; i < GeoElements.properties[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.properties[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.properties[n].relateImages[i].pathUrl) {
+                                GeoElements.properties[n].relateImages.splice(i,1);
+                            }
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 for (let i = 0; i < GeoElements.properties.length; i++) {
                     if (GeoElements.properties[i].type == type) {
@@ -1395,7 +1483,30 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
 
                 var parent = $("#processImageContainer_"+type)[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let n = 0; n < GeoElements.processes.length; n++) {
+                        for (let i = 0; i < GeoElements.processes[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.processes[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.processes[n].relateImages[i].pathUrl) {
+                                GeoElements.processes[n].relateImages.splice(i,1);
+                            }
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 for (let i = 0; i < GeoElements.processes.length; i++) {
                     if (GeoElements.processes[i].name == type) {
@@ -1472,10 +1583,33 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
 
                 var parent = $("#relateImageContainer_"+type)[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    var index = pathUrl.indexOf("/static");
+                    var pathUrl2 = pathUrl.substring(index);
+                    for (let n = 0; n < GeoElements.elementRelations.length; n++) {
+                        for (let i = 0; i < GeoElements.elementRelations[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.elementRelations[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.elementRelations[n].relateImages[i].pathUrl) {
+                                GeoElements.elementRelations[n].relateImages.splice(i,1);
+                            }
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 parent.style.padding = "5px";
                 for (let i = 0; i < GeoElements.elementRelations.length; i++) {
-                    if (GeoElements.elementRelations[i].relateElements.join("，") == type) {
+                    if (GeoElements.elementRelations[i].relateElements.join("、") == type) {
                         GeoElements.elementRelations[i].relateImages.push(userImage);
                     }
                 }

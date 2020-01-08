@@ -6786,8 +6786,30 @@ GeoElementsPanel.prototype.addShapePalette = function(container,ui){
             var a = GeoElements.shapeInfo.relateImages[i];
             var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                 ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-            imageContainer.appendChild(image);
+            var imageDiv = document.createElement("div");
+            imageDiv.style.width = "70px";
+            imageDiv.style.display = "inline-flex";
+            var deleteDiv = document.createElement("div");
+            deleteDiv.innerText = "×";
+            deleteDiv.style.fontSize = "14px";
+            imageDiv.appendChild(image);
+            imageDiv.appendChild(deleteDiv);
+            imageContainer.appendChild(imageDiv);
             imageContainer.style.padding = "5px";
+            deleteDiv.onclick = (elt)=>{
+                var eltTitle = elt.target.parentNode;
+
+                var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                var index = pathUrl.indexOf("/static");
+                var pathUrl2 = pathUrl.substring(index);
+                for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+                    if (pathUrl == GeoElements.shapeInfo.relateImages[i].pathUrl || pathUrl2 == GeoElements.shapeInfo.relateImages[i].pathUrl) {
+                        GeoElements.shapeInfo.relateImages.splice(i,1);
+                        break;
+                    }
+                }
+                eltTitle.remove();
+            }
         }
 
         var fileInput2 = document.createElement("input");
@@ -6813,7 +6835,27 @@ GeoElementsPanel.prototype.addShapePalette = function(container,ui){
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
                 var parent = $("#shapeImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.shapeInfo.relateImages[i].pathUrl) {
+                            GeoElements.shapeInfo.relateImages.splice(i,1);
+                            break;
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 imageContainer.style.padding = "5px";
                 $.ajax({
                     url: "/userImage/online",
@@ -6856,7 +6898,29 @@ GeoElementsPanel.prototype.addShapePalette = function(container,ui){
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                     var parent = $("#shapeImageContainer")[0];
-                    parent.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    parent.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        pathUrl = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+                            if (pathUrl == GeoElements.shapeInfo.relateImages[i].pathUrl) {
+                                GeoElements.shapeInfo.relateImages.splice(i,1);
+                                break;
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     GeoElements.shapeInfo.relateImages.push(userImage);
                 }
@@ -6925,7 +6989,29 @@ GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
             var a = GeoElements.spacePosition.relateImages[i];
             var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                 ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-            imageContainer.appendChild(image);
+            var imageDiv = document.createElement("div");
+            imageDiv.style.width = "70px";
+            imageDiv.style.display = "inline-flex";
+            var deleteDiv = document.createElement("div");
+            deleteDiv.innerText = "×";
+            deleteDiv.style.fontSize = "14px";
+            imageDiv.appendChild(image);
+            imageDiv.appendChild(deleteDiv);
+            imageContainer.appendChild(imageDiv);
+            deleteDiv.onclick = (elt)=>{
+                var eltTitle = elt.target.parentNode;
+
+                var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                var index = pathUrl.indexOf("/static");
+                var pathUrl2 = pathUrl.substring(index);
+                for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+                    if (pathUrl == GeoElements.spacePosition.relateImages[i].pathUrl || pathUrl2 == GeoElements.spacePosition.relateImages[i].pathUrl) {
+                        GeoElements.spacePosition.relateImages.splice(i,1);
+                        break;
+                    }
+                }
+                eltTitle.remove();
+            };
             imageContainer.style.padding = "5px";
         }
         var fileInput2 = document.createElement("input");
@@ -6951,7 +7037,27 @@ GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
                 var parent = $("#spaceImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.spacePosition.relateImages[i].pathUrl) {
+                            GeoElements.spacePosition.relateImages.splice(i,1);
+                            break;
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 imageContainer.style.padding = "5px";
                 $.ajax({
                     url: "/userImage/online",
@@ -6994,7 +7100,29 @@ GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                     var parent = $("#spaceImageContainer")[0];
-                    parent.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    parent.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        pathUrl = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+                            if (pathUrl == GeoElements.spacePosition.relateImages[i].pathUrl) {
+                                GeoElements.spacePosition.relateImages.splice(i,1);
+                                break;
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     GeoElements.spacePosition.relateImages.push(userImage);
                 }
@@ -7145,7 +7273,28 @@ GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
             var a = GeoElements.concept.relateImages[i];
             var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                 ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-            imageContainer.appendChild(image);
+            var imageDiv = document.createElement("div");
+            imageDiv.style.width = "70px";
+            imageDiv.style.display = "inline-flex";
+            var deleteDiv = document.createElement("div");
+            deleteDiv.innerText = "×";
+            deleteDiv.style.fontSize = "14px";
+            imageDiv.appendChild(image);
+            imageDiv.appendChild(deleteDiv);
+            imageContainer.appendChild(imageDiv);
+            deleteDiv.onclick = (elt)=>{
+                var eltTitle = elt.target.parentNode;
+
+                var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                var index = pathUrl.indexOf("/static");
+                var pathUrl2 = pathUrl.substring(index);
+                for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+                    if (pathUrl == GeoElements.concept.relateImages[i].pathUrl || pathUrl2 == GeoElements.concept.relateImages[i].pathUrl) {
+                        GeoElements.concept.relateImages.splice(i,1);
+                    }
+                }
+                eltTitle.remove();
+            };
             imageContainer.style.padding = "5px";
         }
         var fileInput2 = document.createElement("input");
@@ -7171,7 +7320,26 @@ GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
                 var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                     ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
                 var parent = $("#conceptImageContainer")[0];
-                parent.appendChild(image);
+                var imageDiv = document.createElement("div");
+                imageDiv.style.width = "70px";
+                imageDiv.style.display = "inline-flex";
+                var deleteDiv = document.createElement("div");
+                deleteDiv.innerText = "×";
+                deleteDiv.style.fontSize = "14px";
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteDiv);
+                parent.appendChild(imageDiv);
+                deleteDiv.onclick = (elt)=>{
+                    var eltTitle = elt.target.parentNode;
+
+                    var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                    for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+                        if (pathUrl == GeoElements.concept.relateImages[i].pathUrl) {
+                            GeoElements.concept.relateImages.splice(i,1);
+                        }
+                    }
+                    eltTitle.remove();
+                };
                 imageContainer.style.padding = "5px";
                 $.ajax({
                     url: "/userImage/online",
@@ -7214,7 +7382,28 @@ GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
                     var parent = $("#conceptImageContainer")[0];
-                    parent.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    parent.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        pathUrl = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+                            if (pathUrl == GeoElements.concept.relateImages[i].pathUrl) {
+                                GeoElements.concept.relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     GeoElements.concept.relateImages.push(userImage);
                 }
@@ -7359,7 +7548,28 @@ GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
                     var a = GeoElements.properties[n].relateImages[j];
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-                    imageContainer.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.properties[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.properties[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.properties[n].relateImages[i].pathUrl) {
+                                GeoElements.properties[n].relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                 }
             }
@@ -7387,7 +7597,29 @@ GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
 
-                    imageContainer.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.properties[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.properties[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.properties[n].relateImages[i].pathUrl) {
+                                GeoElements.properties[n].relateImages.splice(i,1);
+                                break;
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     $.ajax({
                         url: "/userImage/online",
@@ -7428,7 +7660,29 @@ GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
                     success: (userImage)=>{
                         var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                             ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
-                        imageContainer.appendChild(image);
+                        var imageDiv = document.createElement("div");
+                        imageDiv.style.width = "70px";
+                        imageDiv.style.display = "inline-flex";
+                        var deleteDiv = document.createElement("div");
+                        deleteDiv.innerText = "×";
+                        deleteDiv.style.fontSize = "14px";
+                        imageDiv.appendChild(image);
+                        imageDiv.appendChild(deleteDiv);
+                        imageContainer.appendChild(imageDiv);
+                        deleteDiv.onclick = (elt)=>{
+                            var eltTitle = elt.target.parentNode;
+
+                            var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                            var index = pathUrl.indexOf("/static");
+                            var pathUrl2 = pathUrl.substring(index);
+                            for (let i = 0; i < GeoElements.properties[n].relateImages.length; i++) {
+                                if (pathUrl == GeoElements.properties[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.properties[n].relateImages[i].pathUrl) {
+                                    GeoElements.properties[n].relateImages.splice(i,1);
+                                    break;
+                                }
+                            }
+                            eltTitle.remove();
+                        };
                         imageContainer.style.padding = "5px";
                        p.relateImages.push(userImage);
                     }
@@ -7614,7 +7868,28 @@ GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
                     var a = GeoElements.processes[n].relateImages[j];
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-                    imageContainer.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.processes[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.processes[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.processes[n].relateImages[i].pathUrl) {
+                                GeoElements.processes[n].relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                 }
             }
@@ -7640,8 +7915,28 @@ GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
                     var url = fileInput2.value;
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
 
-                    imageContainer.appendChild(image);
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.processes[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.processes[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.processes[n].relateImages[i].pathUrl) {
+                                GeoElements.processes[n].relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     $.ajax({
                         url: "/userImage/online",
@@ -7683,7 +7978,28 @@ GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
                     success: (userImage)=>{
                         var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                             ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
-                        imageContainer.appendChild(image);
+                        var imageDiv = document.createElement("div");
+                        imageDiv.style.width = "70px";
+                        imageDiv.style.display = "inline-flex";
+                        var deleteDiv = document.createElement("div");
+                        deleteDiv.innerText = "×";
+                        deleteDiv.style.fontSize = "14px";
+                        imageDiv.appendChild(image);
+                        imageDiv.appendChild(deleteDiv);
+                        imageContainer.appendChild(imageDiv);
+                        deleteDiv.onclick = (elt)=>{
+                            var eltTitle = elt.target.parentNode;
+
+                            var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                            var index = pathUrl.indexOf("/static");
+                            var pathUrl2 = pathUrl.substring(index);
+                            for (let i = 0; i < GeoElements.processes[n].relateImages.length; i++) {
+                                if (pathUrl == GeoElements.processes[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.processes[n].relateImages[i].pathUrl) {
+                                    GeoElements.processes[n].relateImages.splice(i,1);
+                                }
+                            }
+                            eltTitle.remove();
+                        };
                         imageContainer.style.padding = "5px";
                         p.relateImages.push(userImage);
                     }
@@ -7926,7 +8242,28 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
                     var a = GeoElements.elementRelations[n].relateImages[j];
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
-                    imageContainer.appendChild(image);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
+
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.elementRelations[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.elementRelations[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.elementRelations[n].relateImages[i].pathUrl) {
+                                GeoElements.elementRelations[n].relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                 }
             }
@@ -7952,8 +8289,28 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
                     var url = fileInput2.value;
                     var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + url,
                         ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", "", null, null, null);
+                    var imageDiv = document.createElement("div");
+                    imageDiv.style.width = "70px";
+                    imageDiv.style.display = "inline-flex";
+                    var deleteDiv = document.createElement("div");
+                    deleteDiv.innerText = "×";
+                    deleteDiv.style.fontSize = "14px";
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteDiv);
+                    imageContainer.appendChild(imageDiv);
+                    deleteDiv.onclick = (elt)=>{
+                        var eltTitle = elt.target.parentNode;
 
-                    imageContainer.appendChild(image);
+                        var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                        var index = pathUrl.indexOf("/static");
+                        var pathUrl2 = pathUrl.substring(index);
+                        for (let i = 0; i < GeoElements.elementRelations[n].relateImages.length; i++) {
+                            if (pathUrl == GeoElements.elementRelations[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.elementRelations[n].relateImages[i].pathUrl) {
+                                GeoElements.elementRelations[n].relateImages.splice(i,1);
+                            }
+                        }
+                        eltTitle.remove();
+                    };
                     imageContainer.style.padding = "5px";
                     $.ajax({
                         url: "/userImage/online",
@@ -7994,7 +8351,28 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
                     success: (userImage)=>{
                         var image = ui.sidebar.createGeoIconTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + userImage.pathUrl,
                             ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, "", userImage.name, userImage.name != null, null, null);
-                        imageContainer.appendChild(image);
+                        var imageDiv = document.createElement("div");
+                        imageDiv.style.width = "70px";
+                        imageDiv.style.display = "inline-flex";
+                        var deleteDiv = document.createElement("div");
+                        deleteDiv.innerText = "×";
+                        deleteDiv.style.fontSize = "14px";
+                        imageDiv.appendChild(image);
+                        imageDiv.appendChild(deleteDiv);
+                        imageContainer.appendChild(imageDiv);
+                        deleteDiv.onclick = (elt)=>{
+                            var eltTitle = elt.target.parentNode;
+
+                            var pathUrl = eltTitle.firstChild.firstChild.firstChild.children[1].firstChild.firstChild.href.baseVal;
+                            var index = pathUrl.indexOf("/static");
+                            var pathUrl2 = pathUrl.substring(index);
+                            for (let i = 0; i < GeoElements.elementRelations[n].relateImages.length; i++) {
+                                if (pathUrl == GeoElements.elementRelations[n].relateImages[i].pathUrl || pathUrl2 == GeoElements.elementRelations[n].relateImages[i].pathUrl) {
+                                    GeoElements.elementRelations[n].relateImages.splice(i,1);
+                                }
+                            }
+                            eltTitle.remove();
+                        };
                         imageContainer.style.padding = "5px";
                         r.relateImages.push(userImage);
                     }
