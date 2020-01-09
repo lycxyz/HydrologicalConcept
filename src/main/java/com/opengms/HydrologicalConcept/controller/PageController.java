@@ -68,4 +68,10 @@ public class PageController {
     {
         return "chatTest";
     };
+    @RequestMapping("/drools")
+    public String drools()
+
+    {
+        return "drools";
+    };
 }

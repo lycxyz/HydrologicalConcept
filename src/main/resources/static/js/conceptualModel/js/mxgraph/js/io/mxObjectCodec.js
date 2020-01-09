@@ -728,7 +728,7 @@ mxObjectCodec.prototype.afterEncode = function(enc, obj, node)
  *
  * (code)
  * <Object>
- *   <add as="hello"><![CDATA[
+ *   <add as="hello.drl"><![CDATA[
  *     function(arg1) {
  *       mxUtils.alert('Hello '+arg1);
  *     }

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" rel="stylesheet">
+  <link href="img/favicon.ico" rel="shortcut icon">
+  <style>
+    body{
+      overflow:hidden;
+    }
+    .el-header, .el-footer{
+        background-color: black;
+        color: white;
+        text-align: center;
+        line-height: 60px;
+    }
+    .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+
+    /*导航栏*/
+    .el-row {
+        margin-bottom: 20px;
+
+    }
+    .el-col {
+        border-radius: 4px;
+    }
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
+    .item {
+        margin-top: -3px;
+        margin-right: 10px;
+    }
+    /* 关于显示的切换 */
+  </style>
+</head>
+
+<body>
+  <div id="app">
+      <el-Header class="navbar">
+          <el-col class="grid-content" :span="4">
+              <div style="height:60px">
+                  <img src="images/logo.png" style="height:100%;width:auto">
+              </div>
+          </el-col>
+          <el-col class="grid-content" :span="14">
+              <span style="color:white;font-weight:bold;line-height:60px">开放式水文概念图库</span>
+          </el-col>
+          <el-col class="grid-content" :span="6">
+              <div class="userPart">
+                  <!--el-icon-message-solid-->
+                  <el-button title="通知" icon="el-icon-message-solid" size="medium"></el-button>
+                  <el-button size="medium" v-show="isLogin" @click="login">登录</el-button>
+                  <el-button size="medium">注销</el-button>
+                  <el-button title="个人空间" icon="el-icon-s-home" size="medium"></el-button>
+              </div>
+          </el-col>
+      </el-Header>
+      <el-container :style="mainObj">
+        <div>
+            <el-col :span="4" :offset="1" style="margin-top:20px" v-for="(item, index) in conceptData.slice((currentPage-1)*PageSize,currentPage*PageSize)" :key="item.index">
+              <el-card style="height:200px;overflow:auto">
+                <h4 style="text-align:center" @click="jumpToItem(item.name)">{{item.name}}</h4>
+                  <p>{{item.description}}</p>
+              </el-card>
+            </el-col>
+            <el-col :span="3" style="top:90px;right:30px;position:absolute;margin-left:50px;">
+                <div style="text-align:center">
+                    <el-button type="success" icon="el-icon-plus" circle style=" text-align: center;" @click="createDialogVisible = true"></el-button>
+                </div>
+            </el-col>
+        </div>
+      </el-container>
+      <div style="height:30px;display:flex;justify-content: center;align-items:center">
+          <el-pagination small layout="prev, pager, next" :total="50" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes">
+          </el-pagination>
+      </div>
+      <el-footer></el-footer>
+  </div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        createDialogVisible:false,   //控制创建模态框的按钮
+        visible: false,
+        rateValue: 4,
+        mainObj: {
+          height: '',
+          width:''
+        },
+        //前台获取到的所有信息
+        conceptData:[
+            {name:"冰上覆雪",description:"封冻冰盖表面覆盖积雪的现象。"},
+            {name:"波速",description:"洪水波同位水相位（流量）在河道中的传播速度。"},
+            {name:"补偿流",description:"由于某一海区海水的损失，使附近海区的海水流来补充而形成的海流。"},
+            {name:"部分平均流速",description:"两相邻测速垂线的垂线平均流速的平均值，或岸边垂线流速乘以相应系数的积。"},
+            {name:"冰上覆雪",description:"封冻冰盖表面覆盖积雪的现象。"},
+            {name:"波速",description:"洪水波同位水相位（流量）在河道中的传播速度。"},
+            {name:"补偿流",description:"由于某一海区海水的损失，使附近海区的海水流来补充而形成的海流。。"},
+            {name:"部分平均流速",description:"两相邻测速垂线的垂线平均流速的平均值，或岸边垂线流速乘以相应系数的积。"},
+            {name:"冰上覆雪",description:"封冻冰盖表面覆盖积雪的现象。"},
+            {name:"波速",description:"洪水波同位水相位（流量）在河道中的传播速度。"},
+            {name:"补偿流",description:"由于某一海区海水的损失，使附近海区的海水流来补充而形成的海流。"},
+            {name:"部分平均流速",description:"两相邻测速垂线的垂线平均流速的平均值，或岸边垂线流速乘以相应系数的积。"},
+            {name:"部分平均流速",description:"两相邻测速垂线的垂线平均流速的平均值，或岸边垂线流速乘以相应系数的积。"},
+            {name:"冰上覆雪",description:"封冻冰盖表面覆盖积雪的现象。"},
+            {name:"波速",description:"洪水波同位水相位（流量）在河道中的传播速度。"},
+            {name:"补偿流",description:"由于某一海区海水的损失，使附近海区的海水流来补充而形成的海流。"},
+            {name:"部分平均流速",description:"两相邻测速垂线的垂线平均流速的平均值，或岸边垂线流速乘以相应系数的积。"},
+
+        ],
+
+        currentDate: new Date(),
+        isLogin:true,
+        //关于页数分页
+          currentPage:1,
+          // 总条数，根据接口获取数据长度(注意：这里不能为空)
+          totalCount:1,
+          // 个数选择器（可修改）
+          pageSizes:[1,2,3,4],
+          // 默认每页显示的条数（可修改）
+          PageSize:12,
+
+         //关于概念的表单
+          concept:{
+            conceptDescription:{name:"",definition:"",classification:[{type:"",concept:[]}]},
+          }
+      }
+    },
+    methods: {
+      getHeight: function () {
+        this.mainObj.height = window.innerHeight - 150 + 'px';
+        console.log(this.mainObj.height);
+      },
+      //分页
+        handleSizeChange(val) {
+            // 改变每页显示的条数
+            this.PageSize=val;
+            // 注意：在改变每页显示的条数时，要将页码显示到第一页
+            this.currentPage=1
+        },
+        // 显示第几页
+        handleCurrentChange(val) {
+            // 改变默认的页数
+            this.currentPage=val
+        },
+        login(){
+          window.location.href = "./_login";
+        },
+        jumpToItem(para){
+          alert(para);
+          window.location.href = "./conceptItem/"+para;
+        },
+        //处理模态框关闭的事件
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+        }
+    },
+    created() {
+      window.addEventListener('resize', this.getHeight);
+      this.getHeight();
+    },
+    destroyed() {
+      window.removeEventListener('resize', this.getHeight)
+    }
+  })
+</script>
+
+</html>

@@ -19,7 +19,10 @@ $(document).ready(function () {
             // setMessageInnerHTML(data.info);
         }else if (data.infoType===2){
             // setMessageInnerHTML(data.from+":"+data.message);
+            // this.relateConcepts = data.relateInfo;
+            // consoel.log("relateConcepts是:"+this.relateConcepts);
             setRelateDiv(data.relateInfo);
+
         }
 
         /*
@@ -73,31 +76,11 @@ $(document).ready(function () {
 screenFuc();
 function screenFuc() {
     var topHeight = $(".chatBox-head").innerHeight();//聊天头部高度
-    //屏幕小于768px时候,布局change
-    var winWidth = $(window).innerWidth();
-    $(".chatBox-content-demo").css("height", "calc(100% - 47px)");
-    if (winWidth <= 768) {
-        var totalHeight = $(window).height(); //页面整体高度
-        $(".chatBox-info").css("height", totalHeight - topHeight);
-        var infoHeight = $(".chatBox-info").innerHeight();//聊天头部以下高度
-        //中间内容高度
-        $(".chatBox-content").css("height", infoHeight - 46);
-
-
-        $(".chatBox-list").css("height", totalHeight - topHeight);
-        // $(".chatBox-kuang").css("height", "calc(100% - 90px)");
-        //chatBox-content-demo
-        //calc(100% - 90px)
-        $(".div-textarea").css("width", "calc(100% - 90px)");
-        // $(".div-textarea").css("width", winWidth - 106);
-    } else {
-        $(".chatBox-info").css("height", 495);
-        $(".chatBox-content").css("height", 448);
-        // $(".chatBox-content-demo").css("height", 448);
-        $(".chatBox-list").css("height", 495);
-        $(".chatBox-kuang").css("height", 495);
-        $(".div-textarea").css("width", 260);
-    }
+    console.log("聊天头部高度是"+topHeight);
+    $(".div-textarea").css("width", "calc(100% - 90px)");
+    $(".chatBox-content").css("height",$(window).height()-80);
+    $(".div-textarea").css("width", "calc(100% - 90px)");
+    $(".chatBox-content").css("height",$(window).height()-80);
 }
 (window.onresize = function () {
     screenFuc();
@@ -200,7 +183,6 @@ function selectImg(pic) {
     reader.readAsDataURL(pic.files[0]);
 
 }
-
 //将其他信息展示在其他位置上
 function setRelateDiv(info) {
     $("#concept-panel").empty();
@@ -208,21 +190,33 @@ function setRelateDiv(info) {
     var relateConcepts = $("#concept-panel");
     for (let j = 0; j <infoArray[0].length ; j++) {
         for (var i=0;i<infoArray[0][j].length;i++){
-            let div = $("<div></div>");
-            div.css("border","1px dashed gray");
-            let title = $(`<div style="font-size: 18px;font-weight: 600">`+ infoArray[0][j][i].name +`</div>`);
-            let content =$(`<div>`+ infoArray[0][j][i].definition +`</div>`);
-            div.append(title);
-            div.append(content);
-            relateConcepts.append(div);
+            // let div = $("<div></div>");
+            // div.css("border","1px dashed gray");
+            // let title = $(`<div style="font-size: 18px;font-weight: 600">`+ infoArray[0][j][i].name +`</div>`);
+            // let content =$(`<div>`+ infoArray[0][j][i].definition +`</div>`);
+            let title = $(`<label style="font-size: 10px;font-weight: 200;margin-right:15px;border: 1px solid gray" class="concepts" draggable="true">`+ infoArray[0][j][i].name +`</label>`);
+            title.attr("content",infoArray[0][j][i].definition);
+            title.attr("title",infoArray[0][j][i].name);
+            //添加一个点击事件能够展开概念的具体描述
+            // div.append(title);
+            // div.append(content);
+            // relateConcepts.append(div);
+            relateConcepts.append(title);
         }
     }
+    // $(".concepts").click(function () {
+    //     alert($(this).attr("content"));
+    // });
+    $(".concepts").dblclick(function () {
+        $('#my_message').html($(this).attr("title"));
+        // $("#my_message").val($(this).attr("title"));
+    });
+
     $("#geoIcon-panel").empty();
     var relateGeoIcons = $("#geoIcon-panel");
     for (let j = 0; j <infoArray[1].length ; j++) {
         for (var i=0;i<infoArray[1][j].length;i++){
             let geoIcon = $(`<img src="`+infoArray[1][j][i].pathUrl+`" width="80" height="80" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-
             relateGeoIcons.append(geoIcon);
         }
     }

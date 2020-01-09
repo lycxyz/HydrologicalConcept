@@ -1,7 +1,5 @@
 package com.opengms.HydrologicalConcept.controller;
-
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.opengms.HydrologicalConcept.entity.GeoIcon;
 import com.opengms.HydrologicalConcept.service.GeoIconService;
 import io.swagger.annotations.Api;
@@ -28,7 +26,6 @@ public class GeoIconController {
 
         GeoIcon geoIcon = JSON.parseObject(jsonObject, GeoIcon.class);
         geoIconService.uploadGeoIcons(mfile,geoIcon);
-
         return "ok";
     }
 }

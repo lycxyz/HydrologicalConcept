@@ -7,7 +7,10 @@ import com.opengms.HydrologicalConcept.dto.GeoIconDTO;
 import com.opengms.HydrologicalConcept.entity.ConceptMap;
 import com.opengms.HydrologicalConcept.entity.Concepts;
 import com.opengms.HydrologicalConcept.entity.GeoIcon;
+import org.ansj.app.keyword.KeyWordComputer;
+import org.ansj.app.keyword.Keyword;
 import org.ansj.domain.Result;
+import org.ansj.splitWord.analysis.NlpAnalysis;
 import org.ansj.splitWord.analysis.ToAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +19,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -39,14 +43,20 @@ public class AnsjSegService{
 
     public String processInfo(String info) {
         String result="";
-        Result output= ToAnalysis.parse(info);
+        //IndexAnalysis面向索引的分词、NlpAnalysis Nlp分词、
+//        Result output= ToAnalysis.parse(info);
+        Result output= NlpAnalysis.parse(info);
         if(output.size()!=0){
             JSONArray wordArray = new JSONArray();
             for(int i=0;i<output.size();i++){
                 String word = output.get(i).getName(); //拿到词
                 String natureStr = output.get(i).getNatureStr(); //拿到词性
-                if(natureStr.equals("n")||natureStr.equals("nt")||natureStr.equals("vn")||natureStr.equals("an")||natureStr.equals("nz")||natureStr.equals("nl")||natureStr.equals("nw")||natureStr.equals("nr")||natureStr.equals("ng")||natureStr.equals("ns")||natureStr.equals("t")||natureStr.equals("tg")){
-                    wordArray.add(word);
+//natureStr.equals("n")||
+                if(word.length()>1){
+                    if(natureStr.equals("n")||natureStr.equals("nt")||natureStr.equals("vn")||natureStr.equals("an")||natureStr.equals("nz")||natureStr.equals("nl")||natureStr.equals("nw")||natureStr.equals("nt")||natureStr.equals("ns")||natureStr.equals("t")||natureStr.equals("tg")||natureStr.equals("f")||natureStr.equals("z")) {
+                        wordArray.add(word);
+                        System.out.println(word + "," + "词性是:" + natureStr);
+                    }
                 }
             }
             System.out.println(wordArray.toString());

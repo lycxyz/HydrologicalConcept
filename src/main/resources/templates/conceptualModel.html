@@ -236,7 +236,7 @@
             },
             "elementRelations": [
                 {
-                    "relateElements": ['雨','雪'],
+                    "relateElements": [],
                     "relateImages": [],
                     "relateType": "",
                     "relateValue": "",
@@ -248,7 +248,7 @@
                     "description": "",
                     "tags": [],
                     "elements": [],
-                    "name": "风化过程",
+                    "name": "",
                     "relateImages": []
                 }
             ],
@@ -257,23 +257,23 @@
                     "description": "",
                     "tags": [],
                     "relateImages": [],
-                    "type": "物理"
+                    "type": ""
                 }
             ]
 
         };
         //
-        $.ajax({
-            url: "/conceptMap/getConceptMapByGeoId",
-            data: {
-                geoId: "80272317-7d89-d4f4-208e-4956904002eb"
-            },
-            async: false,
-            success: (conceptMap)=>{
-                console.log(conceptMap);
-                GeoElements = conceptMap;
-            }
-        })
+        // $.ajax({
+        //     url: "/conceptMap/getConceptMapByGeoId",
+        //     data: {
+        //         geoId: "0666fcf7-2322-430c-881c-07ddec554674"
+        //     },
+        //     async: false,
+        //     success: (conceptMap)=>{
+        //         console.log(conceptMap);
+        //         GeoElements = conceptMap;
+        //     }
+        // })
 
     </script>
     <!--jsanel引用开始->
