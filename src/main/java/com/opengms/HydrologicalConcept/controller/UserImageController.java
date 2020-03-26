@@ -4,6 +4,7 @@ import com.opengms.HydrologicalConcept.dao.UserImageDao;
 import com.opengms.HydrologicalConcept.entity.UserImage;
 import com.opengms.HydrologicalConcept.service.AnsjSegService;
 import com.opengms.HydrologicalConcept.service.UserImageService;
+import com.opengms.HydrologicalConcept.utils.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,6 +59,7 @@ public class UserImageController {
         String result = ansjSegService.processInfo(image.getDescription());
         result = result.replaceAll("\"","");
         String[] tags = result.substring(1,result.length()-1).split(",");
+        tags = ArrayUtils.removeDuplication(tags);
         image.setTags(tags);
 
         userImageDao.save(image);

@@ -488,11 +488,11 @@
 }
 @media all and (max-width: 370px){
     /*.chat-name{*/
-        /*!*width: 185px;*!*/
-        /*width: 185px;*/
+    /*!*width: 185px;*!*/
+    /*width: 185px;*/
     /*}*/
     /*.chat-name p{*/
-        /*width: 185px;*/
+    /*width: 185px;*/
     /*}*/
     .chat-people>div:nth-of-type(2){
         width: 120px;
