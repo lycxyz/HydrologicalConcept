@@ -35,6 +35,10 @@ public class PageController {
     {
         return "uploadIcons";
     };
+    @RequestMapping("/chatBaseMapB")
+    public String chatBaseMap(){
+        return "chatBaseMap";
+    }
 
     @RequestMapping("/_login")
     public String aaa()

@@ -15,6 +15,6 @@ public class GeoIcon {
 //    String iconClass;
     List<String> tags;
 
-    List<ConceptMap> relatedConceptMaps;
-    List<GeoIcon> relatedGeoIcons;
+//    List<ConceptMap> relatedConceptMaps;
+//    List<GeoIcon> relatedGeoIcons;
 }

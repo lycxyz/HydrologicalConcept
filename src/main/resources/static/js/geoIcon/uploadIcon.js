@@ -28,10 +28,10 @@ $(document).ready(function(){
         geoIcon["name"]=$("#nameInput").val().split('.')[0];
         geoIcon["description"] = $("#descInput").val();
         geoIcon["pathUrl"] = "";
-        geoIcon["iconClass"] = $("#classInput").val();
+        // geoIcon["iconClass"] = $("#classInput").val();
         geoIcon["tags"] = $("#tagInput").val().split(',');
-        geoIcon["relatedConceptMaps"] = [];
-        geoIcon["relatedGeoIcons"] = [];
+        // geoIcon["relatedConceptMaps"] = [];
+        // geoIcon["relatedGeoIcons"] = [];
         console.log(geoIcon);
 
         // var formData = new FormData(document.getElementById("form1"));

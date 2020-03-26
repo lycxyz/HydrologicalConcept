@@ -2,7 +2,7 @@ var ws;
 $(document).ready(function () {
     //判断当前浏览器是否支持WebSocket
     if (WebSocket) {
-        ws = new WebSocket("ws://localhost:8082/webSocketChat/" + "lyc");
+        ws = new WebSocket("ws://localhost:8083/webSocketChat/" + "lyc");
     } else {
         alert('Not support websocket')
     }
@@ -76,11 +76,36 @@ $(document).ready(function () {
 screenFuc();
 function screenFuc() {
     var topHeight = $(".chatBox-head").innerHeight();//聊天头部高度
-    console.log("聊天头部高度是"+topHeight);
-    $(".div-textarea").css("width", "calc(100% - 90px)");
-    $(".chatBox-content").css("height",$(window).height()-80);
-    $(".div-textarea").css("width", "calc(100% - 90px)");
-    $(".chatBox-content").css("height",$(window).height()-80);
+    // console.log("聊天头部高度是"+topHeight);
+    // $(".div-textarea").css("width", "calc(100% - 90px)");
+    // $(".chatBox-content").css("height",$(window).height()-80);
+    // $(".div-textarea").css("width", "calc(100% - 90px)");
+    // $(".chatBox-content").css("height",$(window).height()-80);
+    //屏幕小于768px时候,布局change
+    var winWidth = $(window).innerWidth();
+    $(".chatBox-content-demo").css("height", "calc(100% - 47px)");
+    if (winWidth <= 768) {
+        var totalHeight = $(window).height(); //页面整体高度
+        $(".chatBox-info").css("height", totalHeight - topHeight);
+        var infoHeight = $(".chatBox-info").innerHeight();//聊天头部以下高度
+        //中间内容高度
+        $(".chatBox-content").css("height", infoHeight - 46);
+
+
+        $(".chatBox-list").css("height", totalHeight - topHeight);
+        // $(".chatBox-kuang").css("height", "calc(100% - 90px)");
+        //chatBox-content-demo
+        //calc(100% - 90px)
+        $(".div-textarea").css("width", "calc(100% - 90px)");
+        // $(".div-textarea").css("width", winWidth - 106);
+    } else {
+        $(".chatBox-info").css("height", 495);
+        $(".chatBox-content").css("height", 448);
+        // $(".chatBox-content-demo").css("height", 448);
+        $(".chatBox-list").css("height", 495);
+        $(".chatBox-kuang").css("height", 495);
+        $(".div-textarea").css("width", 260);
+    }
 }
 (window.onresize = function () {
     screenFuc();
@@ -185,25 +210,39 @@ function selectImg(pic) {
 }
 //将其他信息展示在其他位置上
 function setRelateDiv(info) {
-    $("#concept-panel").empty();
+    //词云效果
+    var wc = new Js2WordCloud(document.getElementById('concept-panel'))
+    var list = [];
+
+    // $("#concept-panel").empty();
     let infoArray = JSON.parse(info);
-    var relateConcepts = $("#concept-panel");
+    // var relateConcepts = $("#concept-panel");
     for (let j = 0; j <infoArray[0].length ; j++) {
         for (var i=0;i<infoArray[0][j].length;i++){
-            // let div = $("<div></div>");
-            // div.css("border","1px dashed gray");
-            // let title = $(`<div style="font-size: 18px;font-weight: 600">`+ infoArray[0][j][i].name +`</div>`);
-            // let content =$(`<div>`+ infoArray[0][j][i].definition +`</div>`);
-            let title = $(`<label style="font-size: 10px;font-weight: 200;margin-right:15px;border: 1px solid gray" class="concepts" draggable="true">`+ infoArray[0][j][i].name +`</label>`);
-            title.attr("content",infoArray[0][j][i].definition);
-            title.attr("title",infoArray[0][j][i].name);
-            //添加一个点击事件能够展开概念的具体描述
-            // div.append(title);
-            // div.append(content);
-            // relateConcepts.append(div);
-            relateConcepts.append(title);
+            // let title = $(`<label style="font-size: 10px;font-weight: 200;margin-right:15px;border: 1px solid gray" class="concepts" draggable="true">`+ infoArray[0][j][i].name +`</label>`);
+            // title.attr("content",infoArray[0][j][i].definition);
+            // title.attr("title",infoArray[0][j][i].name);
+            // relateConcepts.append(title);
+
+            var r = Math.random()
+            var l = [infoArray[0][j][i].name, r < 0.9? r*100:r*10000,infoArray[0][j][i].definition]
+            list.push(l);
         }
     }
+    wc.setOption({
+        tooltip: {
+            show: true,
+            formatter: function(item) {
+                return item[0] + ': ' + item[2]
+            }
+        },
+        list: list,
+        color: '#15a4fa',
+        shape: 'circle',
+        ellipticity: 1
+    })
+
+
     // $(".concepts").click(function () {
     //     alert($(this).attr("content"));
     // });

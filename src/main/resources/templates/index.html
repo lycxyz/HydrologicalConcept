@@ -130,8 +130,13 @@
 <div>
     <div style="margin-top:10px;height:40px;" class="col-md-12 col-xs-12">
         <div class="col-md-2 col-xs-4" style="float:right">
+
+            <button type="button" class="btn btn-primary" id="geoRule" style="float:left;"
+                    onClick="geoRule()">geoRule</button>
             <button type="button" class="btn btn-primary" id="conceptualModel" style="float:left;"
                     onClick="conceptualModel()">Conceptual Model</button>
+            <button type="button" class="btn btn-primary" id="chatBaseMap" style="float:left;"
+                    onClick="chatBaseMap()">Chat Base Map</button>
             <button type="button" class="btn btn-primary" id="uploadIcons" style="float:left;"
                     onClick="uploadIcons()">Upload Icons</button>
             <button type="button" class="btn btn-primary" id="chatTest" style="float:left;"
@@ -556,8 +561,16 @@
         $("#computationalBtn").css('display', 'none');
     }
 
+    function geoRule() {
+        window.location.href = "/geoRule/getAllGeoRules"
+    }
+
     function conceptualModel(){
         window.location.href = "/conceptualModel";
+    }
+
+    function chatBaseMap() {
+        window.location.href = "/chatBaseMapB";
     }
 
     function uploadIcons(){
