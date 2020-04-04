@@ -11,6 +11,7 @@ public class ConceptMap{
     String id;
     String geoId;
     String name;
+
     String description;
     String graphXml;
     String xml;

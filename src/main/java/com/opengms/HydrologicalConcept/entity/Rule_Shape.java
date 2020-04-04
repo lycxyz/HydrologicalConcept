@@ -1,14 +1,15 @@
 package com.opengms.HydrologicalConcept.entity;
 
-import com.opengms.HydrologicalConcept.entity.Rule_Enum.Aspect;
+import com.opengms.HydrologicalConcept.entity.Rule_Enum.Type_Shape;
 import lombok.Data;
+
 import java.util.List;
 
 @Data
-public class GeoRule {
+public class Rule_Shape {
+    String id;
     String from;
     List<String> to;
-    String type;
+    Type_Shape type;
     String description;
-    Aspect aspect;
 }
