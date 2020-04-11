@@ -2,14 +2,13 @@ var ws;
 $(document).ready(function () {
     //判断当前浏览器是否支持WebSocket
     if (WebSocket) {
-        ws = new WebSocket("ws://localhost:8083/webSocketChat/" + "lyc");
+        ws = new WebSocket("ws://localhost:8080/webSocketChat/" + "lyc");
     } else {
         alert('Not support websocket')
     }
 
     ws.onopen = function () {
-        // var json="{'from':'1','to':'2','input':'111'}";
-        // ws.send(json);//可以给后台发送参数
+        alert("已连接");
     };
     //接收到消息的回调方法
     ws.onmessage = function (event) {
@@ -46,7 +45,7 @@ $(document).ready(function () {
     };
     //断开 web socket 连接成功触发事件
     ws.onclose = function () {
-        alert("连接已关闭...");
+        alert("连接已关闭");
     };
     let outerDiv = $("#chatBox-list");
     //这里读取群组的人员信息并进行渲染
@@ -216,18 +215,10 @@ function setRelateDiv(info) {
 
     // $("#concept-panel").empty();
     let infoArray = JSON.parse(info);
-    // var relateConcepts = $("#concept-panel");
     for (let j = 0; j <infoArray[0].length ; j++) {
-        for (var i=0;i<infoArray[0][j].length;i++){
-            // let title = $(`<label style="font-size: 10px;font-weight: 200;margin-right:15px;border: 1px solid gray" class="concepts" draggable="true">`+ infoArray[0][j][i].name +`</label>`);
-            // title.attr("content",infoArray[0][j][i].definition);
-            // title.attr("title",infoArray[0][j][i].name);
-            // relateConcepts.append(title);
-
-            var r = Math.random()
-            var l = [infoArray[0][j][i].name, r < 0.9? r*100:r*10000,infoArray[0][j][i].definition]
-            list.push(l);
-        }
+        var r = Math.random();
+        var l = [infoArray[0][j].name, r < 0.9? r*100:r*10000,infoArray[0][j].definition]
+        list.push(l);
     }
     wc.setOption({
         tooltip: {
@@ -242,31 +233,12 @@ function setRelateDiv(info) {
         ellipticity: 1
     })
 
-
-    // $(".concepts").click(function () {
-    //     alert($(this).attr("content"));
-    // });
-    $(".concepts").dblclick(function () {
-        $('#my_message').html($(this).attr("title"));
-        // $("#my_message").val($(this).attr("title"));
-    });
-
-    $("#geoIcon-panel").empty();
-    var relateGeoIcons = $("#geoIcon-panel");
-    for (let j = 0; j <infoArray[1].length ; j++) {
-        for (var i=0;i<infoArray[1][j].length;i++){
-            let geoIcon = $(`<img src="`+infoArray[1][j][i].pathUrl+`" width="80" height="80" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-            relateGeoIcons.append(geoIcon);
-        }
-    }
     $("#conceptMap-panel").empty();
     var relateConceptMaps = $("#conceptMap-panel");
-    for (let j = 0; j <infoArray[2].length ; j++) {
-        for (var i=0;i<infoArray[2][j].length;i++){
-            let conceptMap = $(`<img src="`+infoArray[2][j][i].pathUrl+`" width="100%" height="100%" style="margin-bottom: 5px;border: 2px solid #b4dc8c;">`);
+    for (let j = 0; j <infoArray[1].length ; j++) {
+        let conceptMap = $(`<img src="` + infoArray[1][j].pathUrl + `" width="100%" height="100%" style="margin-bottom: 5px;border: 2px solid #b4dc8c;">`);
 
-            relateConceptMaps.append(conceptMap);
-        }
+        relateConceptMaps.append(conceptMap);
     }
 }
 

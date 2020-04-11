@@ -12,7 +12,8 @@ import java.io.Serializable;
 @Data
 @Document(collection = "ConceptSemantic")
 public class Concepts implements Serializable {
-    private String name;
-    private String definition;
-    private String conceptType;
+    String conceptID;
+    String name;
+    String definition;
+    String conceptType;
 }

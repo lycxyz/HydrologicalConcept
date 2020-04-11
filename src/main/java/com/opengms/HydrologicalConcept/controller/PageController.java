@@ -63,7 +63,7 @@ public class PageController {
     public String chatroom()
 
     {
-        return "chatRoom";
+        return "chat_new";
     };
 
     @RequestMapping("/chatTest")

@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface Rule_SpacePositionDao extends MongoRepository<Rule_SpacePosition,String> {
-    List<Rule_SpacePosition> findByFromOrTo(String key);
+    List<Rule_SpacePosition> findByFrom(String key);
 }

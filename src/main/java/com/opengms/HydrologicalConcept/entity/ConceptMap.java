@@ -10,6 +10,7 @@ import java.util.List;
 public class ConceptMap{
     String id;
     String geoId;
+    String conceptId;
     String name;
 
     String description;

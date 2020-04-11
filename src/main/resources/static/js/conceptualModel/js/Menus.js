@@ -1093,7 +1093,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "几何形状"
+                type: "几何形状",
+				conceptName:GeoElements.name
             },
             type: "post",
             async: true,
@@ -1186,7 +1187,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "空间位置"
+                type: "空间位置",
+                conceptName:GeoElements.name
             },
             type: "post",
             async: true,
@@ -1279,7 +1281,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "语义描述"
+                type: "语义描述",
+                conceptName:GeoElements.name
             },
             type: "post",
             async: true,
@@ -1371,7 +1374,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "属性特征"
+                type: "属性特征",
+                conceptName:GeoElements.name
             },
             type: "post",
             async: true,
@@ -1470,7 +1474,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "演变过程"
+                type: "演变过程",
+                conceptName:GeoElements.name
             },
             type: "post",
             async: true,
@@ -1570,7 +1575,8 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
                 width: w,
                 height: h,
                 xml: xml,
-                type: "要素关系"
+                type: "要素关系",
+                conceptName:GeoElements.name
             },
             type: "post",
             async: true,

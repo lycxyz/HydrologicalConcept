@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opengms.HydrologicalConcept.dao.*;
 import com.opengms.HydrologicalConcept.entity.*;
 import com.opengms.HydrologicalConcept.entity.Rule_Enum.Aspect;
+import com.opengms.HydrologicalConcept.service.GeoRuleService;
 import com.opengms.HydrologicalConcept.utils.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,74 +36,13 @@ public class GeoRuleController {
     Rule_ShapeDao rule_shapeDao;
     @Autowired
     Rule_SpacePositionDao rule_spacePositionDao;
+    @Autowired
+    GeoRuleService geoRuleService;
 
     @RequestMapping(value = "/findRulesByKey")
-    List<GeoRule> findRulesByKey(){
-        String key = "鄱阳湖";
-        List<GeoRule> list = null;
-
-        Rule_Concept[] list0 = rule_conceptDao.findAllByFromOrTo(key);
-        for (int i = 0; i < list0.length; i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list0[i].getFrom());
-            t.setTo(list0[i].getTo());
-            t.setType(list0[i].getType().toString());
-            t.setDescription(list0[i].getDescription());
-            t.setAspect(Aspect.values()[0]);
-            list.add(t);
-        }
-        List<Rule_SpacePosition> list1 = rule_spacePositionDao.findByFromOrTo(key);
-        for (int i = 0; i < list1.size(); i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list1.get(i).getFrom());
-            t.setTo(list1.get(i).getTo());
-            t.setType(list1.get(i).getType().toString());
-            t.setDescription(list1.get(i).getDescription());
-            t.setAspect(Aspect.values()[1]);
-            list.add(t);
-        }
-        List<Rule_Shape> list2 = rule_shapeDao.findByFromOrTo(key);
-        for (int i = 0; i < list2.size(); i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list2.get(i).getFrom());
-            t.setTo(list2.get(i).getTo());
-            t.setType(list2.get(i).getType().toString());
-            t.setDescription(list2.get(i).getDescription());
-            t.setAspect(Aspect.values()[2]);
-            list.add(t);
-        }
-        List<Rule_Process> list3 = rule_processDao.findByFromOrTo(key);
-        for (int i = 0; i < list3.size(); i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list3.get(i).getFrom());
-            t.setTo(list3.get(i).getTo());
-            t.setType(list3.get(i).getType().toString());
-            t.setDescription(list3.get(i).getDescription());
-            t.setAspect(Aspect.values()[3]);
-            list.add(t);
-        }
-        List<Rule_ElementRelation> list4 = rule_elementRelationDao.findByFromOrTo(key);
-        for (int i = 0; i < list4.size(); i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list4.get(i).getFrom());
-            t.setTo(list4.get(i).getTo());
-            t.setType(list4.get(i).getType().toString());
-            t.setDescription(list4.get(i).getDescription());
-            t.setAspect(Aspect.values()[4]);
-            list.add(t);
-        }
-        List<Rule_Property> list5 = rule_propertyDao.findByFromOrTo(key);
-        for (int i = 0; i < list5.size(); i++) {
-            GeoRule t = new GeoRule();
-            t.setFrom(list5.get(i).getFrom());
-            t.setTo(list5.get(i).getTo());
-            t.setType(list5.get(i).getType().toString());
-            t.setDescription(list5.get(i).getDescription());
-            t.setAspect(Aspect.values()[5]);
-            list.add(t);
-        }
-        System.out.println(list);
-        return list;
+    List<GeoRule> findRulesByKey(String key){
+        return geoRuleService.findRulesByKey(key);
+        //将方法与实现分开，更方便对方法的复用
     }
 
     @RequestMapping(value = "/saveRuleConcept")

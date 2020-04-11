@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -51,4 +52,11 @@ public class ConceptMapController {
         return conceptMapDao.findAll();
     }
 
+    @RequestMapping(value = "/getConceptMapInfoByGeoId")
+    ModelAndView getConceptMapInfoByGeoId(String geoId){
+        ModelAndView mv = new ModelAndView("conceptMapInfo");
+        ConceptMap conceptMap = conceptMapService.getConceptMapByGeoId(geoId);
+        mv.addObject("conceptMap",conceptMap);
+        return mv;
+    }
 }

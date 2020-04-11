@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface Rule_PropertyDao extends MongoRepository<Rule_Property,String> {
-    List<Rule_Property> findByFromOrTo(String key);
+    List<Rule_Property> findByFrom(String key);
 }

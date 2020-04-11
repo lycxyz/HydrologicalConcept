@@ -6,6 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface Rule_ConceptDao extends MongoRepository<Rule_Concept,String> {
-   Rule_Concept[] findAllByFromOrTo(String key);
-
+    List<Rule_Concept> findAllByFrom(String key);
 }

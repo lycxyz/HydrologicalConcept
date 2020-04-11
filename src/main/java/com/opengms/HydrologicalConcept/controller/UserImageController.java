@@ -1,8 +1,10 @@
 package com.opengms.HydrologicalConcept.controller;
 
 import com.opengms.HydrologicalConcept.dao.UserImageDao;
+import com.opengms.HydrologicalConcept.entity.Concepts;
 import com.opengms.HydrologicalConcept.entity.UserImage;
 import com.opengms.HydrologicalConcept.service.AnsjSegService;
+import com.opengms.HydrologicalConcept.service.ConceptsService;
 import com.opengms.HydrologicalConcept.service.UserImageService;
 import com.opengms.HydrologicalConcept.utils.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +23,34 @@ public class UserImageController {
     UserImageService userImageService;
 
     @Autowired
+    ConceptsService conceptsService;
+
+    @Autowired
     UserImageDao userImageDao;
 
     @Autowired
     AnsjSegService ansjSegService;
 
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    UserImage upload(MultipartFile mfile) throws IOException {
+    UserImage upload(MultipartFile mfile,String conceptName) throws IOException {
         UserImage userImage = userImageService.upload(mfile);
+
+        //获取conceptId
+        Concepts c = conceptsService.findByName(conceptName);
+        userImage.setConceptId(c.getConceptID());
+
         return userImage;
     }
 
     @RequestMapping(value = "/online", method = RequestMethod.POST)
-    UserImage online(String url){
+    UserImage online(@RequestParam("url")String url,@RequestParam("conceptName")String conceptName){
         UserImage userImage = new UserImage();
         userImage.setGeoId(UUID.randomUUID().toString());
+
+        //获取conceptId
+        Concepts c = conceptsService.findByName(conceptName);
+        userImage.setConceptId(c.getConceptID());
+
         userImage.setName(new Date().getTime() + "_onlineImage");
         userImage.setPathUrl(url);
         userImageDao.save(userImage);
@@ -44,8 +59,14 @@ public class UserImageController {
 
     @RequestMapping(value = "/userDIY",method = RequestMethod.POST)
     UserImage userDIY(@RequestParam("width") String width,@RequestParam("height") String height,
-                      @RequestParam("xml") String xml,@RequestParam("type") String type) throws Exception {
+                      @RequestParam("xml") String xml,@RequestParam("type") String type,
+                      @RequestParam("conceptName")String conceptName) throws Exception {
         UserImage userImage = userImageService.userDIY(width,height,xml,type);
+
+        //获取conceptId
+        Concepts c = conceptsService.findByName(conceptName);
+        userImage.setConceptId(c.getConceptID());
+
         return userImage;
     }
 

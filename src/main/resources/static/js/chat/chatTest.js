@@ -20,7 +20,7 @@ $("#connect").click(function () {
     }
     //判断当前浏览器是否支持WebSocket
     if (WebSocket) {
-        ws = new WebSocket("ws://localhost:8082/webSocketChat/" + nickname);
+        ws = new WebSocket("ws://localhost:8080/webSocketChat/" + nickname);
     } else {
         alert('Not support websocket')
     }

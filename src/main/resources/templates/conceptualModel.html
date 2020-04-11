@@ -202,6 +202,7 @@
         // };
         var GeoElements = {
             "geoId": "",
+            "conceptId":"",
             "name": "",
             "mapClass": "",
             "description": "",
@@ -262,18 +263,18 @@
             ]
 
         };
-        //
-        $.ajax({
-            url: "/conceptMap/getConceptMapByGeoId",
-            data: {
-                geoId: "0666fcf7-2322-430c-881c-07ddec554674"
-            },
-            async: false,
-            success: (conceptMap)=>{
-                console.log(conceptMap);
-                GeoElements = conceptMap;
-            }
-        })
+
+        // $.ajax({
+        //     url: "/conceptMap/getConceptMapByGeoId",
+        //     data: {
+        //         geoId: "0666fcf7-2322-430c-881c-07ddec554674"
+        //     },
+        //     async: false,
+        //     success: (conceptMap)=>{
+        //         console.log(conceptMap);
+        //         GeoElements = conceptMap;
+        //     }
+        // })
 
     </script>
     <!--jsanel引用开始->

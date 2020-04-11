@@ -128,11 +128,9 @@
 </head>
 <body>
 <div>
-    <div style="margin-top:10px;height:40px;" class="col-md-12 col-xs-12">
+    <div style="margin-top:10px;height:110px;" class="col-md-12 col-xs-12">
         <div class="col-md-2 col-xs-4" style="float:right">
 
-            <button type="button" class="btn btn-primary" id="geoRule" style="float:left;"
-                    onClick="geoRule()">geoRule</button>
             <button type="button" class="btn btn-primary" id="conceptualModel" style="float:left;"
                     onClick="conceptualModel()">Conceptual Model</button>
             <button type="button" class="btn btn-primary" id="chatBaseMap" style="float:left;"
@@ -561,9 +559,6 @@
         $("#computationalBtn").css('display', 'none');
     }
 
-    function geoRule() {
-        window.location.href = "/geoRule/findRulesByKey"
-    }
 
     function conceptualModel(){
         window.location.href = "/conceptualModel";

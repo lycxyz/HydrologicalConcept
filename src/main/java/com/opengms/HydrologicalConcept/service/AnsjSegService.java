@@ -2,11 +2,10 @@ package com.opengms.HydrologicalConcept.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.opengms.HydrologicalConcept.dao.ConceptsDao;
 import com.opengms.HydrologicalConcept.dto.ConceptMapDTO;
 import com.opengms.HydrologicalConcept.dto.GeoIconDTO;
-import com.opengms.HydrologicalConcept.entity.ConceptMap;
-import com.opengms.HydrologicalConcept.entity.Concepts;
-import com.opengms.HydrologicalConcept.entity.GeoIcon;
+import com.opengms.HydrologicalConcept.entity.*;
 import org.ansj.domain.Result;
 import org.ansj.splitWord.analysis.NlpAnalysis;
 import org.ansj.splitWord.analysis.ToAnalysis;
@@ -38,6 +37,15 @@ public class AnsjSegService{
     @Autowired
     ConceptMapService conceptMapService;
 
+    @Autowired
+    ConceptsService conceptsService;
+
+    @Autowired
+    UserImageService userImageService;
+
+    @Autowired
+    GeoRuleService geoRuleService;
+
     public String processInfo(String info) {
         String result="";
         Result output= NlpAnalysis.parse(info);
@@ -62,7 +70,7 @@ public class AnsjSegService{
         return result;
     }
 
-
+    //废弃，最后删除
     public String map_SpaceInfo(String info){
         String result="";
         Result output= NlpAnalysis.parse(info);
@@ -100,7 +108,6 @@ public class AnsjSegService{
         }
         return result;
     }
-
     public String map_PropertyInfo(String info){
         String result="";
         Result output= NlpAnalysis.parse(info);
@@ -135,35 +142,39 @@ public class AnsjSegService{
         if(wordArray.size()!=0){
             //搜索概念
             JSONArray arr1 = new JSONArray();
+            //搜索概念图
+            JSONArray arr3 = new JSONArray();
             for(int i = 0; i<size; i++){
                 Query query = new Query();
                 String name = wordArray.getString(i);
-                Pattern pattern = Pattern.compile("^"+name+".*$",Pattern.CASE_INSENSITIVE );
-                query.addCriteria(Criteria.where("name").regex(pattern));
-                List<Concepts> result = mongoTemplate.find(query, Concepts.class, ConceptSemantic);
-                if(result.size()!=0){
-                    arr1.add(result);
-                }
-            }
-            //搜索图标
-            JSONArray arr2 = new JSONArray();
-            for (int i = 0; i < size; i++) {
-                List<GeoIconDTO> result = geoIconService.getGeoIconByNameContains(wordArray.getString(i));
-                if(result.size()!=0){
-                    arr2.add(result);
-                }
-            }
 
-            //搜索概念图
-            JSONArray arr3 = new JSONArray();
-            for (int i = 0; i < size; i++) {
-                List<ConceptMapDTO> result = conceptMapService.getConceptMapByDescriptionContains(wordArray.getString(i));
-                if(result.size()!=0){
-                    arr3.add(result);
+                Concepts concept = conceptsService.findByName(name);
+                if(concept != null){
+                    arr1.add(concept);
+                    List<UserImage> images = userImageService.findByConceptId(concept.getConceptID());
+                    arr3.add(images);
                 }
+
+                //搜索规则
+                List<GeoRule> rules = geoRuleService.findRulesByKey(name);
+                for (int j = 0; j < rules.size(); j++) {
+                    List<String> to = rules.get(j).getTo();
+                    for (int k = 0; k < to.size(); k++) {
+                        String n = to.get(k);
+                        Concepts c = conceptsService.findByName(n);
+                        if(c != null){
+                            arr1.add(c);
+                            List<UserImage> images = userImageService.findByConceptId(c.getConceptID());
+                            for (int l = 0; l < images.size(); l++) {
+                                UserImage image = images.get(l);
+                                arr3.add(image);
+                            }
+                        }
+                    }
+                }
+
             }
             arr.add(arr1);
-            arr.add(arr2);
             arr.add(arr3);
             searchResult= arr.toJSONString();
         }
