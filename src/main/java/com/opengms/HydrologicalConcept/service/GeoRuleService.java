@@ -28,7 +28,7 @@ public class GeoRuleService {
     Rule_SpacePositionDao rule_spacePositionDao;
 
     public List<GeoRule> findRulesByKey(String key){
-        //String key = "鄱阳湖";
+
         List<GeoRule> list = new ArrayList<>();
 
         List<Rule_Concept> list0 = rule_conceptDao.findAllByFrom(key);

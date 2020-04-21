@@ -264,17 +264,17 @@
 
         };
 
-        // $.ajax({
-        //     url: "/conceptMap/getConceptMapByGeoId",
-        //     data: {
-        //         geoId: "0666fcf7-2322-430c-881c-07ddec554674"
-        //     },
-        //     async: false,
-        //     success: (conceptMap)=>{
-        //         console.log(conceptMap);
-        //         GeoElements = conceptMap;
-        //     }
-        // })
+        $.ajax({
+            url: "/conceptMap/getConceptMapByGeoId",
+            data: {
+                geoId: "69392b41-db0f-45d8-a8d2-6e18d3751578"
+            },
+            async: false,
+            success: (conceptMap)=>{
+                console.log(conceptMap);
+                GeoElements = conceptMap;
+            }
+        })
 
     </script>
     <!--jsanel引用开始->
@@ -324,18 +324,18 @@
                     <img src="/static/images/logo.png" height="45">
                 </a>
             </div>
-            <span class="navTitle">Conceptual Model Builder</span>
+            <span class="navTitle">水文概念条目构建工具</span>
             <ul id="rightNav">
                 <li>
                     <!--<a href="http://localhost:8081/TeamWorking/index.html"><strong>HOME</strong></a>-->
-                    <a href="index.html"><strong>HOME</strong></a>
+                    <a href="index.html"><strong>主页</strong></a>
                 </li>
                 <li class="nav_hello">
                     <a><strong id="userNameLabel">NJGIS</strong></a>
                 </li>
-                <li class="nav_exit">
-                    <a><strong id="groupIDLabel">GroupID</strong></a>
-                </li>
+                <!--<li class="nav_exit">-->
+                    <!--<a><strong id="groupIDLabel">GroupID</strong></a>-->
+                <!--</li>-->
             </ul>
         </div>
     </nav>

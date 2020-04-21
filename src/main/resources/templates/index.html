@@ -7,6 +7,7 @@
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <title>HydrologicalConcept</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
         .main {
             height: 600px;
@@ -127,10 +128,36 @@
 
 </head>
 <body>
-<div>
+<div id="app">
     <div style="margin-top:10px;height:110px;" class="col-md-12 col-xs-12">
         <div class="col-md-2 col-xs-4" style="float:right">
+            <div>
+                <el-button type="text" @click="centerDialogVisible = true">点击打开 Dialog</el-button>
 
+                <el-dialog
+                    title="新建水文概念条目"
+                    :visible.sync="centerDialogVisible"
+                    width="40%"
+                    center>
+
+                    <div style="font-size:16px;margin:0 0 8px">概念名称：</div>
+                    <el-input v-model="conceptName" placeholder="请输入概念名称" size="small"></el-input>
+
+                    <template>
+                        <div style="font-size:16px;margin:8px 0 8px">概念类别：</div>
+                        <el-checkbox-group v-model="classList">
+                            <el-checkbox label="地表水"></el-checkbox>
+                            <el-checkbox label="地下水"></el-checkbox>
+                            <el-checkbox label="土壤水"></el-checkbox>
+                            <el-checkbox label="大气水"></el-checkbox>
+                        </el-checkbox-group>
+                    </template>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="centerDialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+                    </span>
+                </el-dialog>
+            </div>
             <button type="button" class="btn btn-primary" id="conceptualModel" style="float:left;"
                     onClick="conceptualModel()">Conceptual Model</button>
             <button type="button" class="btn btn-primary" id="chatBaseMap" style="float:left;"
@@ -438,6 +465,10 @@
         crossorigin="anonymous"></script>
 <script src="/static/js/tagsinput.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script src="/static/js/vue.min.2.2.0.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
 <script>
 
     $(document).ready(function () {
@@ -898,5 +929,18 @@
             return v.toString(16);
         });
     }
+</script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data:function (){
+            return {
+                centerDialogVisible: false,
+                conceptName:"",
+                classList: ['地表水']
+            };
+        }
+    })
 </script>
 </html>

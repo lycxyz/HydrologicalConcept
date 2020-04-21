@@ -991,6 +991,10 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 	}
 	else
 	{
+		/* 张硕
+		* 202001
+		* 添加六维度菜单
+		* */
         if (graph.getSelectionCount() == 1)
         {
             var submenu1 = menu.addItem('关联到...', null, null);

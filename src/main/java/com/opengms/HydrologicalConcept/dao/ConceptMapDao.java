@@ -10,6 +10,7 @@ import java.util.List;
 public interface ConceptMapDao  extends MongoRepository<ConceptMap,String> {
 
     ConceptMap findConceptMapByGeoId(String geoId);
+    ConceptMap findConceptMapByConceptId(String conceptId);
 
     List<ConceptMapDTO> findConceptMapByDescriptionContains(String key);
 

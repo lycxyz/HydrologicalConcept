@@ -61,7 +61,6 @@ public class PageController {
 
     @RequestMapping("/chatRoom")
     public String chatroom()
-
     {
         return "chat_new";
     };

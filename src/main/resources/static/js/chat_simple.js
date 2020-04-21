@@ -231,76 +231,6 @@
         let s = time.getSeconds();
         return two(hour) + ":" + two(m) + ":" + two(s);
     })
-    Vue.component('login', {
-        template: "#login",
-        data() {
-            return {
-                user: {
-                    name: "",
-                    avatarUrl: "http://q.qlogo.cn/headimg_dl?dst_uin=705597001&spec=100",
-                    type: "user",
-                },
-                avatars: [
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=705597001&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=956411241&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=1361514346&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=624748513&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=1741841217&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=157509895&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=453079985&spec=100',
-                    'http://q.qlogo.cn/headimg_dl?dst_uin=753678776&spec=100',
-                ],
-                QQ: "",
-                isShow: false,
-            }
-        },
-        created() {
-            let _this = this;
-            document.addEventListener('click', (e) => {
-                _this.isShow = false;
-            })
-            _this.user.name = _this.randomText();
-            let QQ = _this.randomQQ();
-            let url = "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQ + "&spec=100";
-            _this.addQQAvatar(QQ);
-            _this.user.avatarUrl = url;
-        },
-        methods: {
-            addQQAvatar(QQ) {
-                let reg = /^[1-9][0-9]{3,9}[0-9]$/;
-                if (reg.test(QQ)) {
-                    let url = "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQ + "&spec=100";
-                    if (this.avatars.indexOf(url) == -1) {
-                        this.avatars.push(url);
-                    }
-                    this.QQ = ""
-                } else {
-                    console.log("请输入正确的QQ号！")
-                    this.$alterMessage({
-                        type: 'info',
-                        text: "请输入正确的QQ号！"
-                    })
-                }
-            },
-            login(user) {
-                this.$emit("login", user)
-            },
-            randomText() {
-                let word = new randomName().randomName();
-                console.log(word);
-                return word;
-            },
-            randomQQ() {
-                let num = parseInt(Math.random() * 3 + 6);
-                let firstNum = parseInt(Math.random() * 9 + 1);
-                let QQ = "" + firstNum;
-                for (let i = 0; i < num; i++) {
-                    QQ += parseInt(Math.random() * 9);
-                }
-                return QQ;
-            }
-        }
-    });
     let message = {
         install(Vue) {
             function _extend(opt, option) {
@@ -353,7 +283,6 @@ new Vue({
     template: "#tpl",
     data: function () {
         return {
-            activeName: "concept",
             threads: {},
             loginUser: {
                 name: "似水流年",
@@ -368,7 +297,7 @@ new Vue({
                     type: "room"
                 }
             ],
-            threadId: "",
+            threadId: "group",
             setting: {
                 isVoice: true,
                 isTime: true,
@@ -396,6 +325,7 @@ new Vue({
         document.addEventListener('click', (e) => {
             _this.isShowLog = false;
         });
+        _this.login();
         //_this.initBg();
     },
     computed: {
@@ -407,15 +337,7 @@ new Vue({
             }
         },
         channel() {
-            let channel = {};
-            for (let i = 0; i < this.onLineUsers.length; i++) {
-                const item = this.onLineUsers[i];
-                if (item.id == this.threadId) {
-                    channel = item;
-                    break;
-                }
-
-            }
+            let channel = this.onLineUsers[0];
             return channel;
         }
     },
@@ -432,11 +354,7 @@ new Vue({
                 isRead: true,
             }
             this.saveMessage(tidings);
-            if (to.type != "user") {
-                this.socket.emit("groupMessage", JSON.stringify(from), JSON.stringify(to), message, type);
-            } else {
-                this.socket.emit("message", JSON.stringify(from), JSON.stringify(to), message, type);
-            }
+            this.socket.emit("groupMessage", JSON.stringify(from), JSON.stringify(to), message, type);
         },
         receiveMessage(from, to, message, type) {
             let threadId = from.id;
@@ -496,9 +414,6 @@ new Vue({
              **/
             let _this = this;
             _this.socket = io.connect("http://localhost:8090?mac=2");
-            _this.socket.on("message", (from, to, message, type) => {
-                _this.receiveMessage(from, to, message, type)
-            })
             _this.socket.on("groupMessage", (from, to, message, type) => {
                 from = JSON.parse(from)
                 to = JSON.parse(to)
@@ -506,11 +421,7 @@ new Vue({
                 //_this.cmd(message);
             })
             _this.socket.on("suggest",(relateConceptSet)=>{
-                setTimeout(
-                    ()=>{this.setRelateDiv(relateConceptSet)},
-                    2000
-                )
-
+                console.log(relateConceptSet)
             })
             _this.socket.on("system", (user, type) => {
                 switch (type) {
@@ -639,220 +550,28 @@ new Vue({
                 })
             }
         },
-        login(user) {
-            if (user.name == "") {
-                this.$alterMessage({
-                    type: "warning",
-                    text: "请输入用户名！"
-                })
-            } else {
-                this.socket.emit("login", JSON.stringify(user));
-            }
+        login() {
+            let user = {};
+            user.name = this.randomText()
+            let QQ = this.randomQQ()
+            let url = "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQ + "&spec=100"
+            user.avatarUrl = url
+            user.type = "user"
+            this.socket.emit("login", JSON.stringify(user));
         },
-        searchUser: function () {
-            let arr = [], _this = this;
-            this.onLineUsers.forEach((item) => {
-                if ((item.name.indexOf(_this.keyWord) != -1) || (item.id.indexOf(_this.keyWord) != -1) ) {
-                    //不算当前用户自己
-                    if (item.id != _this.loginUser.id){
-                        arr.push(item)
-                    }
-                }
-            })
-            return arr;
+        randomText() {
+            let word = new randomName().randomName();
+            console.log(word);
+            return word;
         },
-        initBg: function () {
-            this.$http.jsonp("https://api.asilu.com/bg/").then(function (response) {
-                let images = response.body.images,
-                    len = images.length;
-                setInterval(function () {
-                    let index = parseInt(Math.random() * len);
-                    let img = new Image();
-                    img.addEventListener('load', (e) => {
-                        document.body.style.backgroundImage = "url(" + images[index].url + ")";
-                    })
-                    img.src = images[index].url;
-                }, 30000)
-            })
+        randomQQ() {
+            let num = parseInt(Math.random() * 3 + 6);
+            let firstNum = parseInt(Math.random() * 9 + 1);
+            let QQ = "" + firstNum;
+            for (let i = 0; i < num; i++) {
+                QQ += parseInt(Math.random() * 9);
+            }
+            return QQ;
         },
-        cmd(text) {
-            let name = this.loginUser.name;
-            let cmds = ["@" + name + ":播放音乐", "@" + name + ":暂停播放", "@" + name + ":上一曲", "@" + name + ":下一曲"];
-            let index = cmds.indexOf(text.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ''));
-            let $player = this.$refs["player"];
-            if ($player) {
-                switch (index) {
-                    case 0:
-                        $player.audio.play();
-                        break;
-                    case 1:
-                        $player.audio.pause();
-                        break;
-                    case 2:
-                        $player.prev();
-                        break;
-                    case 3:
-                        $player.next();
-                        break;
-                    default:
-                        return;
-                }
-            }
-        },
-        setRelateDiv(info) {
-            //词云效果
-            $("#concept-panel").empty();
-            var wc = new Js2WordCloud(document.getElementById('concept-panel'))
-            var list = [];
-            let infoArray = JSON.parse(info);
-            for (let j = 0; j <infoArray[3].length ; j++) {
-                var r = infoArray[3][j].frequency/infoArray[4].sum;
-                var l = [infoArray[3][j].name, r*50000,infoArray[3][j].definition]
-                list.push(l);
-            }
-            wc.setOption({
-                tooltip: {
-                    show: true,
-                    formatter: function(item) {
-                        return item[0] + ': ' + item[2]
-                    }
-                },
-                list: list,
-                color: '#15a4fa',
-                shape: 'circle',
-                ellipticity: 1
-            })
-
-
-            //概念图
-            $("#conceptMap-panel").empty();
-            var relateConceptMaps = $("#conceptMap-panel");
-
-            for (let i = 0; i < infoArray[5].length; i++) {
-                let title = $(`<div style="text-align: center;line-height: 30px">` + infoArray[5][i].name + `</div>`);
-                relateConceptMaps.append(title)
-                let conceptMap = $(`<img src="` + infoArray[5][i].pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">主图</span>`);
-                relateConceptMaps.append(conceptMap);
-                relateConceptMaps.append(des);
-
-                //几何
-                for (let j = 0; j < infoArray[5][i].shapeInfo.relateImages.length; j++) {
-                    let img = infoArray[5][i].shapeInfo.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">几何形态</span>`);
-                    relateConceptMaps.append(conceptMap);
-                    relateConceptMaps.append(des);
-                }
-                //位置
-                for (let j = 0; j < infoArray[5][i].spacePosition.relateImages.length; j++) {
-                    let img = infoArray[5][i].spacePosition.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">空间位置</span>`);
-                    relateConceptMaps.append(conceptMap);
-                    relateConceptMaps.append(des);
-                }
-                //语义
-                for (let j = 0; j < infoArray[5][i].concept.relateImages.length; j++) {
-                    let img = infoArray[5][i].concept.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">语义描述</span>`);
-                    relateConceptMaps.append(conceptMap);
-                    relateConceptMaps.append(des);
-                }
-                //属性
-                for (let j = 0; j < infoArray[5][i].properties.length; j++) {
-                    for (let k = 0; k < infoArray[5][i].properties[j].relateImages.length; k++) {
-                        let img = infoArray[5][i].properties[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">属性特征</span>`);
-                        relateConceptMaps.append(conceptMap);
-                        relateConceptMaps.append(des);
-                    }
-                }
-                //过程
-                for (let j = 0; j < infoArray[5][i].processes.length; j++) {
-                    for (let k = 0; k < infoArray[5][i].processes[j].relateImages.length; k++) {
-                        let img = infoArray[5][i].processes[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">演化过程</span>`);
-                        relateConceptMaps.append(conceptMap);
-                        relateConceptMaps.append(des);
-                    }
-                }
-                //关系
-                for (let j = 0; j < infoArray[5][i].elementRelations.length; j++) {
-                    for (let k = 0; k < infoArray[5][i].elementRelations[j].relateImages.length; k++) {
-                        let img = infoArray[5][i].elementRelations[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">要素关系</span>`);
-                        relateConceptMaps.append(conceptMap);
-                        relateConceptMaps.append(des);
-                    }
-                }
-            }
-            // for (let j = 0; j <infoArray[1].length ; j++) {
-            //     let conceptMap = $(`<img src="` + infoArray[1][j].pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-            //
-            //     let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">主图</span>`);
-            //
-            //     relateConceptMaps.append(conceptMap);
-            //     relateConceptMaps.append(des);
-            // }
-
-            var t1_text = '{' +
-                '"1": {"name": "数据结构","type": "学科"},\n' +
-                '"2": { "name": "二叉树", "type": "知识点"},\n' +
-                '"3": {"name": "链表","type": "知识点"},\n' +
-                '"4": {"name": "平衡二叉树","type": "知识点"},\n' +
-                '"5": {"name": "二叉树的结构讲解","url": "www.mooc.com/15.html",\n' +
-                '"type": "视频资源"},\n' +
-                '"6": {"name": "链表的反转",\n' +
-                '"url": "www.mooc.com/1.ppt",\n' +
-                '"type": "ppt资源"\n' +
-                '},\n' +
-                '"7": {"name": "闲节点","type": "闲"},\n' +
-                '"8": {"name": "闲节点2","type": "闲"},\n' +
-                '"9": {"name": "闲节点3","type": "闲"},\n' +
-                '"10": {"name": "芳芳老师","type": "老师"},\n' +
-                '"11": {"name": "月老师","type": "老师"}\n' +
-                "}"
-            var t2_text = "[\n" +
-                '{ "source": 1, "target": 2, "rela": "包含", "type": "包含关系" },\n' +
-                '{ "source": 1, "target": 3, "rela": "包含", "type": "包含关系" },\n' +
-                '{ "source": 1, "target": 4, "rela": "包含", "type": "包含关系" },\n' +
-                '{ "source": 2, "target": 5, "rela": "视频课程", "type": "资源" },\n' +
-                '{ "source": 3, "target": 6, "rela": "ppt教程", "type": "资源" },\n' +
-                '{ "source": 3, "target": 7, "rela": "没关系" },\n' +
-                '{ "source": 8, "target": 9, "rela": "没关系" },\n' +
-                '{ "source": 10, "target": 5, "rela": "授课", "type": "行为" },\n' +
-                '{ "source": 11, "target": 6, "rela": "授课", "type": "行为" }\n' +
-                "]"
-
-            let contentHook = function(item){
-                return "<div>"+item.name+"</div>"
-            }
-            try {
-                //$("svg").remove()
-                var data = {}
-                data.nodes = JSON.parse(t1_text);
-                data.links = JSON.parse(t2_text);
-                var config = {
-                    //鼠标mouseover后的弹窗
-                    content: "",
-                    contentHook: contentHook,
-                    //节点配色方案（可为空)
-                    //nodeColor: document.getElementById("t3").value,
-                    //连接线配色方案（可为空）
-                    //linkColor: document.getElementById("t4").value,
-                    width: 400,
-                    height: 525
-                }
-                initKG(data, config, "#knowledge-container")
-            } catch (err) {
-                Materialize.toast('渲染存在异常', 2000)
-            }
-        }
-
     }
 })

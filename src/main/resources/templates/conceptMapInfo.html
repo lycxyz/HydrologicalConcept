@@ -15,19 +15,23 @@
         span,p{
             font-size: 16px;
         }
+        #app{
+            width: 80%;
+            margin-left: 10%;
+        }
     </style>
 </head>
 <body>
 <div id="app">
     <h2 class="title" th:text="${conceptMap.name}"></h2>
-    <img th:src="${conceptMap.pathUrl}" alt="概念图">
+    <img th:src="${conceptMap.pathUrl}" alt="概念图" style="margin-left: 20%">
     <el-collapse v-model="activeNames" >
         <el-collapse-item title="语义描述" name="concept">
             <p th:text="${conceptMap.concept.definition}"></p>
-            <span>关联概念：</span>
-            <span th:each="relate:${conceptMap.concept.relatedConcepts}">
-                <span th:text="${relate}+'、'"></span>
-            </span></br>
+            <!--<span>关联概念：</span>-->
+            <!--<span th:each="relate:${conceptMap.concept.relatedConcepts}">-->
+                <!--<span th:text="${relate}+'、'"></span>-->
+            <!--</span></br>-->
             <div th:each="img:${conceptMap.concept.relateImages}">
                 <img th:src="${img.pathUrl}" alt="概念关联图">
             </div>

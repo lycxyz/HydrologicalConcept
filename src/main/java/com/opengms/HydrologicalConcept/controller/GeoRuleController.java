@@ -1,15 +1,18 @@
 package com.opengms.HydrologicalConcept.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.opengms.HydrologicalConcept.dao.*;
 import com.opengms.HydrologicalConcept.entity.*;
 import com.opengms.HydrologicalConcept.entity.Rule_Enum.Aspect;
+import com.opengms.HydrologicalConcept.service.ConceptMapService;
 import com.opengms.HydrologicalConcept.service.GeoRuleService;
 import com.opengms.HydrologicalConcept.utils.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.spring.web.json.Json;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -38,6 +41,14 @@ public class GeoRuleController {
     Rule_SpacePositionDao rule_spacePositionDao;
     @Autowired
     GeoRuleService geoRuleService;
+    @Autowired
+    ConceptMapService conceptMapService;
+
+    @RequestMapping(value = "/findImageByRule")
+    List<UserImage> findImageByRule(String rule){
+        GeoRule geoRule = JSON.parseObject(rule,GeoRule.class);
+        return conceptMapService.findImageByRule(geoRule);
+    }
 
     @RequestMapping(value = "/findRulesByKey")
     List<GeoRule> findRulesByKey(String key){
@@ -47,7 +58,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleConcept")
     void saveRule_Concept(){
-        String[] rule ={"{'from':'鄱阳湖','to':['淡水湖'],'type':2,'description':'鄱阳湖是一种淡水湖'}","{'from':'鄱阳湖','to':['彭蠡','彭蠡泽','彭泽'],'type':3,'description':'鄱阳湖的其他称呼'}","{'from':'地面径流','to':['雨洪径流','融雪径流'],'type':0,'description':'按照降水形态，雨洪径流由降雨形成，融雪径流由融雪产生'}","{'from':'水汽扩散','to':['分子扩散','对流扩散','紊动扩散'],'type':0,'description':''}","{'from':'地表径流','to':['地面径流'],'type':3,'description':''}"};
+        String[] rule ={"{'from':'湖泊','to':['淡水湖','咸水湖'],'type':1,'description':'湖泊可以分为淡水湖和咸水湖。'}","{'from':'淡水湖','to':['鄱阳湖','洞庭湖'],'type':0,'description':'鄱阳湖和洞庭湖都是淡水湖。'}","{'from':'鄱阳湖','to':['彭蠡','彭蠡泽','彭泽'],'type':3,'description':'鄱阳湖的其他称呼。'}","{'from':'水循环','to':['鄱阳湖水循环','洞庭湖水循环'],'type':0,'description':''}"};
         System.out.println("saveRule_Concept");
         for (int i = 0; i < rule.length; i++) {
             Rule_Concept rule_concept = JSON.parseObject(rule[i], Rule_Concept.class);
@@ -59,7 +70,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleElementRelation")
     void saveRule_ElementRelation(){
-        String[] rule ={"{'from':'湖泊','to':['流域地表径流','流域地下径流'],'type':1,'description':'流域地表径流和流域地下径流补给湖泊的水量'}","{'from':'湖泊','to':['地下水'],'type':1,'description':'湖泊与地下水进行水交换'}","{'from':'地表水','to':['地下水'],'type':1,'description':'当河流附近地下水水位高于河水水位时，地下水补给河道;反之当河流附近地下水水位低于河水水位时，地下水接受河流的渗漏补给。'}"};
+        String[] rule ={"{'from':'降雨','to':['云','水汽','水滴'],'type':0,'description':''}"};
         System.out.println("saveRule_ElementRelation");
         for (int i = 0; i < rule.length; i++) {
             Rule_ElementRelation rule_elementRelation = JSON.parseObject(rule[i], Rule_ElementRelation.class);
@@ -70,7 +81,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleProcess")
     void saveRule_Process(){
-        String[] rule ={"{'from':'大气降水','to':['植被截留','地面降水'],'type':0,'description':'值被截留和地面降水的水量之和与大气降水的水量相同，大气降水经值被截留后，其余的降水落至地面形成地面降水'}","{'from':'水面蒸发','to':['水分汽化','水分扩散'],'type':1,'description':''}","{'from':'地表径流','to':['产流过程','汇流过程'],'type':1,'description':'按照水体的运动性质，可划分为产流、汇流两个阶段'}","{'from':'地表径流','to':['蒸发','填洼','下渗'],'type':0,'description':'降水经过蒸发、填洼、下渗消耗后形成地表径流'}"};
+        String[] rule ={"{'from':'鄱阳湖水循环','to':['降雨','蒸发','植物截留','土壤入渗','地下水运动','坡面漫流','河道汇流'],'type':5,'description':''}"};
         System.out.println("saveRule_Process");
         for (int i = 0; i < rule.length; i++) {
             Rule_Process rule_process = JSON.parseObject(rule[i], Rule_Process.class);
@@ -81,7 +92,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleProperty")
     void saveRule_Property(){
-        String[] rule ={"{'from':'鄱阳湖','to':['湖泊面积','湖泊水位','径流量','泥沙量'],'type':0,'description':'鄱阳湖的水文特征'}"};
+        String[] rule ={"{'from':'赣江','to':['径流量','含沙量','水位'],'type':0,'description':'鄱阳湖的水文特征'}"};
         System.out.println("saveRule_Property");
         for (int i = 0; i < rule.length; i++) {
             Rule_Property rule_property = JSON.parseObject(rule[i], Rule_Property.class);
@@ -92,7 +103,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleShape")
     void saveRule_Shape(){
-        String[] rule ={"{'from':'鄱阳湖','to':['牛轭湖'],'type':1,'description':'与牛轭湖的形状相似'}"};
+        String[] rule ={"{'from':'鄱阳湖','to':['牛轭湖'],'type':2,'description':'与牛轭湖的形状相似'}"};
         System.out.println("saveRule_Shape");
         for (int i = 0; i < rule.length; i++) {
             Rule_Shape rule_shape = JSON.parseObject(rule[i], Rule_Shape.class);
@@ -103,7 +114,7 @@ public class GeoRuleController {
 
     @RequestMapping(value = "/saveRuleSpacePosition")
     void saveRule_SpacePosition(){
-        String[] rule ={"{'from':'鄱阳湖','to':['长江'],'type':2,'description':'鄱阳湖与长江相交，是长江的一条支流，位于长江中下游'}","{'from':'鄱阳湖','to':['赣河','抚河','信河','饶河','修河'],'type':2,'description':'河水汇入鄱阳湖'}","{'from':'地表径流','to':['非饱和土壤水'],'type':1,'description':'地表径流相对非饱和土壤水位置较高'}","{'from':'非饱和土壤水','to':['地下水'],'type':1,'description':'非饱和土壤水相对地下水位置较高'}"};
+        String[] rule ={"{'from':'鄱阳湖','to':['赣江','修水','抚河','饶河','信江'],'type':2,'description':'河水汇入鄱阳湖'}"};
         System.out.println("saveRule_SpacePosition");
         for (int i = 0; i < rule.length; i++) {
             Rule_SpacePosition rule_spacePosition = JSON.parseObject(rule[i], Rule_SpacePosition.class);

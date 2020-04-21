@@ -33,12 +33,7 @@ public class UserImageController {
 
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     UserImage upload(MultipartFile mfile,String conceptName) throws IOException {
-        UserImage userImage = userImageService.upload(mfile);
-
-        //获取conceptId
-        Concepts c = conceptsService.findByName(conceptName);
-        userImage.setConceptId(c.getConceptID());
-
+        UserImage userImage = userImageService.upload(mfile,conceptName);
         return userImage;
     }
 
@@ -70,20 +65,23 @@ public class UserImageController {
         return userImage;
     }
 
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
-    String update(@RequestBody UserImage userImage){
+    //已废弃
+//    @RequestMapping(value = "/update",method = RequestMethod.POST)
+//    String update(@RequestBody UserImage userImage){
+//
+//
+//        UserImage image = userImageDao.findByGeoId(userImage.getGeoId());
+//        image.setDescription(userImage.getDescription());
+//
+//        String result = ansjSegService.processInfo(image.getDescription());
+//        result = result.replaceAll("\"","");
+//        String[] tags = result.substring(1,result.length()-1).split(",");
+//        tags = ArrayUtils.removeDuplication(tags);
+//        image.setTags(tags);
+//
+//        userImageDao.save(image);
+//        return "ok";
+//    }
 
 
-        UserImage image = userImageDao.findByGeoId(userImage.getGeoId());
-        image.setDescription(userImage.getDescription());
-
-        String result = ansjSegService.processInfo(image.getDescription());
-        result = result.replaceAll("\"","");
-        String[] tags = result.substring(1,result.length()-1).split(",");
-        tags = ArrayUtils.removeDuplication(tags);
-        image.setTags(tags);
-
-        userImageDao.save(image);
-        return "ok";
-    }
 }

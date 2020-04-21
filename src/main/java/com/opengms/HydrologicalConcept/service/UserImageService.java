@@ -1,6 +1,7 @@
 package com.opengms.HydrologicalConcept.service;
 
 import com.opengms.HydrologicalConcept.dao.UserImageDao;
+import com.opengms.HydrologicalConcept.entity.Concepts;
 import com.opengms.HydrologicalConcept.entity.UserImage;
 import com.opengms.HydrologicalConcept.utils.MxGraphUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,13 @@ public class UserImageService {
     @Autowired
     UserImageDao userImageDao;
 
+    @Autowired
+    ConceptsService conceptsService;
+
     @Value("${resourcePath}")
     String resourcePath;
 
-    public UserImage upload(MultipartFile mfile) throws IOException {
+    public UserImage upload(MultipartFile mfile,String conceptName) throws IOException {
         String folderPath = resourcePath + "/userImage";
         File folder = new File(folderPath);
         if (!folder.exists())
@@ -36,6 +40,11 @@ public class UserImageService {
         userImage.setGeoId(UUID.randomUUID().toString());
         userImage.setName(mfile.getOriginalFilename());
         userImage.setPathUrl("/static/userImage/" + file.getName());
+
+        //获取conceptId
+        Concepts c = conceptsService.findByName(conceptName);
+        userImage.setConceptId(c.getConceptID());
+
         userImageDao.save(userImage);
         return userImage;
     }

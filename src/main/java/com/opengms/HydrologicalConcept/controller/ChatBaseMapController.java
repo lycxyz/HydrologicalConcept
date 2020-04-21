@@ -17,7 +17,8 @@ public class ChatBaseMapController {
 
     @RequestMapping(value = "/chatRoom",method = RequestMethod.GET)
     ModelAndView chatRoom (){
-        ModelAndView mv = new ModelAndView("chatRoom2");
+        ModelAndView mv = new ModelAndView("chat_new_simple");
         return mv;
     }
+
 }
