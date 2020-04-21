@@ -1861,7 +1861,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
      * 20200109
      * 为展示不同大小的图片，增加判断
      */
-    if (cells[0].geoId == undefined){
+    if (cells[0].conceptId == undefined){
         width = 70;
         height = 70;
     }
@@ -1874,7 +1874,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	elt.style.height = (this.thumbHeight + border) + 'px';
 	elt.style.padding = this.thumbPadding + 'px';
 
-    if (cells[0].geoId == undefined){
+    if (cells[0].conceptId == undefined){
         elt.style.width = (70 + border) + 'px';
         elt.style.height = (70 + border) + 'px';
     }
@@ -1890,7 +1890,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 		mxEvent.consume(evt);
 	});
 
-    if (cells[0].geoId == undefined){
+    if (cells[0].conceptId == undefined){
         this.createThumb(cells, 70, 70, elt, title, showLabel, showTitle, width, height);
     }else{
         this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
@@ -3224,76 +3224,80 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells)
 		sb.currentElt = elt;
 		var graph = this.editorUi.editor.graph;
         console.log("up");
-        var cells = graph.getModel().cells;
-        var tags = [];
-        for (var i in cells) {
-            if(cells[i].geoId != undefined){
-                for (let j = 0; j < ConceptMapList.length; j++) {
-                    if (cells[i].geoId == ConceptMapList[j].geoId){
-                        tags = tags.concat(ConceptMapList[j].tags);
-                    }
-                }
-            }
-        }
-        tags = _.uniq(tags);
-        for (let i = 0; i < tags.length; i++) {
-            for (let j = 0; j < ConceptMapList.length; j++) {
-                //概念图
-                if (ConceptMapList[j].tags.indexOf(tags[i]) != -1){
-                    RelateImages.push({
-                        geoId: ConceptMapList[j].geoId,
-                        name: ConceptMapList[j].name,
-                        description: ConceptMapList[j].description,
-                        pathUrl: ConceptMapList[j].pathUrl
-                    })
-                }
-
-                //几何
-                if (ConceptMapList[j].shapeInfo.tags.indexOf(tags[i]) != -1){
-                    RelateImages = RelateImages.concat(ConceptMapList[j].shapeInfo.relateImages);
-                }
-                //位置
-                if (ConceptMapList[j].spacePosition.tags.indexOf(tags[i]) != -1){
-                    RelateImages = RelateImages.concat(ConceptMapList[j].spacePosition.relateImages);
-                }
-                //语义
-                if (ConceptMapList[j].concept.tags.indexOf(tags[i]) != -1){
-                    RelateImages = RelateImages.concat(ConceptMapList[j].concept.relateImages);
-                }
-                //属性
-                for (let k = 0; k < ConceptMapList[j].properties.length; k++) {
-                    if (ConceptMapList[j].properties[k].tags.indexOf(tags[i]) != -1){
-                        RelateImages = RelateImages.concat(ConceptMapList[j].properties[k].relateImages);
-                    }
-                }
-                //过程
-                for (let k = 0; k < ConceptMapList[j].processes.length; k++) {
-                    if (ConceptMapList[j].processes[k].tags.indexOf(tags[i]) != -1){
-                        RelateImages = RelateImages.concat(ConceptMapList[j].processes[k].relateImages);
-                    }
-                }
-                //关系
-                for (let k = 0; k < ConceptMapList[j].elementRelations.length; k++) {
-                    if (ConceptMapList[j].elementRelations[k].tags.indexOf(tags[i]) != -1){
-                        RelateImages = RelateImages.concat(ConceptMapList[j].elementRelations[k].relateImages);
-                    }
-                }
-            } 
-        }
-
-        //对象数组去重
-        RelateImages = _.uniqBy(RelateImages,'geoId');
-        //概念图
-        for (var i in cells) {
-            if (cells[i].geoId != undefined) {
-                for (let j = 0; j < RelateImages.length; j++) {
-                    if (RelateImages[j].geoId == cells[i].geoId) {
-                        RelateImages.splice(j,1);
-                    }
-                }
-            }
-
-        }
+        /*
+        * 张硕
+        * 202001
+        * * 获取相关概念图
+        * */
+        // var cells = graph.getModel().cells;
+        // var tags = [];
+        // for (var i in cells) {
+        //     if(cells[i].geoId != undefined){
+        //         for (let j = 0; j < ConceptMapList.length; j++) {
+        //             if (cells[i].geoId == ConceptMapList[j].geoId){
+        //                 tags = tags.concat(ConceptMapList[j].tags);
+        //             }
+        //         }
+        //     }
+        // }
+        // tags = _.uniq(tags);
+        // for (let i = 0; i < tags.length; i++) {
+        //     for (let j = 0; j < ConceptMapList.length; j++) {
+        //         //概念图
+        //         if (ConceptMapList[j].tags.indexOf(tags[i]) != -1){
+        //             RelateImages.push({
+        //                 geoId: ConceptMapList[j].geoId,
+        //                 name: ConceptMapList[j].name,
+        //                 description: ConceptMapList[j].description,
+        //                 pathUrl: ConceptMapList[j].pathUrl
+        //             })
+        //         }
+		//
+        //         //几何
+        //         if (ConceptMapList[j].shapeInfo.tags.indexOf(tags[i]) != -1){
+        //             RelateImages = RelateImages.concat(ConceptMapList[j].shapeInfo.relateImages);
+        //         }
+        //         //位置
+        //         if (ConceptMapList[j].spacePosition.tags.indexOf(tags[i]) != -1){
+        //             RelateImages = RelateImages.concat(ConceptMapList[j].spacePosition.relateImages);
+        //         }
+        //         //语义
+        //         if (ConceptMapList[j].concept.tags.indexOf(tags[i]) != -1){
+        //             RelateImages = RelateImages.concat(ConceptMapList[j].concept.relateImages);
+        //         }
+        //         //属性
+        //         for (let k = 0; k < ConceptMapList[j].properties.length; k++) {
+        //             if (ConceptMapList[j].properties[k].tags.indexOf(tags[i]) != -1){
+        //                 RelateImages = RelateImages.concat(ConceptMapList[j].properties[k].relateImages);
+        //             }
+        //         }
+        //         //过程
+        //         for (let k = 0; k < ConceptMapList[j].processes.length; k++) {
+        //             if (ConceptMapList[j].processes[k].tags.indexOf(tags[i]) != -1){
+        //                 RelateImages = RelateImages.concat(ConceptMapList[j].processes[k].relateImages);
+        //             }
+        //         }
+        //         //关系
+        //         for (let k = 0; k < ConceptMapList[j].elementRelations.length; k++) {
+        //             if (ConceptMapList[j].elementRelations[k].tags.indexOf(tags[i]) != -1){
+        //                 RelateImages = RelateImages.concat(ConceptMapList[j].elementRelations[k].relateImages);
+        //             }
+        //         }
+        //     }
+        // }
+        // //对象数组去重
+        // RelateImages = _.uniqBy(RelateImages,'geoId');
+        // //概念图
+        // for (var i in cells) {
+        //     if (cells[i].geoId != undefined) {
+        //         for (let j = 0; j < RelateImages.length; j++) {
+        //             if (RelateImages[j].geoId == cells[i].geoId) {
+        //                 RelateImages.splice(j,1);
+        //             }
+        //         }
+        //     }
+		//
+        // }
 
     };
 };
@@ -3322,11 +3326,11 @@ Sidebar.prototype.createVertexTemplate = function(style, width, height, value, t
 	return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);
 };
 
-Sidebar.prototype.createConceptMapTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted,geoId)
+Sidebar.prototype.createConceptMapTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted,conceptId)
 {
     var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
     cells[0].vertex = true;
-    cells[0].geoId = geoId;
+    cells[0].conceptId = conceptId;
 
     return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);
 };
@@ -3725,7 +3729,7 @@ Sidebar.prototype.addConceptMapPalette = function () {
         var concept = ConceptMapList[j];
         var name = concept.name;
         var a = this.createConceptMapTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + concept.pathUrl,
-            210, 210, name, null, null, null,null,concept.geoId);
+            210, 210, name, null, null, null,null,concept.conceptId);
         div.appendChild(a);
     }
 

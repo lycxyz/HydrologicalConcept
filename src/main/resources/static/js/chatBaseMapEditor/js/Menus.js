@@ -1018,8 +1018,194 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 	}
 	else
 	{
+        /* 张硕
+        * 20200419
+        * 添加六维度推理菜单
+        * */
+        if (graph.getSelectionCount() == 1)
+        {
+            var submenu1 = menu.addItem('选择推理维度...', null, null);
+            menu.addItem('所有维度', null, function()
+            {
+                searchFromAll();
+            }, submenu1);
+            menu.addItem('几何形态维度', null, function()
+            {
+                searchFromShape();
+            }, submenu1);
+            menu.addItem('空间位置维度', null, function()
+            {
+                searchFromSpace();
+            }, submenu1);
+            menu.addItem('语义描述维度', null, function()
+            {
+                searchFromConcept();
+            }, submenu1);
+            menu.addItem('属性特征维度', null, function () {
+                searchFromProperty();
+            }, submenu1);
+            menu.addItem('演化过程维度', null, function () {
+                searchFromProcess();
+            }, submenu1);
+            menu.addItem('要素关系维度', null, function () {
+                searchFromElementRelation();
+            }, submenu1);
+
+            this.addMenuItems(menu, '-', null, evt);
+        }
+
 		this.addMenuItems(menu, ['delete', '-', 'cut', 'copy', '-', 'duplicate'], null, evt);
 	}
+
+	var searchFromAll = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+		$.ajax({
+			url:"/conceptMap/searchFromAll",
+			data: {
+                conceptId:cell.conceptId
+			},
+            async: true,
+			success: (infoArr)=>{
+				RelateImages = []
+				RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+					GeoRules.push(infoArr[1][i])
+                }
+				GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+			}
+
+		})
+    }
+	var searchFromShape = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromShape",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+            }
+        })
+    }
+    var searchFromSpace = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromSpace",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+            }
+        })
+    }
+    var searchFromConcept =function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromConcept",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+            }
+        })
+    }
+    var searchFromProperty = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromProperty",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+            }
+        })
+    }
+    var searchFromProcess = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromProcess",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+                parent.createKnowledge()
+            }
+        })
+    }
+    var searchFromElementRelation = function () {
+        var cell = graph.getSelectionCell()
+        console.log(cell)
+        $.ajax({
+            url:"/conceptMap/searchFromElementRelation",
+            data: {
+                conceptId:cell.conceptId
+            },
+            async: true,
+            success: (infoArr)=> {
+                RelateImages = []
+                RelateImages = infoArr[0]
+                for (let i = 0; i < infoArr[1].length; i++) {
+                    GeoRules.push(infoArr[1][i])
+                }
+                GeoRules = _.uniqWith(GeoRules, _.isEqual);
+                graph.removeSelectionCell(cell)
+				parent.createKnowledge()
+            }
+        })
+    }
+
 
 	if (!graph.isSelectionEmpty())
 	{

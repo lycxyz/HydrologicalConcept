@@ -182,90 +182,91 @@ Actions.prototype.init = function()
             GeoElements.name = $("#concept_name").val();
             GeoElements.mapClass = $("#concept_class").val();
             GeoElements.description = $("#concept_desc").val();
-            for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
-                GeoElements.shapeInfo.relateImages[i].description = GeoElements.shapeInfo.desc;
-                $.ajax({
-                    url: "/userImage/update",
-                    data: JSON.stringify(GeoElements.shapeInfo.relateImages[i]),
-                    type: "post",
-                    async: true,
-                    contentType:'application/json',
-                    success: (result)=>{
-                        console.log(result);
-                    }
-                })
-            }
-            for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
-                GeoElements.spacePosition.relateImages[i].description = GeoElements.spacePosition.desc;
-                $.ajax({
-                    url: "/userImage/update",
-                    data: JSON.stringify(GeoElements.spacePosition.relateImages[i]),
-                    type: "post",
-                    async: true,
-                    contentType:'application/json',
-                    success: (result)=>{
-                        console.log(result);
-                    }
-                })
-            }
-            for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
-                GeoElements.concept.relateImages[i].description = GeoElements.concept.definition;
-                $.ajax({
-                    url: "/userImage/update",
-                    data: JSON.stringify(GeoElements.concept.relateImages[i]),
-                    type: "post",
-                    async: true,
-                    contentType:'application/json',
-                    success: (result)=>{
-                        console.log(result);
-                    }
-                })
-            }
-            for (let j = 0; j < GeoElements.properties.length; j++) {
-                for (let i = 0; i < GeoElements.properties[j].relateImages.length; i++) {
-                    GeoElements.properties[j].relateImages[i].description = GeoElements.properties[j].description;
-                    $.ajax({
-                        url: "/userImage/update",
-                        data: JSON.stringify(GeoElements.properties[j].relateImages[i]),
-                        type: "post",
-                        async: true,
-                        contentType:'application/json',
-                        success: (result)=>{
-                            console.log(result);
-                        }
-                    })
-                }
-            }
-            for (let j = 0; j < GeoElements.processes.length; j++) {
-                for (let i = 0; i < GeoElements.processes[j].relateImages.length; i++) {
-                    GeoElements.processes[j].relateImages[i].description = GeoElements.processes[j].description;
-                    $.ajax({
-                        url: "/userImage/update",
-                        data: JSON.stringify(GeoElements.processes[j].relateImages[i]),
-                        type: "post",
-                        async: true,
-                        contentType:'application/json',
-                        success: (result)=>{
-                            console.log(result);
-                        }
-                    })
-                }
-            }
-            for (let j = 0; j < GeoElements.elementRelations.length; j++) {
-                for (let i = 0; i < GeoElements.elementRelations[j].relateImages.length; i++) {
-                    GeoElements.elementRelations[j].relateImages[i].description = GeoElements.elementRelations[j].relateValue;
-                    $.ajax({
-                        url: "/userImage/update",
-                        data: JSON.stringify(GeoElements.elementRelations[j].relateImages[i]),
-                        type: "post",
-                        async: true,
-                        contentType:'application/json',
-                        success: (result)=>{
-                            console.log(result);
-                        }
-                    })
-                }
-            }
+            //废弃
+            // for (let i = 0; i < GeoElements.shapeInfo.relateImages.length; i++) {
+            //     GeoElements.shapeInfo.relateImages[i].description = GeoElements.shapeInfo.desc;
+            //     $.ajax({
+            //         url: "/userImage/update",
+            //         data: JSON.stringify(GeoElements.shapeInfo.relateImages[i]),
+            //         type: "post",
+            //         async: true,
+            //         contentType:'application/json',
+            //         success: (result)=>{
+            //             console.log(result);
+            //         }
+            //     })
+            // }
+            // for (let i = 0; i < GeoElements.spacePosition.relateImages.length; i++) {
+            //     GeoElements.spacePosition.relateImages[i].description = GeoElements.spacePosition.desc;
+            //     $.ajax({
+            //         url: "/userImage/update",
+            //         data: JSON.stringify(GeoElements.spacePosition.relateImages[i]),
+            //         type: "post",
+            //         async: true,
+            //         contentType:'application/json',
+            //         success: (result)=>{
+            //             console.log(result);
+            //         }
+            //     })
+            // }
+            // for (let i = 0; i < GeoElements.concept.relateImages.length; i++) {
+            //     GeoElements.concept.relateImages[i].description = GeoElements.concept.definition;
+            //     $.ajax({
+            //         url: "/userImage/update",
+            //         data: JSON.stringify(GeoElements.concept.relateImages[i]),
+            //         type: "post",
+            //         async: true,
+            //         contentType:'application/json',
+            //         success: (result)=>{
+            //             console.log(result);
+            //         }
+            //     })
+            // }
+            // for (let j = 0; j < GeoElements.properties.length; j++) {
+            //     for (let i = 0; i < GeoElements.properties[j].relateImages.length; i++) {
+            //         GeoElements.properties[j].relateImages[i].description = GeoElements.properties[j].description;
+            //         $.ajax({
+            //             url: "/userImage/update",
+            //             data: JSON.stringify(GeoElements.properties[j].relateImages[i]),
+            //             type: "post",
+            //             async: true,
+            //             contentType:'application/json',
+            //             success: (result)=>{
+            //                 console.log(result);
+            //             }
+            //         })
+            //     }
+            // }
+            // for (let j = 0; j < GeoElements.processes.length; j++) {
+            //     for (let i = 0; i < GeoElements.processes[j].relateImages.length; i++) {
+            //         GeoElements.processes[j].relateImages[i].description = GeoElements.processes[j].description;
+            //         $.ajax({
+            //             url: "/userImage/update",
+            //             data: JSON.stringify(GeoElements.processes[j].relateImages[i]),
+            //             type: "post",
+            //             async: true,
+            //             contentType:'application/json',
+            //             success: (result)=>{
+            //                 console.log(result);
+            //             }
+            //         })
+            //     }
+            // }
+            // for (let j = 0; j < GeoElements.elementRelations.length; j++) {
+            //     for (let i = 0; i < GeoElements.elementRelations[j].relateImages.length; i++) {
+            //         GeoElements.elementRelations[j].relateImages[i].description = GeoElements.elementRelations[j].relateValue;
+            //         $.ajax({
+            //             url: "/userImage/update",
+            //             data: JSON.stringify(GeoElements.elementRelations[j].relateImages[i]),
+            //             type: "post",
+            //             async: true,
+            //             contentType:'application/json',
+            //             success: (result)=>{
+            //                 console.log(result);
+            //             }
+            //         })
+            //     }
+            // }
 
         }
         var dlg = new ConceptTasksSaveDialog(ui);

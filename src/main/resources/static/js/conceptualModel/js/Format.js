@@ -6860,7 +6860,8 @@ GeoElementsPanel.prototype.addShapePalette = function(container,ui){
                 $.ajax({
                     url: "/userImage/online",
                     data: {
-                        url: url
+                        url: url,
+                        conceptName: GeoElements.name
                     },
                     type: "post",
                     async: true,
@@ -6887,6 +6888,7 @@ GeoElementsPanel.prototype.addShapePalette = function(container,ui){
             console.log(file.files[0]);
             var formData = new FormData();
             formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
             $.ajax({
                 url: "/userImage/upload",
                 data: formData,
@@ -7062,7 +7064,8 @@ GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
                 $.ajax({
                     url: "/userImage/online",
                     data: {
-                        url: url
+                        url: url,
+                        conceptName: GeoElements.name
                     },
                     type: "post",
                     async: true,
@@ -7089,6 +7092,7 @@ GeoElementsPanel.prototype.addSpacePalette = function(container,ui){
             console.log(file.files[0]);
             var formData = new FormData();
             formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
             $.ajax({
                 url: "/userImage/upload",
                 data: formData,
@@ -7344,7 +7348,8 @@ GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
                 $.ajax({
                     url: "/userImage/online",
                     data: {
-                        url: url
+                        url: url,
+                        conceptName: GeoElements.name
                     },
                     type: "post",
                     async: true,
@@ -7371,6 +7376,7 @@ GeoElementsPanel.prototype.addConceptPalette = function(container,ui){
             console.log(file.files[0]);
             var formData = new FormData();
             formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
             $.ajax({
                 url: "/userImage/upload",
                 data: formData,
@@ -7624,7 +7630,8 @@ GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
                     $.ajax({
                         url: "/userImage/online",
                         data: {
-                            url: url
+                            url: url,
+                        conceptName: GeoElements.name
                         },
                         type: "post",
                         async: true,
@@ -7650,6 +7657,7 @@ GeoElementsPanel.prototype.addPropertyPalette = function(container,ui){
                 console.log(file.files[0]);
                 var formData = new FormData();
                 formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
                 $.ajax({
                     url: "/userImage/upload",
                     data: formData,
@@ -7941,7 +7949,8 @@ GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
                     $.ajax({
                         url: "/userImage/online",
                         data: {
-                            url: url
+                            url: url,
+                        conceptName: GeoElements.name
                         },
                         type: "post",
                         async: true,
@@ -7968,6 +7977,7 @@ GeoElementsPanel.prototype.addProcessPalette = function(container,ui){
                 console.log(file.files[0]);
                 var formData = new FormData();
                 formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
                 $.ajax({
                     url: "/userImage/upload",
                     data: formData,
@@ -8315,7 +8325,8 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
                     $.ajax({
                         url: "/userImage/online",
                         data: {
-                            url: url
+                            url: url,
+                        conceptName: GeoElements.name
                         },
                         type: "post",
                         async: true,
@@ -8341,6 +8352,7 @@ GeoElementsPanel.prototype.addRelationPalette = function(container,ui){
                 console.log(file.files[0]);
                 var formData = new FormData();
                 formData.append("mfile",file.files[0]);
+            formData.append("conceptName",GeoElements.name);
                 $.ajax({
                     url: "/userImage/upload",
                     data: formData,

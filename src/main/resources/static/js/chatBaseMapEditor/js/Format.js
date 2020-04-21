@@ -378,6 +378,7 @@ Format.prototype.refresh = function()
 	{
 		mxUtils.write(label, mxResources.get('diagram'));
 		label.style.borderLeftWidth = '0px';
+		label.innerText = '推荐概念图'
 		
 		// Adds button to hide the format panel since
 		// people don't seem to find the toolbar button
@@ -413,6 +414,7 @@ Format.prototype.refresh = function()
     else {
         mxUtils.write(label, mxResources.get('diagram'));
         label.style.borderLeftWidth = '0px';
+        label.innerText = '水文概念详情';
 
         // Adds button to hide the format panel since
         // people don't seem to find the toolbar button
@@ -5645,7 +5647,7 @@ ConceptMapPanel.prototype.init = function(){
     var graph = this.editorUi.editor.graph;
     var cell = graph.getSelectionCell();
     for (let i = 0; i < ConceptMapList.length; i++) {
-		if (cell.geoId == ConceptMapList[i].geoId){
+		if (cell.conceptId == ConceptMapList[i].conceptId){
 			GeoElements = ConceptMapList[i];
 			break;
 		}
@@ -5662,7 +5664,7 @@ ConceptMapPanel.prototype.addGeneralElements = function(div){
     //名称
     {
         var nameTitle = document.createElement("div");
-        nameTitle.innerHTML = "Name";
+        nameTitle.innerHTML = "概念名称";
         nameTitle.className = 'label-font';
         div.appendChild(nameTitle);
         var nameInput = document.createElement('input');
@@ -5689,7 +5691,7 @@ ConceptMapPanel.prototype.addGeneralElements = function(div){
     //分类
     {
         var classTitle = document.createElement("div");
-        classTitle.innerHTML = "Classification";
+        classTitle.innerHTML = "概念类别";
         classTitle.className = 'label-font';
         div.appendChild(classTitle);
 
@@ -5717,7 +5719,7 @@ ConceptMapPanel.prototype.addGeneralElements = function(div){
     //描述
     {
         var descTitle = document.createElement("div");
-        descTitle.innerHTML = "Description";
+        descTitle.innerHTML = "概念描述";
         descTitle.className = 'label-font';
         div.appendChild(descTitle);
 
@@ -7519,7 +7521,7 @@ AIPanel.prototype.addAIElements = function(div,ui){
     for (let i = 0; i < RelateImages.length ; i++) {
         var a = RelateImages[i];
         var image = ui.sidebar.createConceptMapTemplate('image;html=1;labelBackgroundColor=#ffffff;image=' + a.pathUrl,
-            ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, a.name, "", null, null, null, a.geoId);
+            ui.sidebar.defaultImageWidth, ui.sidebar.defaultImageHeight, a.name, "", null, null, null, a.conceptId);
         var imageDiv = document.createElement("div");
         imageDiv.style.display = "inline-flex";
         imageDiv.style.border = "2px solid #b4dc8c";
@@ -7528,7 +7530,7 @@ AIPanel.prototype.addAIElements = function(div,ui){
         deleteDiv.style.fontSize = "24px";
         deleteDiv.style.marginLeft = "-8px";
         imageDiv.appendChild(image);
-        imageDiv.appendChild(deleteDiv);
+        //imageDiv.appendChild(deleteDiv);
         imageContainer.appendChild(imageDiv);
         imageContainer.style.padding = "5px";
         // deleteDiv.onclick = (elt)=>{

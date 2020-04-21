@@ -48,6 +48,7 @@
         var ConceptMapList = [];
         var GeoElements = {};
         var RelateImages = [];
+        var GeoRules = [];
         $.ajax({
             url: "/conceptMap/getAllConceptMaps",
             async: true,
@@ -129,4 +130,32 @@
 		})();
 	</script>
 </body>
+<script>
+	/*
+	* 张硕
+	* 20200420
+	* 通过选中的节点 更新推荐的概念图*/
+	var refreshImage = function (name) {
+	    var _this = this;
+        for (let i = 0; i < GeoRules.length; i++) {
+			if (GeoRules[i].from == name) {
+			    var rule = GeoRules[i]
+			    $.ajax({
+					url:"/geoRule/findImageByRule",
+					async:true,
+					data:{
+					    rule:JSON.stringify(rule)
+					},
+					success:(list)=>{
+					    RelateImages = []
+					    RelateImages = list
+						//刷新Format
+                        // var graph = _this.editorUi.editor.graph;
+					    // graph.format.refresh();
+					}
+				})
+			}
+        }
+    }
+</script>
 </html>

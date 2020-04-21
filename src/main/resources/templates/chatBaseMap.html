@@ -9,9 +9,13 @@
     <link type="text/css" href="/static/css/navbar.css" rel="stylesheet">
     <!-- jsPanel CSS -->
     <link href="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/jspanel.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/kg.css">
+    <link rel="stylesheet" href="/static/css/materialize.min.css">
     <style>
         body{
             margin: 0;
+            background-image: url(/static/images/a1.jpg);
         }
         .content{
             height: calc(100% - 60px);
@@ -19,7 +23,6 @@
         .graphSide{
             height: 100%;
             width: 100%;
-            background: #1ABB9C;
         }
         .icon{
             text-align: center;
@@ -69,11 +72,10 @@
         </nav>
     </div>
     <div class="content">
-        <button type="button" class="chatBtn" id="chat" style="position:fixed;z-index:100;color: #fff;background-color: #449d44;border-color: #398439;">聊天</button>
         <div class="graphSide">
             <iframe id="ModelEditor" src="/chatBaseMap/graph"  style="width:86%;height:760px;border:0px;position:relative;margin-left: 7%;margin-bottom: 3%"></iframe>
         </div>
-         </div>
+    </div>
 </body>
 <script type="text/javascript" src="/static/js/jquery.js"></script>
 <!--jsanel引用开始->
@@ -95,24 +97,156 @@
 <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/layout/jspanel.layout.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/contextmenu/jspanel.contextmenu.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.7.0/dist/extensions/dock/jspanel.dock.js"></script>
+
+
+<script src="/static/js/d3.v3.min.js"></script>
+<script src="/static/js/kg.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/materialize.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#chat").click(function(){
-            //创建一个默认的panel
-            jsPanel.create({
-                theme:'primary',
-                headerTitle:'chatRoom',
-                position:'center-top 0 58',
-                contentSize:'400 450',
-                resizeit: {
-                    minWidth: 400,
-                    minHeight:390
-                },
-                contentOverflow: 'hidden',
-                content:'<iframe src="/chatBaseMap/chatRoom" style="width: 100%; height: 100%;"></iframe>',
-                // content:'<iframe src="https://derpanoramafotograf.com/EN/projects/fskrpano.php?pano=091128-116" style="width: 100%; height: 100%;"></iframe>',
-            });
+        //创建一个默认的panel
+        jsPanel.create({
+            theme:'primary',
+            headerTitle:'聊天室',
+            position:'right-bottom',
+            contentSize:'400 420',
+            resizeit: {
+                minWidth: 400,
+                maxWidth: 400,
+                minHeight:420,
+                maxHeight:420,
+            },
+            contentOverflow: 'hidden',
+            content:'<iframe src="/chatBaseMap/chatRoom" style="width: 100%; height: 100%;"></iframe>',
+            // content:'<iframe src="https://derpanoramafotograf.com/EN/projects/fskrpano.php?pano=091128-116" style="width: 100%; height: 100%;"></iframe>',
         });
+
+        //创建第二个jspanel
+        jsPanel.create({
+            theme:'primary',
+            headerTitle:'推理流程记录',
+            position:'left-bottom',
+            contentSize:'600 300',
+            resizeit: {
+                minWidth: 600,
+                maxWidth: 600,
+                minHeight:300,
+                maxHeight:300,
+            },
+            contentOverflow: 'hidden',
+            content:'<div id="knowledge-container" style="width: 100%; height: 100%;"></div>',
+        });
+
+        var t1_text = '{"1": {"name": "核心词","type": "核心词"},"2": { "name": "推荐词", "type": "推荐词"}}'
+        var t2_text = '[{ "source": 1, "target": 2, "rela": "某个维度" }]'
+        let contentHook = function(item){
+            return "<div>"+item.desc+"</div>"
+        }
+        try {
+            $("#knowledge-container").html("")
+            var data = {}
+            data.nodes = JSON.parse(t1_text);
+            data.links = JSON.parse(t2_text);
+            var config = {
+                //鼠标mouseover后的弹窗
+                content: "",
+                contentHook: contentHook,
+                //节点配色方案（可为空)
+                //nodeColor: document.getElementById("t3").value,
+                //连接线配色方案（可为空）
+                //linkColor: document.getElementById("t4").value,
+                width: 400,
+                height: 420
+            }
+            initKG(data, config, "#knowledge-container")
+        } catch (err) {
+            Materialize.toast('渲染存在异常', 2000)
+        }
+
     });
+
+    var createKnowledge = function () {
+        var graph = document.getElementById("ModelEditor")
+        var n=0;
+        var nodes = [],links = []
+        for (let i = 0; i < graph.contentWindow.GeoRules.length; i++) {
+            var rule = graph.contentWindow.GeoRules[i]
+            // 判断是否有同名概念
+            var flag = false
+            var m
+            for (let j = 0; j < nodes.length; j++) {
+                if (rule.from == nodes[j].name) {
+                    flag = true
+                    nodes[j].type = "核心词"
+                    m = j
+                }
+            }
+            if (!flag) {
+                // 插入新的节点
+                var node = {
+                    name: rule.from,
+                    type: "核心词"
+                }
+                nodes.push(node)
+                m = n
+                n++
+            }
+            // to概念
+            for (let j = 0; j < rule.to.length; j++) {
+                // 判断是否有同名概念
+                var flag = false
+                var a
+                for (let k = 0; k < nodes.length; k++) {
+                    if (rule.to[j] == nodes[k].name) {
+                        flag = true
+                        a = k
+                    }
+                }
+                if (!flag){
+                    var node = {
+                        name: rule.to[j],
+                        type: "推荐词",
+                        desc: rule.description
+                    }
+                    nodes.push(node)
+                    a = n
+                    n++
+                }
+                var link ={
+                    source: m,
+                    target: a,
+                    rela: rule.aspect
+                }
+                links.push(link);
+            }
+
+        }
+        let contentHook = function(item){
+            return "<div>"+item.desc+"</div>"
+        }
+        try {
+            $("#knowledge-container").html("")
+            var data = {}
+            data.nodes = nodes;
+            data.links = links;
+            var config = {
+                //鼠标mouseover后的弹窗
+                content: "",
+                contentHook: contentHook,
+                //节点配色方案（可为空)
+                //nodeColor: document.getElementById("t3").value,
+                //连接线配色方案（可为空）
+                //linkColor: document.getElementById("t4").value,
+                width: document.getElementById("knowledge-container").clientWidth,
+                height: document.getElementById("knowledge-container").clientHeight
+            }//1349,735
+            initKG(data, config, "#knowledge-container")
+        } catch (err) {
+            Materialize.toast('渲染存在异常', 2000)
+        }
+
+    }
+
 </script>
 </html>
