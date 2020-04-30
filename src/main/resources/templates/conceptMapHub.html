@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Concept Map Hub</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+    body{
+      width: 80%;
+      margin-left: 10%;
+    }
+    .button {
+      padding: 0;
+      float: right;
+      padding-right: 2px;
+    }
+
+    .image {
+      width: 100%;
+      height: 200px;
+      display: block;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+
+    .clearfix:after {
+      clear: both
+    }
+
+    .el-col-24 {
+      width: 30%;
+      margin: 10px;
+    }
+
+    .input-with-select {
+      background-color: #fff;
+    }
+    .el-tree-node__label {
+      font-size: 16px;
+    }
+    .el-tree {
+      float: right;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <el-container>
+    <el-header>
+      <h1 style="text-align: center">水文概念条目</h1>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <el-tree :data="className" :props="defaultProps" @node-click="handleClassClick"></el-tree>
+      </el-aside>
+
+      <el-main>
+        <div style="width: 80%;margin-left: 10px">
+          <el-input placeholder="请输入内容" v-model="searchStr" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </div>
+
+        <div>
+          <el-button @click="centerDialogVisible = true" type="primary" style="float: right;margin: -40px 5%">新建条目</el-button>
+
+          <el-dialog
+                  title="新建水文概念条目"
+                  :visible.sync="centerDialogVisible"
+                  width="40%"
+                  center>
+
+            <div style="font-size:16px;margin:0 0 8px">概念名称：</div>
+            <el-input v-model="conceptName" placeholder="请输入概念名称" size="small"></el-input>
+
+            <template>
+              <div style="font-size:16px;margin:8px 0 8px">概念类别：</div>
+              <el-checkbox-group v-model="classList">
+                <el-checkbox label="地表水"></el-checkbox>
+                <el-checkbox label="地下水"></el-checkbox>
+                <el-checkbox label="土壤水"></el-checkbox>
+                <el-checkbox label="大气水"></el-checkbox>
+              </el-checkbox-group>
+            </template>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="createConcept">确 定</el-button>
+            </span>
+          </el-dialog>
+        </div>
+
+        <el-row>
+          <el-col v-for="concept in conceptList">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="concept.pathUrl" class="image">
+              <div style="padding: 14px;">
+                <div style="text-align: center">{{concept.name}}</div>
+                <div class="clearfix">
+                  <el-button type="text" class="button" @click="updateConcept(concept.geoId)">更新</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
+  </el-container>
+</div>
+</body>
+<script src="/static/js/vue.min.2.2.0.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script th:inline="javascript">
+
+  new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        conceptList:[[${concepts}]],
+        searchStr:"",
+        centerDialogVisible: false,
+        conceptName:"",
+        classList: ['地表水'],
+        className:[{
+                      label:'地表水'
+                    },{
+                      label:'地下水'
+                    },{
+                      label:'土壤水'
+                    },{
+                      label:'大气水'
+                    }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+      }
+    },
+    methods:{
+      updateConcept(geoId){
+        window.location.href = "/conceptMap/getConceptMapByGeoId?geoId="+geoId;
+      },
+      createConcept(){
+        if (this.conceptName == ''){
+          alert("条目名称不能为空！")
+        } else{
+          this.centerDialogVisible = false
+          window.location.href = "/conceptMap/getConceptMapByGeoId?geoId=''&name="+this.conceptName+"&className="+this.classList.toString();
+        }
+      },
+      handleClassClick(name){
+        console.log(name)
+      }
+    }
+  })
+</script>
+</html>

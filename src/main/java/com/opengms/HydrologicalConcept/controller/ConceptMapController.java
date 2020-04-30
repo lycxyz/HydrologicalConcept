@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,8 +58,13 @@ public class ConceptMapController {
 
     @ApiOperation(value = "根据Id获取概念图")
     @RequestMapping(value = "/getConceptMapByGeoId", method = RequestMethod.GET)
-    ConceptMap getConceptMapByGeoId(String geoId) {
-        return conceptMapService.getConceptMapByGeoId(geoId);
+    ModelAndView getConceptMapByGeoId(String geoId,String name,String className) {
+        ModelAndView modelAndView = new ModelAndView("conceptualModel");
+        ConceptMap conceptMap = conceptMapService.getConceptMapByGeoId(geoId);
+        modelAndView.addObject("GeoElements",conceptMap);
+        if (name != "") modelAndView.addObject("name",name);
+        if (className != "") modelAndView.addObject("className",className);
+        return modelAndView;
     }
 
     @ApiOperation(value = "获取所有概念图")
@@ -73,6 +79,14 @@ public class ConceptMapController {
         ConceptMap conceptMap = conceptMapService.getConceptMapByGeoId(geoId);
         mv.addObject("conceptMap", conceptMap);
         return mv;
+    }
+
+    @RequestMapping(value = "/conceptMapHub")
+    ModelAndView getConceptMapHub(){
+        ModelAndView modelAndView = new ModelAndView("conceptMapHub");
+        List<ConceptMap> list =  conceptMapDao.findAll();
+        modelAndView.addObject("concepts",list);
+        return modelAndView;
     }
 
 //    语义描述,空间定位,几何形态,
