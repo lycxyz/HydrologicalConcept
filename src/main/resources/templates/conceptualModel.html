@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Conceptual Model Builder</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -37,7 +37,7 @@
         //     }
         // }
     </script>
-    <script type="text/javascript">
+    <script th:inline="javascript">
 
         window.taskID="";
         var urlParams = (function (url) {
@@ -68,138 +68,6 @@
         SAVE_URL = "http://geomodeling.njnu.edu.cn/GeoModelingNew/MyTestServlet";
 
         var GeoIconList = [];
-        // var GeoElements =
-        //     {
-        //         "name":"雨",
-        //         "id":"80272317-7d89-d4f4-208e-4956904002eb",
-        //         "description":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
-        //         "xml":"",
-        //         "concepts":
-        //             {
-        //                 "definition":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
-        //                 "relatedConcepts":
-        //                     [
-        //                         {"name":"降水","id":"6039a677-1e53-fdd6-feca-1d2fd02ca716"},
-        //                         {"name":"大气循环","id":"6039a677-1e53-fdd6-feca-1d2fd02ca715"},
-        //                         {"name":"水循环","id":"6039a677-1e53-fdd6-feca-1d2fd02ca714"}
-        //                     ],
-        //                 "classifications":
-        //                     [
-        //                         {
-        //                             "depend":"降水成因",
-        //                             "subConcepts":[{"name":"地形雨","id":"07f3350f-55cb-1a50-dd17-7d9c8e842682"},{"name":"锋面雨","id":"611e815b-b711-19ff-fff1-3815e3b26cc6"},{"name":"台风雨","id":"5ed2cfc2-9ecb-57db-ee87-787cc969ca86"},{"name":"对流雨","id":"bb076694-768b-f7d3-6621-f6ffae60704a"}]
-        //                         },
-        //                         {
-        //                             "depend":"雨量",
-        //                             "subConcepts":[{"name":"小雨","id":"9dfb0d9b-2066-17f3-3c0c-2ac1c6cf27e2"},{"name":"中雨","id":"1f5663f1-9c2b-a8fd-cd3f-26acdde68cf8"},{"name":"大雨","id":"778fc3ba-8317-cc01-f96f-469f8cc2cc95"},{"name":"暴雨","id":"fdd8502a-cb1f-3a2e-6ce9-602db30c8b66"},{"name":"特大暴雨","id":"20168cab-9945-cc50-096a-398ef647225f"}]
-        //                         }
-        //                     ]
-        //             },
-        //         "properties":[{"propertyType":"物理属性","name":"外观","description":"无色透明液体"},{"propertyType":"物理属性","name":"黏性","description":"无粘性"}],
-        //         "shapeInfo":"无任何形状",
-        //         "spacePositions":[{"preciseType":"模糊信息","description":"不同形式的雨所分布的区域不同"}],
-        //         "elementRelations":
-        //             [
-        //                 {
-        //                     "relateElements":[{"name":"水滴","id":"3885cf43-2906-4634-81f3-6bfcfe8a6e22"},{"name":"冰晶","id":"1f949153-4808-d33b-f1aa-b83f97663a91"},{"name":"云:","id":"395566e7-2875-79aa-06c6-17f9b1a41343"}],
-        //                     "relateType":"聚合",
-        //                     "relateValue":"冰晶水滴在高空中相互碰撞形成云"
-        //                 },
-        //                 {
-        //                     "relateElements":[{"name":"水滴","id":"29d83ea3-fcf1-2a8a-dc89-a45fd1f7ed0d"},{"name":"冰晶","id":"7ea6dc17-b1b1-b7b9-6951-ab18fa7ecef7"},{"name":"云:","id":"628c2732-b6a7-0ac4-f845-b82736c8d9de"}],
-        //                     "relateType":"聚合",
-        //                     "relateValue":"冰晶水滴在高空中相互碰撞形成云"
-        //                 },
-        //                 {
-        //                     "relateElements":[{"name":"水滴","id":"ff4a85e8-76b9-64e7-0da2-0169aa6afd5f"},{"name":"冰晶","id":"309db2a9-fbf3-73b4-7bb1-61f24861290d"},{"name":"云:","id":"e55a7da3-5ec7-4224-97bc-fd42cde4796c"}],
-        //                     "relateType":"聚合",
-        //                     "relateValue":"冰晶水滴在高空中相互碰撞形成云"
-        //                 }
-        //             ],
-        //         "processes":
-        //             [
-        //                 {
-        //                     "name":"蒸发过程",
-        //                     "description":"水滴蒸发形成水蒸气",
-        //                     "elements":["水蒸气","水滴"],
-        //                     "effectFactors":["温度","湿度","液体表面积"],
-        //                     "processFeatures":["蒸发从液体中吸热"],
-        //                     "happenConditions":["任何温度条件下都可以进行"],
-        //                     "happenTime":[{"type":"精确","description":"无"},{"type":"模糊","description":"任何时刻都在进行"}]
-        //                 },
-        //                 {
-        //                     "name":"凝华过程",
-        //                     "description":"水蒸气凝华生成冰晶",
-        //                     "elements":["水蒸气","冰晶"],
-        //                     "effectFactors":["气体的浓度要到达一定的要求","温度要低于凝点的温度"],
-        //                     "processFeatures":["凝华过程会放热"],
-        //                     "happenConditions":["气体的浓度要到达一定的要求","温度要低于凝点的温度"],
-        //                     "happenTime":[{"type":"精确","description":"无"},{"type":"模糊","description":"与凝华几乎同时进行"}]
-        //                 },
-        //                 {
-        //                     "name":"成云过程",
-        //                     "description":"水滴和冰晶在大气中碰撞生成云",
-        //                     "elements":["水滴","冰晶","云"],
-        //                     "effectFactors":["温度","水汽浓度"],
-        //                     "processFeatures":["云具有各种形状","云层逐渐变厚"],
-        //                     "happenConditions":["水滴和冰晶在大气中的运动碰撞"],
-        //                     "happenTime":[{"type":"精确","description":"无"},{"type":"模糊","description":"空气湿润的时候容易成云，空气干燥难以形成云。"}]
-        //                 }
-        //             ]
-        //     };
-        // var GeoElements =  {
-        //     "geoId":"80272317-7d89-d4f4-208e-4956904002eb",
-        //     "name":"雨",
-        //     "description":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
-        //     "xml":"",
-        //     "pathUrl":"",
-        //     "mapClass":"水系统",
-        //     "shapeInfo":"无任何形状",
-        //     "spacePositions":"不同形式的雨所分布的区域不同",
-        //     "concept":
-        //         {
-        //             "definition":"雨是一种自然降水现象，是由大气循环扰动产生的，是地球水循环不可缺少的一部分，是几乎所有的远离河流的陆生植物补给淡水的唯一方法。",
-        //             "relatedConcepts":["降水","大气循环","水循环"],
-        //             "classifications":
-        //                 [
-        //                     {
-        //                         "depend":"降水成因",
-        //                         "subConcepts":["地形雨","锋面雨","台风雨","对流雨"]
-        //                     },
-        //                     {
-        //                         "depend":"雨量",
-        //                         "subConcepts":["小雨","中雨","大雨","暴雨","特大暴雨"]
-        //                     }
-        //                 ]
-        //         },
-        //     "properties":[{"type":"物理属性","description":"无色透明液体,无粘性"}],
-        //     "processes":
-        //         [
-        //             {
-        //                 "name":"蒸发过程",
-        //                 "elements":["水蒸气","水滴"],
-        //                 "description":"水滴蒸发形成水蒸气，影响因素主要包括温度、湿度、液体表面积，在任何温度条件下都可以进行。"
-        //             },
-        //             {
-        //                 "name":"凝华过程",
-        //                 "elements":["水蒸气","冰晶"],
-        //                 "description":"水蒸气凝华生成冰晶，影响因素主要包括浓度、温度，气体的浓度要到达一定的要求或温度低于凝点的温度都会进行。"
-        //             },
-        //             {
-        //                 "name":"成云过程",
-        //                 "elements":["水滴","冰晶","云"],
-        //                 "description":"水滴和冰晶在大气中碰撞生成云，影响因素主要包括浓度、温度，空气湿润时水滴和水晶在大气中运动碰撞容易成云。"
-        //             }
-        //         ],
-        //     "elementRelations":
-        //         [
-        //             {
-        //                 "relateElements":["水滴","冰晶","云"],
-        //                 "relateType":"聚合",
-        //                 "relateValue":"冰晶水滴在高空中相互碰撞形成云"
-        //             }
-        //         ]
-        // };
         var GeoElements = {
             "geoId": "",
             "conceptId":"",
@@ -263,18 +131,24 @@
             ]
 
         };
-
-        $.ajax({
-            url: "/conceptMap/getConceptMapByGeoId",
-            data: {
-                geoId: "69392b41-db0f-45d8-a8d2-6e18d3751578"
-            },
-            async: false,
-            success: (conceptMap)=>{
-                console.log(conceptMap);
-                GeoElements = conceptMap;
-            }
-        })
+        if ([[${GeoElements}]] != null){
+          GeoElements = [[${GeoElements}]];
+        }else{
+          GeoElements.name = [[${name}]]
+          GeoElements.mapClass = [[${className}]]
+        }
+        console.log(GeoElements)
+        // $.ajax({
+        //     url: "/conceptMap/getConceptMapByGeoId",
+        //     data: {
+        //         geoId: "69392b41-db0f-45d8-a8d2-6e18d3751578"
+        //     },
+        //     async: false,
+        //     success: (conceptMap)=>{
+        //         console.log(conceptMap);
+        //         GeoElements = conceptMap;
+        //     }
+        // })
 
     </script>
     <!--jsanel引用开始->
