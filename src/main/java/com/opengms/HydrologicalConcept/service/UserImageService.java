@@ -49,7 +49,7 @@ public class UserImageService {
         return userImage;
     }
 
-    public UserImage userDIY(String width,String height,String xml,String type) throws Exception {
+    public UserImage userDIY(String width,String height,String xml,String type,String conceptName) throws Exception {
         UserImage userImage = new UserImage();
 
         String name = new Date().getTime() + "_"+type+".png";
@@ -59,6 +59,11 @@ public class UserImageService {
         userImage.setGeoId(UUID.randomUUID().toString());
         userImage.setName(name);
         userImage.setPathUrl("/static/userImage/" + name);
+
+        //获取conceptId
+        Concepts c = conceptsService.findByName(conceptName);
+        userImage.setConceptId(c.getConceptID());
+
         userImageDao.save(userImage);
         return userImage;
     }

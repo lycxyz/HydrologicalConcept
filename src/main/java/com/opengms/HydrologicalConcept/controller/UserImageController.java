@@ -56,11 +56,8 @@ public class UserImageController {
     UserImage userDIY(@RequestParam("width") String width,@RequestParam("height") String height,
                       @RequestParam("xml") String xml,@RequestParam("type") String type,
                       @RequestParam("conceptName")String conceptName) throws Exception {
-        UserImage userImage = userImageService.userDIY(width,height,xml,type);
+        UserImage userImage = userImageService.userDIY(width,height,xml,type,conceptName);
 
-        //获取conceptId
-        Concepts c = conceptsService.findByName(conceptName);
-        userImage.setConceptId(c.getConceptID());
 
         return userImage;
     }
