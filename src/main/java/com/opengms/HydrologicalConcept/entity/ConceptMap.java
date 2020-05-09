@@ -22,7 +22,7 @@ public class ConceptMap{
 
     ShapeStructure shapeInfo;
     SpacePositionStructure spacePosition;
-    ConceptStructure concept;
+    List<ConceptStructure> concept;
     List<PropertyStructure> properties;
     List<ProcessStructure> processes;
     List<ElementRelationStructure> elementRelations;

@@ -1339,6 +1339,11 @@ var ConceptTasksSaveDialog=function(editorUi){
     var ui = editorUi;
     var graph = ui.editor.graph;
 
+    /*
+    * 张硕
+    * 20200508
+    * 保存概念图
+    * */
     var div = document.createElement("div");
     div.style.textAlign = "center";
     var head=document.createElement('h1');

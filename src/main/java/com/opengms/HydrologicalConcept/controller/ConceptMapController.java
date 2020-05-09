@@ -96,15 +96,27 @@ public class ConceptMapController {
         return conceptMapService.searchFromAll(conceptId,6);
     }
     @RequestMapping(value = "/searchFromShape")
-    JSONArray searchFromShape(String conceptId){ return conceptMapService.searchFromAll(conceptId,2);}
+    JSONArray searchFromShape(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,2);
+    }
     @RequestMapping(value = "/searchFromSpace")
-    JSONArray searchFromSpace(String conceptId){ return conceptMapService.searchFromAll(conceptId,1);}
+    JSONArray searchFromSpace(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,1);
+    }
     @RequestMapping(value = "/searchFromConcept")
-    JSONArray searchFromConcept(String conceptId){ return conceptMapService.searchFromAll(conceptId,0);}
+    JSONArray searchFromConcept(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,0);
+    }
     @RequestMapping(value = "/searchFromProperty")
-    JSONArray searchFromProperty(String conceptId){ return conceptMapService.searchFromAll(conceptId,5);}
+    JSONArray searchFromProperty(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,5);
+    }
     @RequestMapping(value = "/searchFromProcess")
-    JSONArray searchFromProcess(String conceptId){ return conceptMapService.searchFromAll(conceptId,3);}
+    JSONArray searchFromProcess(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,3);
+    }
     @RequestMapping(value = "/searchFromElementRelation")
-    JSONArray searchFromElementRelation(String conceptId){ return conceptMapService.searchFromAll(conceptId,4);}
+    JSONArray searchFromElementRelation(String conceptId){
+        return conceptMapService.searchFromAll(conceptId,4);
+    }
 }
