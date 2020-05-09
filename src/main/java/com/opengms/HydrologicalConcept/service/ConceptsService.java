@@ -14,5 +14,7 @@ public class ConceptsService {
         return conceptsDao.findByName(name);
     }
 
-    public Concepts findByConceptId(String conceptId){return conceptsDao.findByConceptID(conceptId);}
+    public Concepts findByConceptId(String conceptId){
+        return conceptsDao.findByConceptID(conceptId);
+    }
 }
