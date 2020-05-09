@@ -19,42 +19,54 @@
             width: 80%;
             margin-left: 10%;
         }
+        .imageContainer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .conceptImage{
+            width: 30%;
+            margin: 10px;
+            border: 2px solid #bab3b3;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
 <div id="app">
     <h2 class="title" th:text="${conceptMap.name}"></h2>
-    <img th:src="${conceptMap.pathUrl}" alt="概念图" style="margin-left: 20%">
+    <div class="imageContainer">
+        <img class="conceptImage" th:src="${conceptMap.pathUrl}" alt="概念图">
+    </div>
     <el-collapse v-model="activeNames" >
         <el-collapse-item title="语义描述" name="concept">
-            <p th:text="${conceptMap.concept.definition}"></p>
-            <!--<span>关联概念：</span>-->
-            <!--<span th:each="relate:${conceptMap.concept.relatedConcepts}">-->
-                <!--<span th:text="${relate}+'、'"></span>-->
-            <!--</span></br>-->
-            <div th:each="img:${conceptMap.concept.relateImages}">
-                <img th:src="${img.pathUrl}" alt="概念关联图">
+            <div th:each="concept:${conceptMap.concept}">
+                <p th:text="'定义来源：'+${concept.source}"></p>
+                <p th:text="'定义：'+${concept.definition}"></p>
+                <div class="imageContainer" th:each="img:${concept.relateImages}">
+                    <img class="conceptImage" th:src="${img.pathUrl}" alt="概念关联图">
+                </div>
             </div>
         </el-collapse-item>
         <el-collapse-item title="属性特征" name="property">
             <div th:each="property:${conceptMap.properties}">
                 <p th:text="'属性类型：'+${property.type}"></p>
                 <p th:text="'属性描述：'+${property.description}"></p>
-                <div th:each="img:${property.relateImages}">
-                    <img th:src="${img.pathUrl}" alt="属性关联图">
+                <div class="imageContainer" th:each="img:${property.relateImages}">
+                    <img class="conceptImage" th:src="${img.pathUrl}" alt="属性关联图">
                 </div>
             </div>
         </el-collapse-item>
         <el-collapse-item title="几何形状" name="shape">
-            <p th:text="${conceptMap.shapeInfo.desc}"></p>
-            <div th:each="img:${conceptMap.shapeInfo.relateImages}">
-                <img th:src="${img.pathUrl}" alt="形状关联图">
+            <p th:text="${conceptMap.shapeInfo.keyword} +':'+ ${conceptMap.shapeInfo.desc}"></p>
+            <div class="imageContainer" th:each="img:${conceptMap.shapeInfo.relateImages}">
+                <img class="conceptImage" th:src="${img.pathUrl}" alt="形状关联图">
             </div>
         </el-collapse-item>
         <el-collapse-item title="空间位置" name="position">
-            <p th:text="${conceptMap.spacePosition.desc}"></p>
-            <div th:each="img:${conceptMap.spacePosition.relateImages}">
-                <img th:src="${img.pathUrl}" alt="位置关联图">
+            <p th:text="${conceptMap.spacePosition.type}+':'+${conceptMap.spacePosition.desc}"></p>
+            <div class="imageContainer" th:each="img:${conceptMap.spacePosition.relateImages}">
+                <img class="conceptImage" th:src="${img.pathUrl}" alt="位置关联图">
             </div>
         </el-collapse-item>
         <el-collapse-item title="演化过程" name="process">
@@ -65,8 +77,8 @@
                 <span th:each="ele:${process.elements}">
                     <span th:text="${ele}+'、'"></span>
                 </span>
-                <div th:each="img:${process.relateImages}">
-                    <img th:src="${img.pathUrl}" alt="过程关联图">
+                <div class="imageContainer" th:each="img:${process.relateImages}">
+                    <img class="conceptImage" th:src="${img.pathUrl}" alt="过程关联图">
                 </div>
             </div>
         </el-collapse-item>
@@ -78,8 +90,8 @@
                 </span>
                 <p th:text="'关系类型：'+${relation.relateType}"></p>
                 <p th:text="${relation.relateValue}"></p>
-                <div th:each="img:${relation.relateImages}">
-                    <img th:src="${img.pathUrl}" alt="关系关联图">
+                <div class="imageContainer" th:each="img:${relation.relateImages}">
+                    <img class="conceptImage" th:src="${img.pathUrl}" alt="关系关联图">
                 </div>
             </div>
         </el-collapse-item>
