@@ -102,6 +102,7 @@
                 <div style="text-align: center">{{concept.name}}</div>
                 <div class="clearfix">
                   <el-button type="text" class="button" @click="updateConcept(concept.geoId)">更新</el-button>
+                  <el-button type="text" class="button" @click="conceptInfo(concept.geoId)">详情</el-button>
                 </div>
               </div>
             </el-card>
@@ -145,6 +146,9 @@
     methods:{
       updateConcept(geoId){
         window.location.href = "/conceptMap/getConceptMapByGeoId?geoId="+geoId;
+      },
+      conceptInfo(geoId){
+        window.location.href = "/conceptMap/getConceptMapInfoByGeoId?geoId="+geoId;
       },
       createConcept(){
         if (this.conceptName == ''){
