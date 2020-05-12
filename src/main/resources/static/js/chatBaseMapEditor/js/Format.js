@@ -7497,7 +7497,8 @@ ConceptMapPanel.prototype.addRelationPalette = function(container,ui){
 
 /*张硕
 * 20200509
-* 从创建页面拷贝过来，进行了部分参数的修改*/
+* 从创建页面拷贝过来，进行了部分参数的修改，暂时代替了ConceptMapPanel
+* */
 GeoElementsPanel = function (format, editorUi, container) {
   BaseFormatPanel.call(this, format, editorUi, container);
   this.init();
@@ -7521,6 +7522,8 @@ GeoElementsPanel.prototype.init = function () {
   this.container.appendChild(this.addGeneralElements(this.createPanel()));
   this.container.appendChild(this.addGeoElementSelect(this.createPanel()));
   // this.container.appendChild(this.addGeoElements(this.createPanel()));
+
+  this.container.appendChild(this.addImageSource(this.createPanel()));
 };
 
 GeoElementsPanel.prototype.addGeneralElements = function (div) {
@@ -9956,6 +9959,83 @@ GeoElementsPanel.prototype.addRelationPalette = function (container, ui) {
 
 
   container.appendChild(div);
+};
+
+GeoElementsPanel.prototype.addImageSource = function(div){
+  var ui = this.editorUi;
+  var graph = ui.editor.graph;
+  var ss = graph.getSelectionCell();
+
+  var left = ss.value.indexOf("（");
+  var right = ss.value.indexOf("）");
+  if (left == -1){
+    var left = ss.value.indexOf("(");
+    var right = ss.value.indexOf(")");
+  }
+
+  var imageName,imageSource;
+  if (left == -1){
+    imageName = ss.value;
+    imageSource ="";
+  } else{
+    imageName = ss.value.substring(0,left);
+    imageSource = ss.value.substring(left+1,right);
+  }
+
+
+  //名称
+  {
+    var nameTitle = document.createElement("div");
+    nameTitle.innerHTML = "图片名称";
+    nameTitle.className = 'label-font';
+    div.appendChild(nameTitle);
+    var nameInput = document.createElement('input');
+    nameInput.id = "image_name";
+    nameInput.setAttribute('type', 'text');
+    nameInput.style.fontSize = '12px';
+    nameInput.style.overflow = 'hidden';
+    nameInput.style.boxSizing = 'border-box';
+    nameInput.style.border = 'solid 1px #d5d5d5';
+    nameInput.style.borderRadius = '4px';
+    nameInput.style.width = '100%';
+    nameInput.style.outline = 'none';
+    nameInput.style.padding = '6px';
+    nameInput.style.display = 'block';
+    nameInput.style.marginBottom = "10px";
+    nameInput.style.fontFamily = "sans-serif";
+    nameInput.disabled = "true";
+    div.appendChild(nameInput);
+    nameInput.value = imageName;
+  }
+
+  //来源
+  {
+    var classTitle = document.createElement("div");
+    classTitle.innerHTML = "图片来源";
+    classTitle.className = 'label-font';
+    div.appendChild(classTitle);
+
+    var classInput = document.createElement('textarea');
+    classInput.id = "image_source";
+    classInput.setAttribute('type', 'text');
+    classInput.style.fontSize = '12px';
+    classInput.style.overflow = 'hidden';
+    classInput.style.boxSizing = 'border-box';
+    classInput.style.border = 'solid 1px #d5d5d5';
+    classInput.style.borderRadius = '4px';
+    classInput.style.width = '100%';
+    classInput.style.outline = 'none';
+    classInput.style.padding = '6px';
+    classInput.style.display = 'block';
+    classInput.style.marginBottom = "10px";
+    classInput.style.fontFamily = "sans-serif";
+    classInput.rows = 3;
+    classInput.disabled = "true";
+    div.appendChild(classInput);
+    classInput.value = imageSource;
+  }
+
+  return div;
 };
 
 GeoElementsPanel.prototype.createElementPalette = function (title, div, obj) {
