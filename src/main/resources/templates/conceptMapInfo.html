@@ -51,7 +51,7 @@
         <el-collapse-item title="属性特征" name="property">
             <div th:each="property:${conceptMap.properties}">
                 <p th:text="'属性类型：'+${property.type}"></p>
-                <p th:text="'属性描述：'+${property.description}"></p>
+                <p th:utext="'属性描述：'+${property.description}"></p>
                 <div class="imageContainer" th:each="img:${property.relateImages}">
                     <img class="conceptImage" th:src="${img.pathUrl}" alt="属性关联图">
                 </div>
