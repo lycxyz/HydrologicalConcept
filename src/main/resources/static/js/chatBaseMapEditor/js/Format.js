@@ -7540,7 +7540,7 @@ GeoElementsPanel.prototype.addGeneralElements = function (div) {
     var nameInput = document.createElement('input');
     nameInput.id = "concept_name";
     nameInput.setAttribute('type', 'text');
-    nameInput.style.fontSize = '12px';
+    nameInput.style.fontSize = '16px';
     nameInput.style.overflow = 'hidden';
     nameInput.style.boxSizing = 'border-box';
     nameInput.style.border = 'solid 1px #d5d5d5';
@@ -7568,7 +7568,7 @@ GeoElementsPanel.prototype.addGeneralElements = function (div) {
     var classInput = document.createElement('input');
     classInput.id = "concept_class";
     classInput.setAttribute('type', 'text');
-    classInput.style.fontSize = '12px';
+    classInput.style.fontSize = '16px';
     classInput.style.overflow = 'hidden';
     classInput.style.boxSizing = 'border-box';
     classInput.style.border = 'solid 1px #d5d5d5';
@@ -8162,7 +8162,7 @@ GeoElementsPanel.prototype.addShapePalette = function (container, ui) {
     var shapeInput = document.createElement("input");
     shapeInput.id = "concept_shape_keyword";
     shapeInput.value = GeoElements.shapeInfo.keyword;
-    shapeInput.style.fontSize = '12px';
+    shapeInput.style.fontSize = '16px';
     shapeInput.style.overflow = 'hidden';
     shapeInput.style.boxSizing = 'border-box';
     shapeInput.style.border = 'solid 1px #d5d5d5';
@@ -8185,11 +8185,11 @@ GeoElementsPanel.prototype.addShapePalette = function (container, ui) {
     shapeLabel2.innerHTML = "形状特征补充描述";
     shapeLabel2.className = 'label-font2';
 
-    var shapeInput2 = document.createElement("input");
+    var shapeInput2 = document.createElement("textarea");
     shapeInput2.id = "concept_shape";
     shapeInput2.value = GeoElements.shapeInfo.desc;
-    shapeInput2.style.fontSize = '12px';
-    shapeInput2.style.overflow = 'hidden';
+    shapeInput2.style.fontSize = '16px';
+    // shapeInput2.style.overflow = 'hidden';
     shapeInput2.style.boxSizing = 'border-box';
     shapeInput2.style.border = 'solid 1px #d5d5d5';
     shapeInput2.style.borderRadius = '4px';
@@ -8198,6 +8198,7 @@ GeoElementsPanel.prototype.addShapePalette = function (container, ui) {
     shapeInput2.style.padding = '6px';
     shapeInput2.style.display = 'block';
     shapeInput2.style.margin = "5px 0 10px";
+    shapeInput2.rows = 3;
     shapeInfo.appendChild(shapeLabel2);
     shapeInfo.appendChild(shapeInput2);
     shapeInput2.onchange = () => {
@@ -8395,7 +8396,7 @@ GeoElementsPanel.prototype.addSpacePalette = function (container, ui) {
     var spaceInput = document.createElement("input");
     spaceInput.value = GeoElements.spacePosition.type;
     spaceInput.id = "concept_space_type";
-    spaceInput.style.fontSize = '12px';
+    spaceInput.style.fontSize = '16px';
     spaceInput.style.overflow = 'hidden';
     spaceInput.style.boxSizing = 'border-box';
     spaceInput.style.border = 'solid 1px #d5d5d5';
@@ -8414,11 +8415,11 @@ GeoElementsPanel.prototype.addSpacePalette = function (container, ui) {
     spaceLabel2.innerHTML = '空间位置信息描述';
     spaceLabel2.className = 'label-font2';
     spaceLabelDiv.appendChild(spaceLabel2);
-    var spaceInput2 = document.createElement("input");
+    var spaceInput2 = document.createElement("textarea");
     spaceInput2.value = GeoElements.spacePosition.desc;
     spaceInput2.id = "concept_space";
-    spaceInput2.style.fontSize = '12px';
-    spaceInput2.style.overflow = 'hidden';
+    spaceInput2.style.fontSize = '16px';
+    // spaceInput2.style.overflow = 'hidden';
     spaceInput2.style.boxSizing = 'border-box';
     spaceInput2.style.border = 'solid 1px #d5d5d5';
     spaceInput2.style.borderRadius = '4px';
@@ -8427,6 +8428,7 @@ GeoElementsPanel.prototype.addSpacePalette = function (container, ui) {
     spaceInput2.style.padding = '6px';
     spaceInput2.style.display = 'block';
     spaceInput2.style.margin = "5px 0 10px";
+    spaceInput2.rows = 3;
     spaceLabelDiv.appendChild(spaceInput2);
     spaceInput2.onchange = () => {
       GeoElements.spacePosition.desc = spaceInput2.value;
@@ -8669,9 +8671,10 @@ GeoElementsPanel.prototype.addConceptPalette = function (container, ui) {
         var definitionTitle = document.createElement("p");
         definitionTitle.innerHTML = "语义：";
         definitionTitle.style.margin = "3px 0 0 1px";
-        var definitionContent = document.createElement("input");
+        var definitionContent = document.createElement("textarea");
         definitionContent.id = "concept_definition";
         definitionContent.placeholder = "请输入概念的定义";
+        definitionContent.style.fontSize = '16px';
         definitionContent.style.border = 'solid 1px #d5d5d5';
         definitionContent.style.borderRadius = '4px';
         definitionContent.style.width = '94%';
@@ -8679,6 +8682,7 @@ GeoElementsPanel.prototype.addConceptPalette = function (container, ui) {
         definitionContent.style.padding = '6px';
         definitionContent.style.display = 'block';
         definitionContent.style.margin ='5px 0 10px';
+        definitionContent.rows = 3;
         definitionDiv.appendChild(definitionTitle);
         definitionDiv.appendChild(definitionContent);
         pro.appendChild(definitionDiv);
@@ -8694,6 +8698,7 @@ GeoElementsPanel.prototype.addConceptPalette = function (container, ui) {
         var sourceContent = document.createElement("input");
         sourceContent.id = "concept_definition";
         sourceContent.placeholder = "请输入概念的来源";
+        sourceContent.style.fontSize = '16px';
         sourceContent.style.border = 'solid 1px #d5d5d5';
         sourceContent.style.borderRadius = '4px';
         sourceContent.style.width = '94%';
@@ -9057,9 +9062,9 @@ GeoElementsPanel.prototype.addPropertyPalette = function (container, ui) {
       var propertyContent = document.createElement('textarea');
       propertyContent.className = "concept_properties";
       propertyContent.setAttribute('type', 'text');
-      propertyContent.style.fontSize = '12px';
+      propertyContent.style.fontSize = '16px';
       propertyContent.style.fontFamily = 'Arial';
-      propertyContent.style.overflow = 'hidden';
+      // propertyContent.style.overflow = 'hidden';
       propertyContent.style.boxSizing = 'border-box';
       propertyContent.style.border = 'solid 1px #d5d5d5';
       propertyContent.style.borderRadius = '4px';
@@ -9067,7 +9072,7 @@ GeoElementsPanel.prototype.addPropertyPalette = function (container, ui) {
       propertyContent.style.outline = 'none';
       propertyContent.style.padding = '6px';
       propertyContent.style.display = "block";
-      propertyContent.rows = 2;
+      propertyContent.rows = 3;
       propertyContent.style.margin = "5px 0 10px";
       pro.appendChild(propertyContent);
 
@@ -9336,6 +9341,7 @@ GeoElementsPanel.prototype.addProcessPalette = function (container, ui) {
       processNameContent.style.outline = 'none';
       processNameContent.style.padding = '3px';
       processNameContent.style.marginBottom = "2px";
+      processNameContent.style.fontSize = "16px";
       processNameDiv.appendChild(processNameTitle);
       processNameDiv.appendChild(processNameContent);
       pro.appendChild(processNameDiv);
@@ -9356,10 +9362,11 @@ GeoElementsPanel.prototype.addProcessPalette = function (container, ui) {
       elementsContent.placeholder = "例如：要素1、要素2";
       elementsContent.style.border = 'solid 1px #d5d5d5';
       elementsContent.style.borderRadius = '4px';
-      elementsContent.style.width = '60%';
+      elementsContent.style.width = '50%';
       elementsContent.style.outline = 'none';
       elementsContent.style.padding = '3px';
       elementsContent.style.marginBottom = "2px";
+      elementsContent.style.fontSize = "16px";
       elementsDiv.appendChild(elementsTitle);
       elementsDiv.appendChild(elementsContent);
       pro.appendChild(elementsDiv);
@@ -9377,9 +9384,9 @@ GeoElementsPanel.prototype.addProcessPalette = function (container, ui) {
       processDescContent.className = "concept_processDesc";
       processDescContent.placeholder = "请输入过程描述";
       processDescContent.setAttribute('type', 'text');
-      processDescContent.style.fontSize = '12px';
+      processDescContent.style.fontSize = '16px';
       processDescContent.style.fontFamily = 'Arial';
-      processDescContent.style.overflow = 'hidden';
+      // processDescContent.style.overflow = 'hidden';
       processDescContent.style.boxSizing = 'border-box';
       processDescContent.style.border = 'solid 1px #d5d5d5';
       processDescContent.style.borderRadius = '4px';
@@ -9388,7 +9395,7 @@ GeoElementsPanel.prototype.addProcessPalette = function (container, ui) {
       processDescContent.style.padding = '6px';
       processDescContent.style.display = 'block';
       processDescContent.style.marginBottom = '5px';
-      processDescContent.rows = 2;
+      processDescContent.rows = 3;
       processDescContent.onclick = function () {
         this.focus();
       };
@@ -9992,7 +9999,7 @@ GeoElementsPanel.prototype.addImageSource = function(div){
     var nameInput = document.createElement('input');
     nameInput.id = "image_name";
     nameInput.setAttribute('type', 'text');
-    nameInput.style.fontSize = '12px';
+    nameInput.style.fontSize = '16px';
     nameInput.style.overflow = 'hidden';
     nameInput.style.boxSizing = 'border-box';
     nameInput.style.border = 'solid 1px #d5d5d5';
@@ -10018,7 +10025,7 @@ GeoElementsPanel.prototype.addImageSource = function(div){
     var classInput = document.createElement('textarea');
     classInput.id = "image_source";
     classInput.setAttribute('type', 'text');
-    classInput.style.fontSize = '12px';
+    classInput.style.fontSize = '16px';
     classInput.style.overflow = 'hidden';
     classInput.style.boxSizing = 'border-box';
     classInput.style.border = 'solid 1px #d5d5d5';
