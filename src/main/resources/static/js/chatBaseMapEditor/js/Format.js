@@ -409,7 +409,7 @@ Format.prototype.refresh = function()
 		
 		div.appendChild(label);
 		// this.panels.push(new DiagramFormatPanel(this, ui, div));
-        this.panels.push(new AIPanel(this,ui,div));
+          this.panels.push(new AIPanel(this,ui,div));
 	}
     else {
         mxUtils.write(label, mxResources.get('diagram'));
