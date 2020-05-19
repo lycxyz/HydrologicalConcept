@@ -57,6 +57,9 @@
                 ConceptMapList = list;
             }
         });
+
+        var editorUi = {};
+
 	</script>
 	<script type="text/javascript" src="/static/js/chatBaseMapEditor/js/Init.js"></script>
 	<script type="text/javascript" src="/static/js/chatBaseMapEditor/deflate/pako.min.js"></script>
@@ -80,55 +83,64 @@
 </head>
 <body class="geEditor">
 	<script type="text/javascript">
-		// Extends EditorUi to update I/O action states based on availability of backend
-		(function()
-		{
-			var editorUiInit = EditorUi.prototype.init;
-			
-			EditorUi.prototype.init = function()
-			{
-				editorUiInit.apply(this, arguments);
-				this.actions.get('export').setEnabled(false);
+          // Extends EditorUi to update I/O action states based on availability of backend
+          (function()
+          {
+            var editorUiInit = EditorUi.prototype.init;
 
-				// Updates action states which require a backend
-				if (!Editor.useLocalStorage)
-				{
-					mxUtils.post(OPEN_URL, '', mxUtils.bind(this, function(req)
-					{
-						var enabled = req.getStatus() != 404;
-						this.actions.get('open').setEnabled(enabled || Graph.fileSupport);
-						this.actions.get('import').setEnabled(enabled || Graph.fileSupport);
-						this.actions.get('save').setEnabled(enabled);
-						this.actions.get('saveAs').setEnabled(enabled);
-						this.actions.get('export').setEnabled(enabled);
-					}));
-				}
-			};
-			
-			// Adds required resources (disables loading of fallback properties, this can only
-			// be used if we know that all keys are defined in the language specific file)
-			mxResources.loadDefaultBundle = false;
-			var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
-				mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
+            EditorUi.prototype.init = function()
+            {
+              editorUiInit.apply(this, arguments);
+              this.actions.get('export').setEnabled(false);
 
-			// Fixes possible asynchronous requests
-			mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr)
-			{
-				// Adds bundle text to resources
-				mxResources.parse(xhr[0].getText());
-				
-				// Configures the default graph theme
-				var themes = new Object();
-				themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement(); 
-				
-				// Main
-				new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
-			}, function()
-			{
-				document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
-			});
-		})();
-	</script>
+              // Updates action states which require a backend
+              if (!Editor.useLocalStorage)
+              {
+                mxUtils.post(OPEN_URL, '', mxUtils.bind(this, function(req)
+                {
+                  var enabled = req.getStatus() != 404;
+                  this.actions.get('open').setEnabled(enabled || Graph.fileSupport);
+                  this.actions.get('import').setEnabled(enabled || Graph.fileSupport);
+                  this.actions.get('save').setEnabled(enabled);
+                  this.actions.get('saveAs').setEnabled(enabled);
+                  this.actions.get('export').setEnabled(enabled);
+                }));
+              }
+            };
+
+            // Adds required resources (disables loading of fallback properties, this can only
+            // be used if we know that all keys are defined in the language specific file)
+            mxResources.loadDefaultBundle = false;
+            var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
+                mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
+
+            // Fixes possible asynchronous requests
+            mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr)
+            {
+              // Adds bundle text to resources
+              mxResources.parse(xhr[0].getText());
+
+              // Configures the default graph theme
+              var themes = new Object();
+              themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
+
+              // Main
+			  editorUi = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+
+              /**
+               * 张硕
+               * 20200517
+               * 通过graph.setEnabled() 设置控制权
+               */
+              var graph = editorUi.editor.graph;
+              graph.setEnabled(false);
+
+            }, function()
+            {
+              document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
+            });
+          })();
+</script>
 </body>
 <script>
 	/*
@@ -157,5 +169,46 @@
 			}
         }
     }
+
+    var changeRight = function () {
+      var graph = editorUi.editor.graph;
+      graph.setEnabled(false);
+    }
+    var getRight = function () {
+      var graph = editorUi.editor.graph;
+      graph.setEnabled(true);
+    }
+    var refreshXml = function (xml,selected,relatedImages,geoRules) {
+	  	if (xml != ""){
+          var x = mxUtils.parseXml(xml).documentElement;
+          editorUi.editor.setGraphXml(x);
+		}
+
+		var graph = editorUi.editor.graph
+		var cells = graph.model.cells
+		if (selected != -1){
+          graph.selectCell(cells[selected])
+		}else{
+          var cs = graph.getSelectionCells();
+          graph.removeSelectionCells(cs);
+		}
+		if( JSON.stringify(GeoRules) != geoRules){
+			GeoRules = JSON.parse(geoRules);
+			parent.createKnowledge()
+		}
+      	if(JSON.stringify(RelateImages) != relatedImages){
+      	  RelateImages = JSON.parse(relatedImages);
+		}
+    }
+
+    var cellSelect = function (selected) {
+	  if (selected == -1){
+        var graph = editorUi.editor.graph
+        var cs = graph.getSelectionCells();
+        graph.removeSelectionCells(cs);
+		editorUi.format.refresh();
+	  }
+    }
 </script>
+
 </html>

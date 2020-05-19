@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +34,8 @@ public class MessageEventHandler {
     private static final Logger logger = LoggerFactory.getLogger(MessageEventHandler.class);
 
     static ArrayList<User_Chat> listUser = new ArrayList<>();
+
+    static User_Chat currentControlUser = new User_Chat();
 
     @Autowired
     AnsjSegService ansjSegService;
@@ -118,8 +122,9 @@ public class MessageEventHandler {
     }
 
     @OnEvent(value = "login")
-    public void onLogin(SocketIOClient client,String data, AckRequest request) {
-        User_Chat user = JSON.parseObject(data,User_Chat.class);
+    public void onLogin(SocketIOClient client,String data, AckRequest request) throws UnsupportedEncodingException {
+
+        User_Chat user = JSON.parseObject(URLDecoder.decode(data,"utf-8"),User_Chat.class);
         if (isHaveUser(user)) {
             logger.info("登录失败,昵称<"+user.getName()+">已存在！");
             client.sendEvent("loginFail", "登录失败,昵称已存在!");
@@ -140,6 +145,50 @@ public class MessageEventHandler {
     }
 
 
+    @OnEvent(value = "applyRight")
+    public void onApplyRight(SocketIOClient client,String applyUser){
+        System.out.println(applyUser);
+        User_Chat user = JSON.parseObject(applyUser,User_Chat.class);
+        if (currentControlUser.getName() == null){
+            currentControlUser = user;
+            //给所有用户发送消息
+            for (UUID clientId : listClient) {
+                //给申请者发送获得控制权的信息
+                if (socketIoServer.getClient(clientId) == client){
+                    socketIoServer.getClient(clientId).sendEvent("getRight");
+                    continue;
+                }
+                //给其他参与者发送失去控制权的信息
+                socketIoServer.getClient(clientId).sendEvent("changeRight",currentControlUser);
+            }
+        }else {
+            socketIoServer.getClient(user.getId()).sendEvent("wait",currentControlUser);
+        }
+
+    }
+
+    @OnEvent(value = "syncXml")
+    public void onSyncXml(SocketIOClient client,String xml,String selected,String relateImages,String geoRules){
+        for (UUID clientId : listClient) {
+            if (socketIoServer.getClient(clientId) == client) continue;
+            socketIoServer.getClient(clientId).sendEvent("refreshXml",xml,selected,relateImages,geoRules);
+        }
+    }
+    @OnEvent(value = "syncSelect")
+    public void onSyncSelect(SocketIOClient client,String selected){
+        for (UUID clientId : listClient) {
+            if (socketIoServer.getClient(clientId) == client) continue;
+            socketIoServer.getClient(clientId).sendEvent("cellSelect",selected);
+        }
+    }
+
+    @OnEvent(value = "releaseRight")
+    public void onReleaseRight(SocketIOClient client){
+        for (UUID clientId : listClient) {
+            socketIoServer.getClient(clientId).sendEvent("release",currentControlUser);
+        }
+        currentControlUser = new User_Chat();
+    }
 
     //这里就是向客户端推消息了
     public static void broadcast(User_Chat user,String type) {
@@ -152,7 +201,7 @@ public class MessageEventHandler {
     public static boolean isHaveUser(User_Chat user){
         boolean flag = false;
         for (User_Chat item :listUser) {
-            if (item.getName() == user.getName()) {
+            if (item.getName().equals(user.getName())) {
                 flag = true;
             }
         }

@@ -646,6 +646,7 @@ new Vue({
                     text: "请输入用户名！"
                 })
             } else {
+                user.draw = "false"
                 this.socket.emit("login", JSON.stringify(user));
             }
         },
@@ -731,41 +732,43 @@ new Vue({
             for (let i = 0; i < infoArray[5].length; i++) {
                 let title = $(`<div style="text-align: center;line-height: 30px">` + infoArray[5][i].name + `</div>`);
                 relateConceptMaps.append(title)
-                let conceptMap = $(`<img src="` + infoArray[5][i].pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">主图</span>`);
+                let conceptMap = $(`<img src="` + infoArray[5][i].pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                let des = $(`<span style="margin: 107px 0 0 -75px;position: absolute;font-weight: bold;background: white">主图</span>`);
                 relateConceptMaps.append(conceptMap);
                 relateConceptMaps.append(des);
 
                 //几何
                 for (let j = 0; j < infoArray[5][i].shapeInfo.relateImages.length; j++) {
                     let img = infoArray[5][i].shapeInfo.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">几何形态</span>`);
+                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                    let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">几何形态</span>`);
                     relateConceptMaps.append(conceptMap);
                     relateConceptMaps.append(des);
                 }
                 //位置
                 for (let j = 0; j < infoArray[5][i].spacePosition.relateImages.length; j++) {
                     let img = infoArray[5][i].spacePosition.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">空间位置</span>`);
+                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                    let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">空间位置</span>`);
                     relateConceptMaps.append(conceptMap);
                     relateConceptMaps.append(des);
                 }
                 //语义
-                for (let j = 0; j < infoArray[5][i].concept.relateImages.length; j++) {
-                    let img = infoArray[5][i].concept.relateImages[j];
-                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                    let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">语义描述</span>`);
+                for (let j = 0; j < infoArray[5][i].concept.length; j++) {
+                  for (let k = 0; k < infoArray[5][i].concept[j].relateImages.length; k++) {
+                    let img = infoArray[5][i].concept[j].relateImages[k];
+                    let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                    let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">语义描述</span>`);
                     relateConceptMaps.append(conceptMap);
                     relateConceptMaps.append(des);
+                  }
                 }
                 //属性
                 for (let j = 0; j < infoArray[5][i].properties.length; j++) {
                     for (let k = 0; k < infoArray[5][i].properties[j].relateImages.length; k++) {
                         let img = infoArray[5][i].properties[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">属性特征</span>`);
+                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                        let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">属性特征</span>`);
                         relateConceptMaps.append(conceptMap);
                         relateConceptMaps.append(des);
                     }
@@ -774,8 +777,8 @@ new Vue({
                 for (let j = 0; j < infoArray[5][i].processes.length; j++) {
                     for (let k = 0; k < infoArray[5][i].processes[j].relateImages.length; k++) {
                         let img = infoArray[5][i].processes[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">演化过程</span>`);
+                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                        let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">演化过程</span>`);
                         relateConceptMaps.append(conceptMap);
                         relateConceptMaps.append(des);
                     }
@@ -784,17 +787,17 @@ new Vue({
                 for (let j = 0; j < infoArray[5][i].elementRelations.length; j++) {
                     for (let k = 0; k < infoArray[5][i].elementRelations[j].relateImages.length; k++) {
                         let img = infoArray[5][i].elementRelations[j].relateImages[k];
-                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
-                        let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">要素关系</span>`);
+                        let conceptMap = $(`<img src="` + img.pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+                        let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">要素关系</span>`);
                         relateConceptMaps.append(conceptMap);
                         relateConceptMaps.append(des);
                     }
                 }
             }
             // for (let j = 0; j <infoArray[1].length ; j++) {
-            //     let conceptMap = $(`<img src="` + infoArray[1][j].pathUrl + `" width="175px" height="175px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
+            //     let conceptMap = $(`<img src="` + infoArray[1][j].pathUrl + `" width="115px" height="115px" style="margin: 5px;border: 2px solid #b4dc8c;">`);
             //
-            //     let des = $(`<span style="margin: 150px 0 0 -115px;position: absolute;font-weight: bold;background: white">主图</span>`);
+            //     let des = $(`<span style="margin: 107px 0 0 -90px;position: absolute;font-weight: bold;background: white">主图</span>`);
             //
             //     relateConceptMaps.append(conceptMap);
             //     relateConceptMaps.append(des);

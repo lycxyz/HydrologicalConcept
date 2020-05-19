@@ -15,4 +15,5 @@ public class User_Chat {
     String deviceType;
     String address;
     Long loginTime;
+    Boolean draw;
 }
