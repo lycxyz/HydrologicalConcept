@@ -1372,7 +1372,7 @@ var ConceptTasksSaveDialog=function(editorUi){
     textarea.setAttribute('type', 'text');
     textarea.setAttribute('id', 'graphDescriptionSave');
     if (GeoElements != null){
-        textarea.innerText = GeoElements.description;
+        textarea.innerText = GeoElements.concept[0].definition;
     }
     textarea.style.fontSize = '12px';
     textarea.style.fontFamily = 'Arial';

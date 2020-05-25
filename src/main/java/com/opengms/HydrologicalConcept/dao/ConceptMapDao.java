@@ -18,4 +18,5 @@ public interface ConceptMapDao  extends MongoRepository<ConceptMap,String> {
 
     void deleteByGeoId(String geoId);
 
+    List<ConceptMap> findAllByNameContains(String key);
 }
