@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <title>HydrologicalConcept</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link type="text/css" href="/static/css/navbar.css" rel="stylesheet">
     <style>
         .main {
             height: 600px;
@@ -123,6 +124,43 @@
         .list-group-item {
             cursor: pointer;
         }
+        .icon{
+            text-align: center;
+            width: 156px;
+            height: 60px;
+            margin: 7px;
+            margin-top: -60px;
+        }
+        .header{
+            font-size: 10pt;
+            padding: 0 15px;
+            position: relative;
+            text-align: center;
+        }
+        .title{
+            text-align: center;
+            color: #FFFFFF;
+            font-size: 28px;
+            line-height: 75px;
+        }
+        .imageContainer{
+            background-image: url("/static/images/indexBG.jpg");
+            width: 80%;
+            height: 70%;
+            background-repeat: round;
+            margin: auto;
+        }
+        .functionEntry{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .functionBtn{
+            width: 300px;
+            height: 70px;
+            margin: 40px;
+            font-size: 28px;
+        }
     </style>
 
 
@@ -130,306 +168,344 @@
 <body>
 <div id="app">
 
+    <div class="head">
+        <nav class="" role="navigation">
+            <div class="header">
 
-    <div style="margin-top:10px;height:110px;" class="col-md-12 col-xs-12">
-        <div class="col-md-2 col-xs-4" style="float:right">
-            <button type="button" class="btn btn-primary" id="conceptMapHub" style="float:left;"
-                    onClick="conceptMapHub()">conceptMapHub</button>
-            <button type="button" class="btn btn-primary" id="chatBaseMap" style="float:left;"
-                    onClick="chatBaseMap()">Chat Base Map</button>
-            <button type="button" class="btn btn-primary" id="uploadIcons" style="float:left;"
-                    onClick="uploadIcons()">Upload Icons</button>
-            <button type="button" class="btn btn-primary" id="chatTest" style="float:left;"
-                    onClick="chatRoom()">Chat Room</button>
+                <span class="title">水文概念图库系统首页</span>
+                <div class="icon">
+                    <a href="#">
+                        <img src="/static/images/logo.png" height="45">
+                    </a>
+                </div>
+                <!--<ul id="rightNav">-->
+                    <!--<li>-->
+                        <!--&lt;!&ndash;<a href="http://localhost:8081/TeamWorking/index.html"><strong>HOME</strong></a>&ndash;&gt;-->
+                        <!--<a href="index.html"><strong>HOME</strong></a>-->
+                    <!--</li>-->
+                    <!--<li class="nav_hello">-->
+                        <!--<a><strong id="userNameLabel">NJGIS</strong></a>-->
+                    <!--</li>-->
+                    <!--<li class="nav_exit">-->
+                        <!--<a><strong id="groupIDLabel">GroupID</strong></a>-->
+                    <!--</li>-->
+                <!--</ul>-->
 
-            <button type="button" class="btn btn-primary" id="login" style="float:left;"
-                    onClick="login()">Login</button>
-            <button type="button" class="btn btn-success" id="register" onClick="register()">Register</button>
-            <span class="label label-warning" id="name"
-                  style="float:left;margin-right:10%;height:34px;line-height:34px;font-size:17px"></span>
-            <button type="button" class="btn btn-success" id="logout" onClick="logout()">Log out</button>
-        </div>
+            </div>
+        </nav>
     </div>
-    <div class="col-md-12 col-xs-12 main">
-        <div class="introduce" id="introduce">
-            <div class="Function-description">
-                <h1>Description2222</h1>
-            </div>
-            <div class="Image-show">
-                <h1>Features</h1>
-            </div>
-        </div>
-        <div class="group-panel" id="group-panel">
-            <div class="col-md-2  col-xs-4 myGroup" style="padding:0px">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active" id="showCreatedGroupList" style="width:50%"><a
-                            href="#createdGroupListContent"
-                            aria-controls="home" role="tab" data-toggle="tab">Created</a></li>
-                    <li role="presentation" id="showJoinedGroupList" style="width:50%"><a href="#joinedGroupListContent"
-                                                                                          aria-controls="profile"
-                                                                                          role="tab" data-toggle="tab">Joined
-                    </a></li>
-                </ul>
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="createdGroupListContent">
-                        <div class="grouplist-title">
-                            Created Group
-                        </div>
-                        <div class="list-panel">
-                            <ul class="list-group" id="createdGroupList">
-                            </ul>
-                        </div>
-                        <div class="create-panel">
-                            <button type="button" class="btn btn-default" id="createGroup"
-                                    style="width:50%;margin-left:25%"
-                                    data-toggle="modal" data-target="#createModal">Create
-                            </button>
-                            <div class="modal fade" id="createModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Create a new group</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="text" id="getGroupName" class="form-control"
-                                                   placeholder="Group name">
-                                            <br>
-                                            <textarea class="form-control" id="getGroupDesc" rows="3"
-                                                      placeholder="Group description"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                            </button>
-                                            <button type="button" class="btn btn-primary" onclick="createNewGroup()">
-                                                Create
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="joinedGroupListContent">
-                        <div class="grouplist-title">
-                            Joined Group
-                        </div>
-                        <div class="list-panel">
-                            <ul class="list-group" id="joinedGroupList">
-                            </ul>
-                        </div>
-                        <div class="join-panel">
-                            <button type="button" class="btn btn-default" style="width:50%;margin-left:25%"
-                                    data-toggle="modal" data-target="#joinModal">Join
-                            </button>
-                            <div class="modal fade" id="joinModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Join in a group</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="text" class="form-control" placeholder="Group Id"
-                                                   id="inputGroupID">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                            </button>
-                                            <button type="button" class="btn btn-primary" onClick="joinGroup()">Submit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 col-xs-8">
-                <div class="grouplist-detail">
-                    <div class="groupNameText" id="groupNameText"></div>
-                    <div style="display: flex">
-                        <div class="col-md-10 col-xs-9 group-desc">
-                            <div>
-                                <p id="groupDescText" style=" max-height:150px;overflow-y: auto;margin:0;padding: 5px">
+    <div class="imageContainer">    </div>
+    <div class="functionEntry">
+        <button type="button" class="btn btn-primary functionBtn" id="conceptMapHub"
+                onClick="conceptMapHub()">水文概念条目库</button>
+        <button type="button" class="btn btn-primary functionBtn" id="chatBaseMap"
+                onClick="chatBaseMap()">绘图推理工具</button>
+        <button type="button" class="btn btn-primary functionBtn" id="chatTest"
+                onClick="chatRoom()">文本交流工具</button>
+    </div>
+    <!--暂时注释-->
+    <div>
+        <!--<div style="margin-top:10px;height:110px;" class="col-md-12 col-xs-12">-->
+            <!--<div class="col-md-2 col-xs-4" style="float:right">-->
+                <!--<button type="button" class="btn btn-primary" id="conceptMapHub" style="float:left;"-->
+                        <!--onClick="conceptMapHub()">conceptMapHub</button>-->
+                <!--<button type="button" class="btn btn-primary" id="chatBaseMap" style="float:left;"-->
+                        <!--onClick="chatBaseMap()">Chat Base Map</button>-->
+                <!--<button type="button" class="btn btn-primary" id="uploadIcons" style="float:left;"-->
+                        <!--onClick="uploadIcons()">Upload Icons</button>-->
+                <!--<button type="button" class="btn btn-primary" id="chatTest" style="float:left;"-->
+                        <!--onClick="chatRoom()">Chat Room</button>-->
 
-                                </p>
-                            </div>
-                            <div style="height:20px">
-                                <span class="label label-default" id="createdTime" style="float:right">time</span>
-                            </div>
-                            <div class="group-member">
-                                <div class="group-member-title">Members</div>
-                                <div class="group-member-list" id="memberList">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-xs-3 group-invite">
-                            <div style="height:50%" class="changebtn">
-                                <button type="button" class="btn btn-default" id="quitBtn"
-                                        style="margin-top:20px;height:40px;margin-right:20px;width:80px"
-                                        onclick="quitGroup(this)"><span class="glyphicon glyphicon-log-out"
-                                                                        aria-hidden="true"></span>
-                                    Quit
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-success" id="editBtn"
-                                        style="margin-top:20px;height:40px;margin-right:20px;width:80px"
-                                        data-toggle="modal" data-target="#editModal" data-groupid=""
-                                        onclick="editGroupBtn(this)"><span
-                                        class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                    Edit
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-danger" id="deleteBtn"
-                                        style="margin-top:20px;height:40px;width:80px"
-                                        data-groupid="" onclick="deleteGroup(this)"><span
-                                        class="glyphicon glyphicon-floppy-remove"
-                                        aria-hidden="true"></span>
-                                    Delete
-                                </button>
-                            </div>
-                            <div style="height:50%;" class="otherbtn">
-                                <button type="button" class="btn btn-primary" id="inviteBtn"
-                                        style="margin-top:40px;height:40px;width:80px"
-                                        data-toggle="modal" data-target="#inviteModal" onclick="addMail(this)">
-                                        <span class="glyphicon glyphicon-share-plus" aria-hidden="true">
-                                        </span>
-                                    Invite
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-info" id="shareBtn"
-                                        style="margin-top:20px;height:40px;width:80px"
-                                        data-toggle="modal" data-target="#shareModal" onclick="ShareURL(this)">
-                                    <span class="glyphicon glyphicon-alt" aria-hidden="true"></span>Share
-                                </button>
-                            </div>
-                            <!--模态框-->
-                            <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="myModalLabel">Edit Group Detail</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> -->
-                                            <div class="tagsinput-primary form-group">
-                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
-                                                <span style="height:40px;line-height:40px;font-size:20px">Name:</span>
-                                                <br><input value="" id="editName" style="width:100%"
-                                                           placeholder="please input your edit name">
-                                            </div>
-                                            <!-- <input type="text" class="form-control" placeholder="User Email"> -->
-                                            <br>
-                                            <span style="height:40px;line-height:40px;font-size:20px;width:20%">Desc:</span>
-                                            <textarea id="editDesc" style="width:100%" rows="5" cols="5"
-                                                      placeholder="you can edit description here"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                            </button>
-                                            <button type="button" class="btn btn-primary" data-groupid="" id="editGroup"
-                                                    onClick="editGroup(this)">Sumbit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Invite Others</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> -->
-                                            <div class="tagsinput-primary form-group">
-                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
-                                                <input name="tagsinput" id="tagsinputval" class="tagsinput"
-                                                       data-role="tagsinput" value=""
-                                                       placeholder="Input Email and print enter">
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="Title" id="mailTitle">
-                                            <br>
-                                            <textarea style="width:100%" rows="5" cols="5" id="mailContent">
-                                                </textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                            </button>
-                                            <button type="button" class="btn btn-primary" onClick="Invite()">Send
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="shareModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Share Url</h4>
-                                        </div>
-                                        <div class="modal-body">
+                <!--<button type="button" class="btn btn-primary" id="login" style="float:left;"-->
+                        <!--onClick="login()">Login</button>-->
+                <!--<button type="button" class="btn btn-success" id="register" onClick="register()">Register</button>-->
+                <!--<span class="label label-warning" id="name"-->
+                      <!--style="float:left;margin-right:10%;height:34px;line-height:34px;font-size:17px"></span>-->
+                <!--<button type="button" class="btn btn-success" id="logout" onClick="logout()">Log out</button>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-md-12 col-xs-12 main">-->
+            <!--<div class="introduce" id="introduce">-->
+                <!--<div class="Function-description">-->
+                    <!--<h1>Description2222</h1>-->
+                <!--</div>-->
+                <!--<div class="Image-show">-->
+                    <!--<h1>Features</h1>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="group-panel" id="group-panel">-->
+                <!--<div class="col-md-2  col-xs-4 myGroup" style="padding:0px">-->
+                    <!--<ul class="nav nav-tabs" role="tablist">-->
+                        <!--<li role="presentation" class="active" id="showCreatedGroupList" style="width:50%"><a-->
+                                <!--href="#createdGroupListContent"-->
+                                <!--aria-controls="home" role="tab" data-toggle="tab">Created</a></li>-->
+                        <!--<li role="presentation" id="showJoinedGroupList" style="width:50%"><a href="#joinedGroupListContent"-->
+                                                                                              <!--aria-controls="profile"-->
+                                                                                              <!--role="tab" data-toggle="tab">Joined-->
+                        <!--</a></li>-->
+                    <!--</ul>-->
+                    <!--<div class="tab-content">-->
+                        <!--<div role="tabpanel" class="tab-pane active" id="createdGroupListContent">-->
+                            <!--<div class="grouplist-title">-->
+                                <!--Created Group-->
+                            <!--</div>-->
+                            <!--<div class="list-panel">-->
+                                <!--<ul class="list-group" id="createdGroupList">-->
+                                <!--</ul>-->
+                            <!--</div>-->
+                            <!--<div class="create-panel">-->
+                                <!--<button type="button" class="btn btn-default" id="createGroup"-->
+                                        <!--style="width:50%;margin-left:25%"-->
+                                        <!--data-toggle="modal" data-target="#createModal">Create-->
+                                <!--</button>-->
+                                <!--<div class="modal fade" id="createModal" tabindex="-1" role="dialog"-->
+                                     <!--aria-labelledby="myModalLabel">-->
+                                    <!--<div class="modal-dialog" role="document">-->
+                                        <!--<div class="modal-content">-->
+                                            <!--<div class="modal-header">-->
+                                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                                                        <!--aria-hidden="true">&times;</span></button>-->
+                                                <!--<h4 class="modal-title">Create a new group</h4>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-body">-->
+                                                <!--<input type="text" id="getGroupName" class="form-control"-->
+                                                       <!--placeholder="Group name">-->
+                                                <!--<br>-->
+                                                <!--<textarea class="form-control" id="getGroupDesc" rows="3"-->
+                                                          <!--placeholder="Group description"></textarea>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-footer">-->
+                                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                                                <!--</button>-->
+                                                <!--<button type="button" class="btn btn-primary" onclick="createNewGroup()">-->
+                                                    <!--Create-->
+                                                <!--</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div role="tabpanel" class="tab-pane" id="joinedGroupListContent">-->
+                            <!--<div class="grouplist-title">-->
+                                <!--Joined Group-->
+                            <!--</div>-->
+                            <!--<div class="list-panel">-->
+                                <!--<ul class="list-group" id="joinedGroupList">-->
+                                <!--</ul>-->
+                            <!--</div>-->
+                            <!--<div class="join-panel">-->
+                                <!--<button type="button" class="btn btn-default" style="width:50%;margin-left:25%"-->
+                                        <!--data-toggle="modal" data-target="#joinModal">Join-->
+                                <!--</button>-->
+                                <!--<div class="modal fade" id="joinModal" tabindex="-1" role="dialog"-->
+                                     <!--aria-labelledby="myModalLabel">-->
+                                    <!--<div class="modal-dialog" role="document">-->
+                                        <!--<div class="modal-content">-->
+                                            <!--<div class="modal-header">-->
+                                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                                                        <!--aria-hidden="true">&times;</span></button>-->
+                                                <!--<h4 class="modal-title">Join in a group</h4>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-body">-->
+                                                <!--<input type="text" class="form-control" placeholder="Group Id"-->
+                                                       <!--id="inputGroupID">-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-footer">-->
+                                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                                                <!--</button>-->
+                                                <!--<button type="button" class="btn btn-primary" onClick="joinGroup()">Submit-->
+                                                <!--</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-10 col-xs-8">-->
+                    <!--<div class="grouplist-detail">-->
+                        <!--<div class="groupNameText" id="groupNameText"></div>-->
+                        <!--<div style="display: flex">-->
+                            <!--<div class="col-md-10 col-xs-9 group-desc">-->
+                                <!--<div>-->
+                                    <!--<p id="groupDescText" style=" max-height:150px;overflow-y: auto;margin:0;padding: 5px">-->
 
-                                            <div class="tagsinput-primary form-group">
-                                                <!-- <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> -->
+                                    <!--</p>-->
+                                <!--</div>-->
+                                <!--<div style="height:20px">-->
+                                    <!--<span class="label label-default" id="createdTime" style="float:right">time</span>-->
+                                <!--</div>-->
+                                <!--<div class="group-member">-->
+                                    <!--<div class="group-member-title">Members</div>-->
+                                    <!--<div class="group-member-list" id="memberList">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 col-xs-3 group-invite">-->
+                                <!--<div style="height:50%" class="changebtn">-->
+                                    <!--<button type="button" class="btn btn-default" id="quitBtn"-->
+                                            <!--style="margin-top:20px;height:40px;margin-right:20px;width:80px"-->
+                                            <!--onclick="quitGroup(this)"><span class="glyphicon glyphicon-log-out"-->
+                                                                            <!--aria-hidden="true"></span>-->
+                                        <!--Quit-->
+                                    <!--</button>-->
+                                    <!--<br>-->
+                                    <!--<button type="button" class="btn btn-success" id="editBtn"-->
+                                            <!--style="margin-top:20px;height:40px;margin-right:20px;width:80px"-->
+                                            <!--data-toggle="modal" data-target="#editModal" data-groupid=""-->
+                                            <!--onclick="editGroupBtn(this)"><span-->
+                                            <!--class="glyphicon glyphicon-edit" aria-hidden="true"></span>-->
+                                        <!--Edit-->
+                                    <!--</button>-->
+                                    <!--<br>-->
+                                    <!--<button type="button" class="btn btn-danger" id="deleteBtn"-->
+                                            <!--style="margin-top:20px;height:40px;width:80px"-->
+                                            <!--data-groupid="" onclick="deleteGroup(this)"><span-->
+                                            <!--class="glyphicon glyphicon-floppy-remove"-->
+                                            <!--aria-hidden="true"></span>-->
+                                        <!--Delete-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                                <!--<div style="height:50%;" class="otherbtn">-->
+                                    <!--<button type="button" class="btn btn-primary" id="inviteBtn"-->
+                                            <!--style="margin-top:40px;height:40px;width:80px"-->
+                                            <!--data-toggle="modal" data-target="#inviteModal" onclick="addMail(this)">-->
+                                        <!--<span class="glyphicon glyphicon-share-plus" aria-hidden="true">-->
+                                        <!--</span>-->
+                                        <!--Invite-->
+                                    <!--</button>-->
+                                    <!--<br>-->
+                                    <!--<button type="button" class="btn btn-info" id="shareBtn"-->
+                                            <!--style="margin-top:20px;height:40px;width:80px"-->
+                                            <!--data-toggle="modal" data-target="#shareModal" onclick="ShareURL(this)">-->
+                                        <!--<span class="glyphicon glyphicon-alt" aria-hidden="true"></span>Share-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                                <!--&lt;!&ndash;模态框&ndash;&gt;-->
+                                <!--<div class="modal fade" id="editModal" tabindex="-1" role="dialog"-->
+                                     <!--aria-labelledby="myModalLabel">-->
+                                    <!--<div class="modal-dialog" role="document">-->
+                                        <!--<div class="modal-content">-->
+                                            <!--<div class="modal-header">-->
+                                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                                                        <!--aria-hidden="true">&times;</span></button>-->
+                                                <!--<h4 class="modal-title" id="myModalLabel">Edit Group Detail</h4>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-body">-->
+                                                <!--&lt;!&ndash; <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> &ndash;&gt;-->
+                                                <!--<div class="tagsinput-primary form-group">-->
+                                                    <!--&lt;!&ndash; <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> &ndash;&gt;-->
+                                                    <!--<span style="height:40px;line-height:40px;font-size:20px">Name:</span>-->
+                                                    <!--<br><input value="" id="editName" style="width:100%"-->
+                                                               <!--placeholder="please input your edit name">-->
+                                                <!--</div>-->
+                                                <!--&lt;!&ndash; <input type="text" class="form-control" placeholder="User Email"> &ndash;&gt;-->
+                                                <!--<br>-->
+                                                <!--<span style="height:40px;line-height:40px;font-size:20px;width:20%">Desc:</span>-->
+                                                <!--<textarea id="editDesc" style="width:100%" rows="5" cols="5"-->
+                                                          <!--placeholder="you can edit description here"></textarea>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-footer">-->
+                                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                                                <!--</button>-->
+                                                <!--<button type="button" class="btn btn-primary" data-groupid="" id="editGroup"-->
+                                                        <!--onClick="editGroup(this)">Sumbit-->
+                                                <!--</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog"-->
+                                     <!--aria-labelledby="myModalLabel">-->
+                                    <!--<div class="modal-dialog" role="document">-->
+                                        <!--<div class="modal-content">-->
+                                            <!--<div class="modal-header">-->
+                                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                                                        <!--aria-hidden="true">&times;</span></button>-->
+                                                <!--<h4 class="modal-title">Invite Others</h4>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-body">-->
+                                                <!--&lt;!&ndash; <h1 style="text-align: center;margin: 20px 0;margin-top: 100px;"></h1> &ndash;&gt;-->
+                                                <!--<div class="tagsinput-primary form-group">-->
+                                                    <!--&lt;!&ndash; <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> &ndash;&gt;-->
+                                                    <!--<input name="tagsinput" id="tagsinputval" class="tagsinput"-->
+                                                           <!--data-role="tagsinput" value=""-->
+                                                           <!--placeholder="Input Email and print enter">-->
+                                                <!--</div>-->
+                                                <!--<input type="text" class="form-control" placeholder="Title" id="mailTitle">-->
+                                                <!--<br>-->
+                                                <!--<textarea style="width:100%" rows="5" cols="5" id="mailContent">-->
+                                                <!--</textarea>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-footer">-->
+                                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close-->
+                                                <!--</button>-->
+                                                <!--<button type="button" class="btn btn-primary" onClick="Invite()">Send-->
+                                                <!--</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="modal fade" id="shareModal" tabindex="-1" role="dialog"-->
+                                     <!--aria-labelledby="myModalLabel">-->
+                                    <!--<div class="modal-dialog" role="document">-->
+                                        <!--<div class="modal-content">-->
+                                            <!--<div class="modal-header">-->
+                                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                                                        <!--aria-hidden="true">&times;</span></button>-->
+                                                <!--<h4 class="modal-title">Share Url</h4>-->
+                                            <!--</div>-->
+                                            <!--<div class="modal-body">-->
 
-                                                <label for="basic-url">Concept Model URL</label>
-                                                <div class="input-group" style="width:100%">
-                                                    <input type="text" id="conceptURL" class="form-control">
-                                                </div>
+                                                <!--<div class="tagsinput-primary form-group">-->
+                                                    <!--&lt;!&ndash; <input name="tagsinput" id="tagsinputval" class="tagsinput" data-role="tagsinput" value="faltui,这是一个标签" placeholder="输入后回车"> &ndash;&gt;-->
 
-                                                <label for="basic-url">Logical Model URL</label>
-                                                <div class="input-group" style="width:100%">
-                                                    <input type="text" id="logicalURL" class="form-control">
-                                                </div>
+                                                    <!--<label for="basic-url">Concept Model URL</label>-->
+                                                    <!--<div class="input-group" style="width:100%">-->
+                                                        <!--<input type="text" id="conceptURL" class="form-control">-->
+                                                    <!--</div>-->
 
-                                                <label for="basic-url">Computational Model URL</label>
-                                                <div class="input-group" style="width:100%">
-                                                    <input type="text" id="computationalURL" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="room-btn">
-                    <button type="button" class=" col-md-3 col-xs-3 btn btn-primary groupBtn" id="conceptBtn"
-                            data-type="ConceptualModel" onclick="startCooperation(this)">Conceptual
-                        Models
-                    </button>
+                                                    <!--<label for="basic-url">Logical Model URL</label>-->
+                                                    <!--<div class="input-group" style="width:100%">-->
+                                                        <!--<input type="text" id="logicalURL" class="form-control">-->
+                                                    <!--</div>-->
 
-                    <!-- Indicates a successful or positive action -->
-                    <button type="button" class=" col-md-3 col-xs-3 btn btn-success groupBtn" id="logicalBtn"
-                            data-type="LogicalModel" onclick="startCooperation(this)">Logical
-                        Models
-                    </button>
+                                                    <!--<label for="basic-url">Computational Model URL</label>-->
+                                                    <!--<div class="input-group" style="width:100%">-->
+                                                        <!--<input type="text" id="computationalURL" class="form-control">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="room-btn">-->
+                        <!--<button type="button" class=" col-md-3 col-xs-3 btn btn-primary groupBtn" id="conceptBtn"-->
+                                <!--data-type="ConceptualModel" onclick="startCooperation(this)">Conceptual-->
+                            <!--Models-->
+                        <!--</button>-->
 
-                    <!-- Contextual button for informational alert messages -->
-                    <button type="button" class="col-md-3 col-xs-3 btn btn-info groupBtn" id="computationalBtn"
-                            data-type="ComputationalModel" onclick="startCooperation(this)">Computational
-                        Models
-                    </button>
-                </div>
-            </div>
-        </div>
+                        <!--&lt;!&ndash; Indicates a successful or positive action &ndash;&gt;-->
+                        <!--<button type="button" class=" col-md-3 col-xs-3 btn btn-success groupBtn" id="logicalBtn"-->
+                                <!--data-type="LogicalModel" onclick="startCooperation(this)">Logical-->
+                            <!--Models-->
+                        <!--</button>-->
+
+                        <!--&lt;!&ndash; Contextual button for informational alert messages &ndash;&gt;-->
+                        <!--<button type="button" class="col-md-3 col-xs-3 btn btn-info groupBtn" id="computationalBtn"-->
+                                <!--data-type="ComputationalModel" onclick="startCooperation(this)">Computational-->
+                            <!--Models-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
     </div>
 </div>
 </div>

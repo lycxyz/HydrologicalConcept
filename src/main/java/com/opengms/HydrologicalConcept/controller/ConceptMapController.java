@@ -17,10 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -89,6 +86,10 @@ public class ConceptMapController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/searchConceptMapByKey")
+    List<ConceptMap> searchConceptMapByKey(@RequestParam("key") String key){
+        return conceptMapService.searchConceptMapByKey(key);
+    }
 //    语义描述,空间定位,几何形态,
 //    演化过程,要素关系,属性特征
     @RequestMapping(value = "/searchFromAll")

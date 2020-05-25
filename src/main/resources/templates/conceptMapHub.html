@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <title>Concept Map Hub</title>
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link type="text/css" href="/static/css/navbar.css" rel="stylesheet">
   <style>
     body{
-      width: 80%;
-      margin-left: 10%;
+      margin: 0;
     }
     .button {
       padding: 0;
@@ -46,53 +46,100 @@
       float: right;
       margin-top: 20px;
     }
+    .searchLine{
+      display: inline-block;
+    }
+    .icon{
+      text-align: center;
+      width: 156px;
+      height: 60px;
+      margin: 7px;
+      margin-top: -60px;
+    }
+    .header{
+      font-size: 10pt;
+      padding: 0 15px;
+      position: relative;
+      text-align: center;
+    }
+    .title{
+      text-align: center;
+      color: #FFFFFF;
+      font-size: 28px;
+      line-height: 75px;
+    }
+    .el-row{
+      width:80%;
+      margin: auto;
+    }
+    .searchContainer{
+      width:80%;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
 <div id="app">
+  <div class="head">
+    <nav class="" role="navigation">
+      <div class="header">
+
+        <span class="title">水文概念条目库</span>
+        <div class="icon">
+          <a href="#">
+            <img src="/static/images/logo.png" height="45">
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
   <el-container>
-    <el-header>
-      <h1 style="text-align: center">水文概念条目</h1>
-    </el-header>
+
+    <!--<el-header>-->
+
+    <!--</el-header>-->
     <el-container>
-      <el-aside width="200px">
-        <el-tree :data="className" :props="defaultProps" @node-click="handleClassClick"></el-tree>
-      </el-aside>
+      <!--<el-aside width="200px">-->
+        <!--<el-tree :data="className" :props="defaultProps" @node-click="handleClassClick"></el-tree>-->
+      <!--</el-aside>-->
 
       <el-main>
-        <div style="width: 80%;margin-left: 10px">
-          <el-input placeholder="请输入内容" v-model="searchStr" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </div>
+        <div class="searchContainer">
+          <div class="searchLine" style="width: 80%;margin-left: 10px">
+            <el-input placeholder="请输入内容" v-model="searchStr" @change="searchByKey" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="searchByKey"></el-button>
+            </el-input>
+          </div>
 
-        <div>
-          <el-button @click="centerDialogVisible = true" type="primary" style="float: right;margin: -40px 5%">新建条目</el-button>
+          <div class="searchLine" >
+            <el-button @click="centerDialogVisible = true" type="primary">新建条目</el-button>
 
-          <el-dialog
-                  title="新建水文概念条目"
-                  :visible.sync="centerDialogVisible"
-                  width="40%"
-                  center>
+            <el-dialog
+                    title="新建水文概念条目"
+                    :visible.sync="centerDialogVisible"
+                    width="40%"
+                    center>
 
-            <div style="font-size:16px;margin:0 0 8px">概念名称：</div>
-            <el-input v-model="conceptName" placeholder="请输入概念名称" size="small"></el-input>
+              <div style="font-size:16px;margin:0 0 8px">概念名称：</div>
+              <el-input v-model="conceptName" placeholder="请输入概念名称" size="small"></el-input>
 
-            <template>
-              <div style="font-size:16px;margin:8px 0 8px">概念类别：</div>
-              <el-checkbox-group v-model="classList">
-                <el-checkbox label="地表水"></el-checkbox>
-                <el-checkbox label="地下水"></el-checkbox>
-                <el-checkbox label="土壤水"></el-checkbox>
-                <el-checkbox label="大气水"></el-checkbox>
-              </el-checkbox-group>
-            </template>
-            <span slot="footer" class="dialog-footer">
+              <template>
+                <div style="font-size:16px;margin:8px 0 8px">概念类别：</div>
+                <el-checkbox-group v-model="classList">
+                  <el-checkbox label="地表水"></el-checkbox>
+                  <el-checkbox label="地下水"></el-checkbox>
+                  <el-checkbox label="土壤水"></el-checkbox>
+                  <el-checkbox label="大气水"></el-checkbox>
+                </el-checkbox-group>
+              </template>
+              <span slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="createConcept">确 定</el-button>
             </span>
-          </el-dialog>
+            </el-dialog>
+          </div>
         </div>
+
 
         <el-row>
           <el-col v-for="concept in conceptList">
@@ -133,8 +180,6 @@
                     },{
                       label:'地下水'
                     },{
-                      label:'土壤水'
-                    },{
                       label:'大气水'
                     }],
         defaultProps: {
@@ -160,6 +205,21 @@
       },
       handleClassClick(name){
         console.log(name)
+      },
+      searchByKey(){
+        console.log(this.searchStr)
+
+        var _this = this
+        $.ajax({
+          url:"/conceptMap/searchConceptMapByKey",
+          data:{
+            key:this.searchStr
+          },
+          async:true,
+          success:function (result) {
+            _this.conceptList = result;
+          }
+        })
       }
     }
   })

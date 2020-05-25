@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ConceptMapService {
@@ -50,6 +47,20 @@ public class ConceptMapService {
 
         //获取conceptId
         Concepts c = conceptsService.findByName(conceptMap.getName());
+        if (c == null){
+            c = new Concepts();
+            c.setName(conceptMap.getName());
+            c.setConceptID(UUID.randomUUID().toString());
+            c.setDefinition(conceptMap.getConcept().get(0).getDefinition());
+            if (conceptMap.getMapClass().contains(",")){
+                c.setConceptType(conceptMap.getMapClass().split(","));
+            }else if(conceptMap.getMapClass().contains("、")){
+                c.setConceptType(conceptMap.getMapClass().split("、"));
+            }else if(conceptMap.getMapClass().contains("；")){
+                c.setConceptType(conceptMap.getMapClass().split("；"));
+            }
+            conceptsService.createNewConcept(c);
+        }
         conceptMap.setConceptId(c.getConceptID());
 
         String name = new Date().getTime() + "_conceptMap.png";
@@ -201,6 +212,11 @@ public class ConceptMapService {
             UserImage image = images.get(l);
             list.add(image);
         }
+        return list;
+    }
+
+    public List<ConceptMap> searchConceptMapByKey(String key) {
+        List<ConceptMap> list = conceptMapDao.findAllByNameContains(key);
         return list;
     }
 }

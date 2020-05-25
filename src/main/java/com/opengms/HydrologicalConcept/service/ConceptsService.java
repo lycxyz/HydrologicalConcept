@@ -17,4 +17,8 @@ public class ConceptsService {
     public Concepts findByConceptId(String conceptId){
         return conceptsDao.findByConceptID(conceptId);
     }
+
+    public void createNewConcept(Concepts c) {
+      conceptsDao.save(c);
+    }
 }
