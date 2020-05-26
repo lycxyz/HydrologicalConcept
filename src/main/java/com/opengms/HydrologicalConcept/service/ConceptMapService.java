@@ -52,13 +52,14 @@ public class ConceptMapService {
             c.setName(conceptMap.getName());
             c.setConceptID(UUID.randomUUID().toString());
             c.setDefinition(conceptMap.getConcept().get(0).getDefinition());
-            if (conceptMap.getMapClass().contains(",")){
-                c.setConceptType(conceptMap.getMapClass().split(","));
-            }else if(conceptMap.getMapClass().contains("、")){
-                c.setConceptType(conceptMap.getMapClass().split("、"));
-            }else if(conceptMap.getMapClass().contains("；")){
-                c.setConceptType(conceptMap.getMapClass().split("；"));
-            }
+            c.setConceptType(conceptMap.getMapClass());
+//            if (conceptMap.getMapClass().contains(",")){
+//                c.setConceptType(conceptMap.getMapClass().split(","));
+//            }else if(conceptMap.getMapClass().contains("、")){
+//                c.setConceptType(conceptMap.getMapClass().split("、"));
+//            }else if(conceptMap.getMapClass().contains("；")){
+//                c.setConceptType(conceptMap.getMapClass().split("；"));
+//            }
             conceptsService.createNewConcept(c);
         }
         conceptMap.setConceptId(c.getConceptID());

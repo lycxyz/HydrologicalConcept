@@ -16,7 +16,7 @@ public class Concepts implements Serializable {
     String conceptID;
     String name;
     String definition;
-    String[] conceptType;
+    String conceptType;
     Integer frequency;
 
     public Concepts myclone() {
