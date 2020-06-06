@@ -708,20 +708,25 @@ new Vue({
             let infoArray = JSON.parse(info);
             for (let j = 0; j <infoArray[3].length ; j++) {
                 var r = infoArray[3][j].frequency/infoArray[4].sum;
-                var l = [infoArray[3][j].name, r*50000,infoArray[3][j].definition]
+                var l = [infoArray[3][j].name, r*50000,infoArray[3][j].definition,infoArray[3][j].conceptID]
                 list.push(l);
             }
             wc.setOption({
                 tooltip: {
                     show: true,
                     formatter: function(item) {
+                        //console.log(item)
                         return item[0] + ': ' + item[2]
                     }
                 },
                 list: list,
                 color: '#15a4fa',
                 shape: 'circle',
-                ellipticity: 1
+                ellipticity: 1,
+                click(item) { //支持点击事件
+                  var conceptId = item[3]
+                  window.open("/conceptMap/getConceptMapInfoByConceptId?conceptId="+conceptId,'_blank');
+                }
             })
 
 

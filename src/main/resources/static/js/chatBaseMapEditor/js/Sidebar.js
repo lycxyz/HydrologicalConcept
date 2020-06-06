@@ -71,24 +71,27 @@ Sidebar.prototype.init = function () {
 
   this.addSearchPalette(true);
   this.addConceptMapPalette();
-  // this.addGeneralPalette(true);
-  // this.addMiscPalette(false);
-  // this.addAdvancedPalette(false);
-  // this.addBasicPalette(dir);
-  // this.addStencilPalette('arrows', mxResources.get('arrows'), dir + '/arrows.xml',
-  // 	';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
-  // this.addUmlPalette(false);
-  // this.addBpmnPalette(dir, false);
-  // this.addStencilPalette('flowchart', 'Flowchart', dir + '/flowchart.xml',
-  // 	';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
-  // this.addImagePalette('clipart', mxResources.get('clipart'), dir + '/clipart/', '_128x128.png',
-  // 	['Earth_globe', 'Empty_Folder', 'Full_Folder', 'Gear', 'Lock', 'Software', 'Virus', 'Email',
-  // 	 'Database', 'Router_Icon', 'iPad', 'iMac', 'Laptop', 'MacBook', 'Monitor_Tower', 'Printer',
-  // 	 'Server_Tower', 'Workstation', 'Firewall_02', 'Wireless_Router_N', 'Credit_Card',
-  // 	 'Piggy_Bank', 'Graph', 'Safe', 'Shopping_Cart', 'Suit1', 'Suit2', 'Suit3', 'Pilot1',
-  // 	 'Worker1', 'Soldier1', 'Doctor1', 'Tech1', 'Security1', 'Telesales1'], null,
-  // 	 {'Wireless_Router_N': 'wireless router switch wap wifi access point wlan',
-  // 	  'Router_Icon': 'router switch'});
+
+  // 参数代表是否展开
+  this.addGeneralPalette(false);
+
+  this.addMiscPalette(false);
+  this.addAdvancedPalette(false);
+  this.addBasicPalette(dir);
+  this.addStencilPalette('arrows', mxResources.get('arrows'), dir + '/arrows.xml',
+  	';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
+  this.addUmlPalette(false);
+  this.addBpmnPalette(dir, false);
+  this.addStencilPalette('flowchart', 'Flowchart', dir + '/flowchart.xml',
+  	';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
+  this.addImagePalette('clipart', mxResources.get('clipart'), dir + '/clipart/', '_128x128.png',
+  	['Earth_globe', 'Empty_Folder', 'Full_Folder', 'Gear', 'Lock', 'Software', 'Virus', 'Email',
+  	 'Database', 'Router_Icon', 'iPad', 'iMac', 'Laptop', 'MacBook', 'Monitor_Tower', 'Printer',
+  	 'Server_Tower', 'Workstation', 'Firewall_02', 'Wireless_Router_N', 'Credit_Card',
+  	 'Piggy_Bank', 'Graph', 'Safe', 'Shopping_Cart', 'Suit1', 'Suit2', 'Suit3', 'Pilot1',
+  	 'Worker1', 'Soldier1', 'Doctor1', 'Tech1', 'Security1', 'Telesales1'], null,
+  	 {'Wireless_Router_N': 'wireless router switch wap wifi access point wlan',
+  	  'Router_Icon': 'router switch'});
 };
 
 /**
@@ -3435,10 +3438,24 @@ Sidebar.prototype.destroy = function () {
 };
 
 Sidebar.prototype.addConceptMapPalette = function () {
-  var elt = document.createElement('div');
+
+  var elt = this.createTitle(mxResources.get('hydrology'));
   this.container.appendChild(elt);
 
+  // Disables built-in pan and zoom in IE10 and later
   var div = document.createElement('div');
+  div.className = 'geSidebar';
+
+  if (mxClient.IS_POINTER) {
+    div.style.touchAction = 'none';
+  }
+  div.style.display = 'none';
+
+
+  // var elt = document.createElement('div');
+  // this.container.appendChild(elt);
+  //
+  // var div = document.createElement('div');
   div.className = 'geSidebar';
   div.style.boxSizing = 'border-box';
   div.style.overflow = 'hidden';
@@ -3446,7 +3463,7 @@ Sidebar.prototype.addConceptMapPalette = function () {
   div.style.padding = '8px';
   div.style.paddingTop = '14px';
   div.style.paddingBottom = '0px';
-  elt.appendChild(div);
+  // elt.appendChild(div);
 
   for (var j = 0; j < ConceptMapList.length; j++) {
     var concept = ConceptMapList[j];
@@ -3456,5 +3473,10 @@ Sidebar.prototype.addConceptMapPalette = function () {
     div.appendChild(a);
   }
 
+  this.addFoldingHandler(elt, div);
+
+  var outer = document.createElement('div');
+  outer.appendChild(div);
+  this.container.appendChild(outer);
 
 };
