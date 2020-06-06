@@ -75,7 +75,8 @@ public class MessageEventHandler {
         if (listClient.contains(client.getSessionId())) {
             listClient.remove(client.getSessionId());
 
-            for (User_Chat user : listUser) {
+            for (int i = 0; i < listUser.size(); i++) {
+                User_Chat user = listUser.get(i);
                 if (user.getId() == client.getSessionId()){
                     listUser.remove(user);
                     broadcast(user,"logout");

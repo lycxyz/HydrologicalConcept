@@ -78,6 +78,15 @@ public class ConceptMapController {
         return mv;
     }
 
+    @RequestMapping(value = "/getConceptMapInfoByConceptId")
+    ModelAndView getConceptMapInfoByConceptId(@RequestParam("conceptId") String conceptId) {
+        ModelAndView mv = new ModelAndView("conceptMapInfo");
+        ConceptMap conceptMap = conceptMapService.getConceptMapByConceptId(conceptId);
+
+        mv.addObject("conceptMap", conceptMap);
+        return mv;
+    }
+
     @RequestMapping(value = "/conceptMapHub")
     ModelAndView getConceptMapHub(){
         ModelAndView modelAndView = new ModelAndView("conceptMapHub");
