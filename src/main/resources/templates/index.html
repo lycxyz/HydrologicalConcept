@@ -202,6 +202,9 @@
                 onClick="chatBaseMap()">绘图推理工具</button>
         <button type="button" class="btn btn-primary functionBtn" id="chatTest"
                 onClick="chatRoom()">文本交流工具</button>
+
+        <button type="button" class="btn btn-primary functionBtn" id="geoRule"
+                onClick="createGeoRule()">创建地理规则</button>
     </div>
     <!--暂时注释-->
     <div>
@@ -650,6 +653,9 @@
       window.location.href = "/conceptMap/conceptMapHub"
     }
 
+    function createGeoRule() {
+      window.location.href = "/geoRule/createGeoRule"
+    }
     function chatBaseMap() {
         window.location.href = "/chatBaseMapB";
     }

@@ -79,7 +79,7 @@ initKG = function (data, config, container) {
         //canvas大小
         .size([width, height])
         //连接线长度
-        .linkDistance(120)
+        .linkDistance(200)
         //作用力，大于0吸引小于0排斥
         .charge(-1200)
         //指时间间隔，隔一段时间刷新一次画面
