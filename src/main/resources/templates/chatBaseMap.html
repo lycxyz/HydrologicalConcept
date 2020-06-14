@@ -219,7 +219,7 @@
                 var link ={
                     source: m,
                     target: a,
-                    rela: rule.aspect
+                    rela: rule.aspect.substring(0,2)+'('+rule.type+')'
                 }
                 links.push(link);
             }
